@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "666618735426",
+    "project_id": "vuondau-c7514",
+    "storage_bucket": "vuondau-c7514.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:666618735426:android:a1c54629b9bae2940b76db",
+        "android_client_info": {
+          "package_name": "com.swd.vuondauapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "666618735426-hsnd1qtp7v8vsuu3lfcf7il6r87s0ids.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.swd.vuondauapp",
+            "certificate_hash": "dc08d5e9f6eb6757c205b5208c75ce44577ba3f4"
+          }
+        },
+        {
+          "client_id": "666618735426-6ml4baq6k9paebvlfshqbg7r3d7frvsg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB1Syasum2P6x1TdslOTctZ8Rj15Bxbd-I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "666618735426-6ml4baq6k9paebvlfshqbg7r3d7frvsg.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "666618735426-er7hj1qedvlsf2980pnks85uh4qt4d7s.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.swd.vuondauapp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
