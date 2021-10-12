@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:vuondauapp/widgets/compoment/bar.dart';
 import 'package:vuondauapp/widgets/drawer.dart';
 
 class Profile extends StatefulWidget {
@@ -35,7 +34,7 @@ class _ProfileState extends State<Profile> {
                         )
                     ),
                     Text(
-                        'Truong',
+                        '',
                         style: TextStyle(
                             letterSpacing: 2.0,
                             fontWeight: FontWeight.bold,
@@ -95,7 +94,6 @@ class _ProfileState extends State<Profile> {
               ]
           )
       ),
-      bottomNavigationBar: BarBottom(),
     );
   }
 }

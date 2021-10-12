@@ -12,7 +12,6 @@ import 'package:google_sign_in/google_sign_in.dart';
 GoogleSignIn _googleSignIn = GoogleSignIn(
   scopes: [
     'email',
-    'https://www.googleapis.com/auth/contacts.readonly',
   ],
 );
 
@@ -25,8 +24,16 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Future<void> _handleSignIn() async {
     try {
-      await _googleSignIn.signIn();
-
+      final GoogleSignInAccount? googleSignInAccount
+      = await _googleSignIn.signIn();
+      if (googleSignInAccount != null){
+        final GoogleSignInAuthentication googleSignInAuthentication
+        = await googleSignInAccount.authentication;
+        print(googleSignInAccount.email);
+        print(googleSignInAccount.displayName);
+        print(googleSignInAccount.id);
+        Navigator.pushReplacementNamed(context, '/home');
+      }
     } catch (error) {
       print(error);
     }
@@ -77,7 +84,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   RoundedButton(
                     text: "LOGIN",
                     press: () {
-                      Navigator.pushReplacementNamed(context, '/home');
+
                     },
                   ),
                   SizedBox(height: size.height * 0.03),

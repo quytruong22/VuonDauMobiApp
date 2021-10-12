@@ -34,19 +34,37 @@ class pageDrawer extends StatelessWidget {
             padding: EdgeInsets.only(top: 24, left: 16, right: 16),
             children: [
               DrawerTile(
-                  icon: MyCustomIcons.farm,
+                  icon: Icons.home,
                   onTap: () {
-                    if (currentPage != "Farms")
-                      Navigator.pushReplacementNamed(context, '/farmlist');
+                    if (currentPage != "Home")
+                      Navigator.pushReplacementNamed(context, '/home');
                   },
                   iconColor: Colors.orangeAccent,
-                  title: "Farms",
-                  isSelected: currentPage == "Farms" ? true : false),
+                  title: "Home",
+                  isSelected: currentPage == "Home" ? true : false),
+              DrawerTile(
+                  icon: Icons.dashboard,
+                  onTap: () {
+                    if (currentPage != "Dashboard")
+                      Navigator.pushReplacementNamed(context, '/dashboard');
+                  },
+                  iconColor: Colors.orangeAccent,
+                  title: "Dashboard",
+                  isSelected: currentPage == "Dashboard" ? true : false),
+              DrawerTile(
+                  icon: MyCustomIcons.farm,
+                  onTap: () {
+                    if (currentPage != "Farm")
+                      Navigator.pushReplacementNamed(context, '/farm');
+                  },
+                  iconColor: Colors.orangeAccent,
+                  title: "Farm",
+                  isSelected: currentPage == "Farm" ? true : false),
               DrawerTile(
                   icon: Icons.home,
                   onTap: () {
                     if (currentPage != "Harvests")
-                      Navigator.pushReplacementNamed(context, '');
+                      Navigator.pushReplacementNamed(context, '/harvest');
                   },
                   iconColor: Colors.green,
                   title: "Harvests",
@@ -54,21 +72,21 @@ class pageDrawer extends StatelessWidget {
               DrawerTile(
                   icon: Icons.account_circle,
                   onTap: () {
-                    if (currentPage != "Products")
-                      Navigator.pushReplacementNamed(context, '');
+                    if (currentPage != "Profile")
+                      Navigator.pushReplacementNamed(context, '/profile');
                   },
                   iconColor: Colors.blue,
-                  title: "Products",
-                  isSelected: currentPage == "Products" ? true : false),
+                  title: "Profile",
+                  isSelected: currentPage == "Profile" ? true : false),
               DrawerTile(
                   icon: Icons.contact_support,
                   onTap: () {
-                    if (currentPage != "About us")
-                      Navigator.pushReplacementNamed(context, '');
+                    if (currentPage != "AboutUs")
+                      Navigator.pushReplacementNamed(context, '/aboutus');
                   },
                   iconColor: Colors.yellow,
                   title: "About us",
-                  isSelected: currentPage == "About us" ? true : false),
+                  isSelected: currentPage == "AboutUs" ? true : false),
               DrawerTile(
                   icon: Icons.logout,
                   onTap: () {
