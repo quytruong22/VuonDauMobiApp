@@ -70,6 +70,15 @@ class pageDrawer extends StatelessWidget {
                   title: "Harvests",
                   isSelected: currentPage == "Harvests" ? true : false),
               DrawerTile(
+                  icon: Icons.add_box_sharp,
+                  onTap: () {
+                    if (currentPage != "Product")
+                      Navigator.pushReplacementNamed(context, '/product');
+                  },
+                  iconColor: Colors.red,
+                  title: "Product",
+                  isSelected: currentPage == "Product" ? true : false),
+              DrawerTile(
                   icon: Icons.account_circle,
                   onTap: () {
                     if (currentPage != "Profile")
