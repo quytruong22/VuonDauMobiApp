@@ -16,7 +16,7 @@ class _ProductState extends State<Product> {
         title: Text('Product'),
         centerTitle: true,
       ),
-      drawer: pageDrawer(currentPage: "Product"),
+      drawer: pageDrawer(currentPage: "Products"),
     );
   }
 }

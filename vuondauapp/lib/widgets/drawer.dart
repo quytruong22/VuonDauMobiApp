@@ -33,7 +33,7 @@ class pageDrawer extends StatelessWidget {
           child: ListView(
             padding: EdgeInsets.only(top: 24, left: 16, right: 16),
             children: [
-              DrawerTile(
+  /*            DrawerTile(
                   icon: Icons.home,
                   onTap: () {
                     if (currentPage != "Home")
@@ -41,7 +41,7 @@ class pageDrawer extends StatelessWidget {
                   },
                   iconColor: Colors.orangeAccent,
                   title: "Home",
-                  isSelected: currentPage == "Home" ? true : false),
+                  isSelected: currentPage == "Home" ? true : false),*/
               DrawerTile(
                   icon: Icons.dashboard,
                   onTap: () {
@@ -49,17 +49,17 @@ class pageDrawer extends StatelessWidget {
                       Navigator.pushReplacementNamed(context, '/dashboard');
                   },
                   iconColor: Colors.orangeAccent,
-                  title: "Dashboard",
+                  title: "Bảng thống kê",
                   isSelected: currentPage == "Dashboard" ? true : false),
               DrawerTile(
                   icon: MyCustomIcons.farm,
                   onTap: () {
-                    if (currentPage != "Farm")
+                    if (currentPage != "Farms")
                       Navigator.pushReplacementNamed(context, '/farm');
                   },
                   iconColor: Colors.orangeAccent,
-                  title: "Farm",
-                  isSelected: currentPage == "Farm" ? true : false),
+                  title: "Nông trại",
+                  isSelected: currentPage == "Farms" ? true : false),
               DrawerTile(
                   icon: Icons.home,
                   onTap: () {
@@ -67,17 +67,17 @@ class pageDrawer extends StatelessWidget {
                       Navigator.pushReplacementNamed(context, '/harvest');
                   },
                   iconColor: Colors.green,
-                  title: "Harvests",
+                  title: "Mùa vụ",
                   isSelected: currentPage == "Harvests" ? true : false),
               DrawerTile(
-                  icon: Icons.add_box_sharp,
+                  icon: Icons.home,
                   onTap: () {
-                    if (currentPage != "Product")
+                    if (currentPage != "Products")
                       Navigator.pushReplacementNamed(context, '/product');
                   },
-                  iconColor: Colors.red,
-                  title: "Product",
-                  isSelected: currentPage == "Product" ? true : false),
+                  iconColor: Colors.green,
+                  title: "Sản phẩm",
+                  isSelected: currentPage == "Products" ? true : false),
               DrawerTile(
                   icon: Icons.account_circle,
                   onTap: () {
@@ -85,7 +85,7 @@ class pageDrawer extends StatelessWidget {
                       Navigator.pushReplacementNamed(context, '/profile');
                   },
                   iconColor: Colors.blue,
-                  title: "Profile",
+                  title: "Thông tin cá nhân",
                   isSelected: currentPage == "Profile" ? true : false),
               DrawerTile(
                   icon: Icons.contact_support,
@@ -102,7 +102,7 @@ class pageDrawer extends StatelessWidget {
                      Navigator.pushReplacementNamed(context, '/login');
                   },
                   iconColor: Colors.red,
-                  title: "Sign out",
+                  title: "Đăng xuất",
               )
             ],
           ),

@@ -35,21 +35,25 @@ class _AddFarmState extends State<AddFarm> {
               ),
               SizedBox(height: size.height * 0.03),
               RoundedInputField(
+                icon: Icons.drive_file_rename_outline,
                 hintText: "Tên nông trại",
                 onChanged: (value) {},
               ),
               SizedBox(height: size.height * 0.03),
               RoundedInputField(
+                icon: Icons.location_on,
                 hintText: "Địa chỉ nông trại",
                 onChanged: (value) {},
               ),
               SizedBox(height: size.height * 0.03),
               RoundedInputField(
+                icon: Icons.description,
                 hintText: "Mô tả nông trại",
                 onChanged: (value) {},
               ),
               SizedBox(height: size.height * 0.03),
               RoundedInputField(
+                icon: Icons.picture_in_picture,
                 hintText: "Link ảnh nông trại",
                 onChanged: (value) {},
               ),

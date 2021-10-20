@@ -29,11 +29,10 @@ class _LoginScreenState extends State<LoginScreen> {
       if (googleSignInAccount != null){
         final GoogleSignInAuthentication googleSignInAuthentication
         = await googleSignInAccount.authentication;
-        print(googleSignInAccount.email);
-        print(googleSignInAccount.displayName);
         print(googleSignInAccount.id);
-        Navigator.pushReplacementNamed(context, '/home');
+        print(googleSignInAuthentication.accessToken);
       }
+      await _googleSignIn.signOut();
     } catch (error) {
       print(error);
     }
@@ -75,16 +74,19 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   SizedBox(height: size.height * 0.03),
                   RoundedInputField(
+                    icon: Icons.email,
                     hintText: "Your Email",
                     onChanged: (value) {},
                   ),
                   RoundedPasswordField(
+                    hint: 'Password',
                     onChanged: (value) {},
                   ),
                   RoundedButton(
                     text: "LOGIN",
                     press: () {
-
+                      print('l');
+                      Navigator.pushReplacementNamed(context, '/dashboard');
                     },
                   ),
                   SizedBox(height: size.height * 0.03),

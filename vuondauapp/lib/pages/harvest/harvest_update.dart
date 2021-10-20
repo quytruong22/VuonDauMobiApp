@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:vuondauapp/widgets/drawer.dart';
 import 'package:vuondauapp/widgets/compoment/rounded_input_field.dart';
 import 'package:vuondauapp/widgets/compoment/rounded_button.dart';
 
@@ -20,7 +19,6 @@ class _UpdateHarvestState extends State<UpdateHarvest> {
         title: Text('Cập nhật mùa vụ'),
         centerTitle: true,
       ),
-      drawer: pageDrawer(currentPage: "Farm"),
       body: Container(
         width: double.infinity,
         height: size.height,
@@ -69,7 +67,7 @@ class _UpdateHarvestState extends State<UpdateHarvest> {
               RoundedButton(
                 text: "Hoàn tất",
                 press: () {
-                  Navigator.pushReplacementNamed(context, '/harvest');
+                  Navigator.pop(context);
                 },
               ),
             ],

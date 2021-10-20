@@ -45,16 +45,39 @@ class CardFarmDetail extends StatelessWidget {
                             Text(name,
                                 style: TextStyle(
                                     color: Colors.black, fontSize: 13)),
-                            Text(address,
-                                style: TextStyle(
-                                    color: Colors.black38,
-                                    fontSize: 11,
-                                    fontWeight: FontWeight.w600)),
+                            SizedBox(height: 4.0,),
+                            Row(
+                              children: [
+                                Text('Địa chỉ:'),
+                                Text(address,
+                                    style: TextStyle(
+                                        color: Colors.black38,
+                                        fontSize: 11,
+                                        fontWeight: FontWeight.w600)),
+
+                              ],
+                            ),
+                            SizedBox(height: 4.0,),
                             Text(description,
                                 style: TextStyle(
                                     color: Colors.black38,
                                     fontSize: 11,
-                                    fontWeight: FontWeight.w600))
+                                    fontWeight: FontWeight.w600)),
+                            SizedBox(height: 4.0,),
+                            TextButton(
+                                style: TextButton.styleFrom(
+                                  backgroundColor: Colors.green,
+                                ),
+                                onPressed: (){
+                                  Navigator.pushNamed(context, '/updatefarm');
+                                  },
+                                child: Text(
+                                    'Cập nhật nông trại',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                    ),
+                                )
+                            )
                           ],
                         ),
                       )

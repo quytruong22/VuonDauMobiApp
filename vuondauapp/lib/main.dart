@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:vuondauapp/pages/account/change_password.dart';
 import 'package:vuondauapp/pages/farm/farm_add.dart';
+import 'package:vuondauapp/pages/farm/farm_update.dart';
+import 'package:vuondauapp/pages/harvest/harvest_update.dart';
 import 'package:vuondauapp/pages/home.dart';
 import 'package:vuondauapp/pages/account/profile.dart';
 import 'package:vuondauapp/pages/farm/farm.dart';
 import 'package:vuondauapp/pages/account/profile_update.dart';
-import 'package:vuondauapp/pages/account/change_password.dart';
 import 'package:vuondauapp/pages/account/login.dart';
 import 'package:vuondauapp/pages/account/signup.dart';
 import 'package:vuondauapp/pages/dashboard.dart';
@@ -22,18 +24,19 @@ void main(){
       '/home': (context) => Home(),
       '/profile': (context) => Profile(),
       '/profileupdate': (context) => UpdateProfile(),
-      '/passwordupdate': (context) => UpdatePassword(),
+      '/changepassword': (context) => ChangePassword(),
       '/farm': (context) => Farm(),
       '/detailfarm': (context) => DetailFarm(),
       '/addfarm': (context) => AddFarm(),
-   //  '/login': (context) => LoginScreen(),
-      '/login': (context) => Home(),
+      '/updatefarm': (context) => UpdateFarm(),
+      '/login': (context) => LoginScreen(),
       '/signup': (context) => SignUpScreen(),
       '/harvest': (context) => Harvest(),
       '/dashboard': (context) => Dashboard(),
       '/aboutus': (context) => AboutUs(),
       '/addharvest': (context) => AddHarvest(),
       '/detailharvest': (context) => DetailHarvest(),
+      '/updateharvest': (context) => UpdateHarvest(),
       '/product': (context) => Product(),
     },
 

@@ -44,10 +44,12 @@ class SignUpScreen extends StatelessWidget {
                     height: size.height * 0.35,
                   ),
                   RoundedInputField(
+                    icon: Icons.email,
                     hintText: "Your Email",
                     onChanged: (value) {},
                   ),
                   RoundedPasswordField(
+                    hint: 'Password',
                     onChanged: (value) {},
                   ),
                   RoundedButton(

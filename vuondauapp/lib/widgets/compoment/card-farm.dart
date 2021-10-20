@@ -47,8 +47,7 @@ class CardFarm extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(title,
-                                style: TextStyle(
-                                    color: Colors.black38, fontSize: 13)),
+                                style: TextStyle( fontSize: 13)),
                             Text(cta,
                                 style: TextStyle(
                                     color: Colors.green,
