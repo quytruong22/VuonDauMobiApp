@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:vuondauapp/widgets/compoment/status_harvest.dart';
 
 class CardHarvest extends StatelessWidget {
   CardHarvest(
@@ -6,7 +8,7 @@ class CardHarvest extends StatelessWidget {
       this.cta = "",
         this.price = "",
         this.quantity = "",
-      this.img = "https://via.placeholder.com/200",
+      required this.img,
       required this.tap});
 
   final String cta;
@@ -18,8 +20,10 @@ class CardHarvest extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Container(
         height: 130,
+        width: size.width,
         child: GestureDetector(
           onTap: tap,
           child: Card(
@@ -51,17 +55,27 @@ class CardHarvest extends StatelessWidget {
                           Text(title,
                               style: TextStyle(
                                   color: Colors.black, fontSize: 13)),
+                          Text("Sản phẩm: Dâu",
+                              style: TextStyle(
+                                  color: Colors.black, fontSize: 13)),
                           Text(quantity,
                               style: TextStyle(
                                   color: Colors.black, fontSize: 13)),
                           Text(price,
                               style: TextStyle(
                                   color: Colors.black, fontSize: 13)),
-                          Text(cta,
-                              style: TextStyle(
-                                  color: Colors.green,
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.w600))
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(cta,
+                                  style: TextStyle(
+                                      color: Colors.green,
+                                      fontSize: 11,
+                                      fontWeight: FontWeight.w600)
+                              ),
+                              StatusHarvest(datestart: DateTime(2021), dateend: DateTime(2023))
+                            ],
+                          )
                         ],
                       ),
                     ))

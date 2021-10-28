@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:vuondauapp/widgets/compoment/rounded_input_field.dart';
 import 'package:vuondauapp/widgets/compoment/rounded_button.dart';
 import 'package:vuondauapp/widgets/compoment/text_field_container.dart';
+import 'package:vuondauapp/widgets/compoment/rounded_date_input.dart';
+import 'package:image_picker/image_picker.dart';
 
 class AddHarvest extends StatefulWidget {
-  const AddHarvest({Key? key}) : super(key: key);
 
   @override
   _AddHarvestState createState() => _AddHarvestState();
@@ -13,13 +14,15 @@ class AddHarvest extends StatefulWidget {
 class _AddHarvestState extends State<AddHarvest> {
   String dropdownValue = 'Nông Trại Phan Nam';
   String dropdownProduct = 'Dâu';
+  DateTime datestart = DateTime.now();
+  DateTime dateend = DateTime.now();
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.green,
-        title: Text('Tạo mùa vụ'),
+        title: Text('Tạo đợt bán'),
         centerTitle: true,
       ),
       body: Container(
@@ -64,17 +67,73 @@ class _AddHarvestState extends State<AddHarvest> {
               ),
               SizedBox(height: size.height * 0.03),
               RoundedInputField(
-                hintText: "Tên mùa vụ",
+                hintText: "Tên đợt bán",
                 icon: Icons.drive_file_rename_outline,
                 onChanged: (value) {},
               ),
               SizedBox(height: size.height * 0.03),
               RoundedInputField(
-                hintText: "Mô tả mùa vụ",
+                hintText: "Mô tả",
                 icon: Icons.info_rounded,
                 onChanged: (value) {},
               ),
               SizedBox(height: size.height * 0.03),
+              Container(
+                width: size.width*0.8,
+                  child: Text(
+                      'Ngày mở bán',
+                      style: TextStyle(
+
+                      ),
+                      textAlign: TextAlign.left,
+                  )
+              ),
+              RoundedDateInput(
+                text: 'Ngày '+datestart.day.toString()+' tháng '+datestart.month.toString()+' năm '+datestart.year.toString(),
+                icon: Icons.date_range,
+                onPress: (){
+                  showDatePicker(
+                      context: context,
+                      initialDate: datestart,
+                      firstDate: DateTime.now(),
+                      lastDate: DateTime(2023)
+                  ).then((value) {
+                    setState(() {
+                      value == null ? DateTime.now() : datestart = value;
+                      if(datestart.isAfter(dateend)){
+                        dateend = datestart;
+                      }
+                    });
+                  });
+                }
+              ),
+              SizedBox(height: size.height * 0.03),
+              Container(
+                  width: size.width*0.8,
+                  child: Text(
+                    'Ngày kết thúc',
+                    style: TextStyle(
+
+                    ),
+                    textAlign: TextAlign.left,
+                  )
+              ),
+              RoundedDateInput(
+                  text: 'Ngày '+dateend.day.toString()+' tháng '+dateend.month.toString()+' năm '+dateend.year.toString(),
+                  icon: Icons.date_range,
+                  onPress: (){
+                    showDatePicker(
+                        context: context,
+                        initialDate: dateend,
+                        firstDate: datestart,
+                        lastDate: DateTime(2023)
+                    ).then((value) {
+                      setState(() {
+                        value == null ? dateend = datestart : dateend = value;
+                      });
+                    });
+                  }
+              ),
               Text(
                 'Điền thông tin sản phẩm',
                 style: TextStyle(

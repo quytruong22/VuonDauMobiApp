@@ -15,7 +15,6 @@ import 'package:vuondauapp/pages/aboutus.dart';
 import 'package:vuondauapp/pages/harvest/harvest_add.dart';
 import 'package:vuondauapp/pages/harvest/harvest_detail.dart';
 import 'package:vuondauapp/pages/farm/farm_detail.dart';
-import 'package:vuondauapp/pages/product/product.dart';
 
 void main(){
   runApp(MaterialApp(
@@ -37,7 +36,6 @@ void main(){
       '/addharvest': (context) => AddHarvest(),
       '/detailharvest': (context) => DetailHarvest(),
       '/updateharvest': (context) => UpdateHarvest(),
-      '/product': (context) => Product(),
     },
 
   ));

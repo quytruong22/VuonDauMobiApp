@@ -14,11 +14,11 @@ class Harvest extends StatefulWidget {
 
 class _HarvestState extends State<Harvest> {
   List<HarvestDTO> list = [
-    HarvestDTO(ID: 0, product: ProductDTO(ID: 0, name: 'Dâu', description: '', img: 'https://cdn.tgdd.vn/Products/Images/8788/223378/bhx/dau-tay-hop-500g-202103180809491848.jpg',
+    HarvestDTO(ID: 0, product: ProductDTO(ID: 0, name: 'Dâu', description: '', img: 'https://cdn1.tuoitre.vn/zoom/600_315/2020/9/22/dau-tay-1600743428804672157496-crop-16007435512231711659798.jpg',
         date: DateTime.now()), name: 'Dâu', description: '', price: 50000, quantity: 50),
-    HarvestDTO(ID: 0, product: ProductDTO(ID: 0, name: 'Dâu', description: '', img: 'https://cdn.tgdd.vn/Products/Images/8788/223378/bhx/dau-tay-hop-500g-202103180809491848.jpg',
+    HarvestDTO(ID: 0, product: ProductDTO(ID: 0, name: 'Dâu', description: '', img: 'https://cdn1.tuoitre.vn/zoom/600_315/2020/9/22/dau-tay-1600743428804672157496-crop-16007435512231711659798.jpg',
         date: DateTime.now()), name: 'Dâu', description: '', price: 50000, quantity: 50),
-    HarvestDTO(ID: 0, product: ProductDTO(ID: 0, name: 'Dâu', description: '', img: 'https://cdn.tgdd.vn/Products/Images/8788/223378/bhx/dau-tay-hop-500g-202103180809491848.jpg',
+    HarvestDTO(ID: 0, product: ProductDTO(ID: 0, name: 'Dâu', description: '', img: 'https://cdn1.tuoitre.vn/zoom/600_315/2020/9/22/dau-tay-1600743428804672157496-crop-16007435512231711659798.jpg',
         date: DateTime.now()), name: 'Dâu', description: '', price: 50000, quantity: 50),
   ];
   @override
@@ -27,7 +27,7 @@ class _HarvestState extends State<Harvest> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.green,
-        title: Text('Mùa vụ'),
+        title: Text('Đợt bán'),
         centerTitle: true,
       ),
       drawer: pageDrawer(currentPage: "Harvests"),
@@ -39,7 +39,7 @@ class _HarvestState extends State<Harvest> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               RoundedIconButton(
-                text: "Tạo mùa vụ mới",
+                text: "Tạo đợt bán mới",
                 press: () {
                   Navigator.pushNamed(context, '/addharvest');
                 },

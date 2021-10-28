@@ -33,22 +33,22 @@ class pageDrawer extends StatelessWidget {
           child: ListView(
             padding: EdgeInsets.only(top: 24, left: 16, right: 16),
             children: [
-  /*            DrawerTile(
+              DrawerTile(
                   icon: Icons.home,
                   onTap: () {
                     if (currentPage != "Home")
                       Navigator.pushReplacementNamed(context, '/home');
                   },
-                  iconColor: Colors.orangeAccent,
-                  title: "Home",
-                  isSelected: currentPage == "Home" ? true : false),*/
+                  iconColor: Colors.green,
+                  title: "Trang chủ",
+                  isSelected: currentPage == "Home" ? true : false),
               DrawerTile(
                   icon: Icons.dashboard,
                   onTap: () {
                     if (currentPage != "Dashboard")
                       Navigator.pushReplacementNamed(context, '/dashboard');
                   },
-                  iconColor: Colors.orangeAccent,
+                  iconColor: Colors.purple,
                   title: "Bảng thống kê",
                   isSelected: currentPage == "Dashboard" ? true : false),
               DrawerTile(
@@ -61,23 +61,13 @@ class pageDrawer extends StatelessWidget {
                   title: "Nông trại",
                   isSelected: currentPage == "Farms" ? true : false),
               DrawerTile(
-                  icon: Icons.home,
+                  icon: Icons.agriculture,
                   onTap: () {
                     if (currentPage != "Harvests")
                       Navigator.pushReplacementNamed(context, '/harvest');
                   },
-                  iconColor: Colors.green,
-                  title: "Mùa vụ",
+                  title: "Đợt bán",
                   isSelected: currentPage == "Harvests" ? true : false),
-              DrawerTile(
-                  icon: Icons.home,
-                  onTap: () {
-                    if (currentPage != "Products")
-                      Navigator.pushReplacementNamed(context, '/product');
-                  },
-                  iconColor: Colors.green,
-                  title: "Sản phẩm",
-                  isSelected: currentPage == "Products" ? true : false),
               DrawerTile(
                   icon: Icons.account_circle,
                   onTap: () {

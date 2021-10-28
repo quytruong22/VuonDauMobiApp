@@ -14,9 +14,10 @@ class CardFarm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Container(
         height: 250,
-        width: null,
+        width: size.width,
         child: GestureDetector(
           onTap: tap,
           child: Card(

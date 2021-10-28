@@ -9,13 +9,14 @@ class DetailHarvest extends StatefulWidget {
 }
 
 class _DetailHarvestState extends State<DetailHarvest> {
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.green,
-        title: Text('Mùa vụ'),
+        title: Text('Chi tiết đợt bán'),
         centerTitle: true,
       ),
       body: Container(
@@ -31,9 +32,12 @@ class _DetailHarvestState extends State<DetailHarvest> {
                   description: "Mô tả: Dâu của nông trại Phan Nam thơm ngon, chín tươi.",
                   name: 'Tên sản phẩm: Dâu',
                   farmname: 'Nông trại: Nông trại Phan Nam',
-                  img: 'https://thamhiemmekong.com/wp-content/uploads/2020/12/nongtraiphannam01.jpg',
+                  imgharvest: 'https://cdn1.tuoitre.vn/zoom/600_315/2020/9/22/dau-tay-1600743428804672157496-crop-16007435512231711659798.jpg',
+                  imgproduct: 'https://cdn.tgdd.vn/Products/Images/8788/223378/bhx/dau-tay-hop-500g-202103180809491848.jpg',
                   quantity: 'Số lượng còn lại: 50Kg',
                   price: 'Giá: 50.000VND/Kg',
+                  datestart: DateTime(2021,11,30),
+                  dateend: DateTime(2021,12,30),
                 ),
               ),
             ],

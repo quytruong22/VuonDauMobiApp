@@ -1,3 +1,5 @@
+import 'package:vuondauapp/object/productType.dart';
+
 class ProductDTO{
   final int ID;
   final String name;

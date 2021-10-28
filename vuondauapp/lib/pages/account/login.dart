@@ -30,7 +30,7 @@ class _LoginScreenState extends State<LoginScreen> {
         final GoogleSignInAuthentication googleSignInAuthentication
         = await googleSignInAccount.authentication;
         print(googleSignInAccount.id);
-        print(googleSignInAuthentication.accessToken);
+        print(googleSignInAuthentication.idToken);
       }
       await _googleSignIn.signOut();
     } catch (error) {
@@ -86,7 +86,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     text: "LOGIN",
                     press: () {
                       print('l');
-                      Navigator.pushReplacementNamed(context, '/dashboard');
+                      Navigator.pushReplacementNamed(context, '/home');
                     },
                   ),
                   SizedBox(height: size.height * 0.03),

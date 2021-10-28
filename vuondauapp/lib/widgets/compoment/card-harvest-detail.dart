@@ -1,14 +1,20 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:vuondauapp/widgets/compoment/status_harvest.dart';
 
 class CardHarvestDetail extends StatelessWidget {
-  CardHarvestDetail({this.name = "Placeholder Title",this.description = "",this.img = "https://via.placeholder.com/200",this. quantity = "",this.price = "",this.farmname = ""});
+  CardHarvestDetail({this.name = "Placeholder Title",this.description = "",required this.imgharvest,this. quantity = "",this.price = "",this.farmname = "",required this.imgproduct,required this.datestart,required this.dateend});
 
   final String description;
-  final String img;
+  final String imgharvest;
+  final String imgproduct;
   final String name;
   final String quantity;
   final String price;
   final String farmname;
+  final DateTime datestart;
+  final DateTime dateend;
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -28,7 +34,7 @@ class CardHarvestDetail extends StatelessWidget {
                     width: size.width,
                       decoration: BoxDecoration(
                           image: DecorationImage(
-                            image: NetworkImage('https://cdn.tgdd.vn/Products/Images/8788/223378/bhx/dau-tay-hop-500g-202103180809491848.jpg'),
+                            image: NetworkImage(imgharvest),
                             fit: BoxFit.cover,
                           )
                       )
@@ -44,15 +50,31 @@ class CardHarvestDetail extends StatelessWidget {
                                 style: TextStyle(
                                     color: Colors.black, fontSize: 13)),
                             SizedBox(height: 8.0,),
-                            Text(name,
-                                style: TextStyle(
-                                    color: Colors.black, fontSize: 13)),
-                            SizedBox(height: 8.0,),
                             Text(description,
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 11,
                                     fontWeight: FontWeight.w600)),
+                            SizedBox(height: 8.0,),
+                            Container(
+                                height: size.height*0.25,
+                                width: size.width*0.5,
+                                decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                      image: NetworkImage(imgproduct),
+                                      fit: BoxFit.cover,
+                                    )
+                                )
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(name,
+                                    style: TextStyle(
+                                        color: Colors.black, fontSize: 13)),
+                                StatusHarvest(datestart: datestart, dateend: dateend)
+                              ],
+                            ),
                             SizedBox(height: 8.0,),
                             Text(quantity,
                                 style: TextStyle(
@@ -66,7 +88,13 @@ class CardHarvestDetail extends StatelessWidget {
                                     fontSize: 11,
                                     fontWeight: FontWeight.w600)),
                             SizedBox(height: 8.0,),
-                            Text('Ngày bắt đầu: 06/06/2021',
+                            Text('Ngày mở bán: '+DateFormat('dd/MM/yyyy').format(datestart),
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.w600)),
+                            SizedBox(height: 8.0,),
+                            Text('Ngày kết thúc: '+DateFormat('dd/MM/yyyy').format(dateend),
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 11,

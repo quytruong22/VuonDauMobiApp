@@ -14,11 +14,11 @@ class DetailFarm extends StatefulWidget {
 
 class _DetailFarmState extends State<DetailFarm> {
   List<HarvestDTO> list = [
-    HarvestDTO(ID: 0, product: ProductDTO(ID: 0, name: 'Dâu', description: '', img: 'https://cdn.tgdd.vn/Products/Images/8788/223378/bhx/dau-tay-hop-500g-202103180809491848.jpg',
+    HarvestDTO(ID: 0, product: ProductDTO(ID: 0, name: 'Dâu', description: '', img: 'https://cdn1.tuoitre.vn/zoom/600_315/2020/9/22/dau-tay-1600743428804672157496-crop-16007435512231711659798.jpg',
         date: DateTime.now()), name: 'Dâu', description: '', price: 50000, quantity: 50),
-    HarvestDTO(ID: 0, product: ProductDTO(ID: 0, name: 'Dâu', description: '', img: 'https://cdn.tgdd.vn/Products/Images/8788/223378/bhx/dau-tay-hop-500g-202103180809491848.jpg',
+    HarvestDTO(ID: 0, product: ProductDTO(ID: 0, name: 'Dâu', description: '', img: 'https://cdn1.tuoitre.vn/zoom/600_315/2020/9/22/dau-tay-1600743428804672157496-crop-16007435512231711659798.jpg',
         date: DateTime.now()), name: 'Dâu', description: '', price: 50000, quantity: 50),
-    HarvestDTO(ID: 0, product: ProductDTO(ID: 0, name: 'Dâu', description: '', img: 'https://cdn.tgdd.vn/Products/Images/8788/223378/bhx/dau-tay-hop-500g-202103180809491848.jpg',
+    HarvestDTO(ID: 0, product: ProductDTO(ID: 0, name: 'Dâu', description: '', img: 'https://cdn1.tuoitre.vn/zoom/600_315/2020/9/22/dau-tay-1600743428804672157496-crop-16007435512231711659798.jpg',
         date: DateTime.now()), name: 'Dâu', description: '', price: 50000, quantity: 50),
   ];
   @override
@@ -27,7 +27,7 @@ class _DetailFarmState extends State<DetailFarm> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.green,
-        title: Text('Nông trại'),
+        title: Text('Chi tiết nông trại'),
         centerTitle: true,
       ),
       body: Container(
@@ -47,13 +47,13 @@ class _DetailFarmState extends State<DetailFarm> {
                       ),
                 ),
                 RoundedButton(
-                  text: "Tạo mùa vụ mới",
+                  text: "Tạo đợt bán mới",
                   press: () {
                     Navigator.pushNamed(context, '/addharvest');
                   },
                 ),
                 Text(
-                  'Các mùa vụ hiện tại',
+                  'Các đợt bán của nông trại',
                   style: TextStyle(
 
                   ),
