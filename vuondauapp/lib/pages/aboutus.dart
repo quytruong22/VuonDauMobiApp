@@ -19,7 +19,6 @@ class _AboutUsState extends State<AboutUs> {
             title: Text('About Us'),
             centerTitle: true
         ),
-        drawer: pageDrawer(currentPage: "AboutUs"),
         body: Container(
           width: double.infinity,
           height: size.height,

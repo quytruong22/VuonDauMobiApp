@@ -229,7 +229,7 @@ class Body extends StatelessWidget {
                     shape:
                     RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
                     onPressed: () {
-                      Navigator.pushNamed(context, "/login");
+                      Navigator.pushReplacementNamed(context, "/login");
                     },
                     color: Colors.white,
                     child: Row(

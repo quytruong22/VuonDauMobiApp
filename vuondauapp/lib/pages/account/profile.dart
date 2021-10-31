@@ -17,7 +17,6 @@ class _ProfileState extends State<Profile> {
           title: Text('Profile'),
           centerTitle: true,
       ),
-      drawer: pageDrawer(currentPage: "Profile"),
       body: Body(),
     );
   }

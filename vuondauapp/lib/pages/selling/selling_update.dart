@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:vuondauapp/widgets/compoment/rounded_date_input.dart';
 import 'package:vuondauapp/widgets/compoment/rounded_input_field.dart';
 import 'package:vuondauapp/widgets/compoment/rounded_button.dart';
 import 'package:vuondauapp/widgets/compoment/text_field_container.dart';
+import 'package:vuondauapp/widgets/compoment/rounded_date_input.dart';
+import 'package:image_picker/image_picker.dart';
 
-class UpdateHarvest extends StatefulWidget {
-  const UpdateHarvest({Key? key}) : super(key: key);
+class UpdateSelling extends StatefulWidget {
 
   @override
-  _UpdateHarvestState createState() => _UpdateHarvestState();
+  _UpdateSellingState createState() => _UpdateSellingState();
 }
 
-class _UpdateHarvestState extends State<UpdateHarvest> {
-  String dropdownValue = 'Nông Trại Phan Nam';
-  String dropdownProduct = 'Dâu';
+class _UpdateSellingState extends State<UpdateSelling> {
+  String dropdownValue = 'Vụ Dâu Đà Lạt Mùa Đông';
   DateTime datestart = DateTime.now();
   DateTime dateend = DateTime.now();
   @override
@@ -22,7 +21,7 @@ class _UpdateHarvestState extends State<UpdateHarvest> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.green,
-        title: Text('Cập nhật mùa vụ'),
+        title: Text('Cập nhật đợt bán'),
         centerTitle: true,
       ),
       body: Container(
@@ -33,12 +32,18 @@ class _UpdateHarvestState extends State<UpdateHarvest> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Text(
-                'Điền thông tin mùa vụ',
+                'Điền thông tin đợt bán',
                 style: TextStyle(
 
                 ),
               ),
               SizedBox(height: size.height * 0.03),
+              Text(
+                'Chọn mùa vụ:',
+                style: TextStyle(
+
+                ),
+              ),
               TextFieldContainer(
                 child: DropdownButton<String>(
                   value: dropdownValue,
@@ -56,7 +61,7 @@ class _UpdateHarvestState extends State<UpdateHarvest> {
                       dropdownValue = newValue!;
                     });
                   },
-                  items: <String>['Nông Trại Phan Nam', 'Nông trại Whiteface', 'Trường Thành Farm']
+                  items: <String>['Vụ Dâu Đà Lạt Mùa Đông', 'Vụ Cà chua Đà Lạt Mùa Đông', 'Vụ rau Cải Thảo Đà Lạt Mùa Đông']
                       .map<DropdownMenuItem<String>>((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
@@ -67,21 +72,15 @@ class _UpdateHarvestState extends State<UpdateHarvest> {
               ),
               SizedBox(height: size.height * 0.03),
               RoundedInputField(
-                hintText: "Tên mùa vụ",
+                hintText: "Tên đợt bán",
                 icon: Icons.drive_file_rename_outline,
-                onChanged: (value) {},
-              ),
-              SizedBox(height: size.height * 0.03),
-              RoundedInputField(
-                hintText: "Mô tả",
-                icon: Icons.info_rounded,
                 onChanged: (value) {},
               ),
               SizedBox(height: size.height * 0.03),
               Container(
                   width: size.width*0.8,
                   child: Text(
-                    'Ngày thu hoạch dự kiến',
+                    'Ngày mở bán',
                     style: TextStyle(
 
                     ),
@@ -108,41 +107,42 @@ class _UpdateHarvestState extends State<UpdateHarvest> {
                   }
               ),
               SizedBox(height: size.height * 0.03),
-              Text(
-                'Sản phẩm',
-                style: TextStyle(
-                ),
+              Container(
+                  width: size.width*0.8,
+                  child: Text(
+                    'Ngày kết thúc',
+                    style: TextStyle(
+
+                    ),
+                    textAlign: TextAlign.left,
+                  )
+              ),
+              RoundedDateInput(
+                  text: 'Ngày '+dateend.day.toString()+' tháng '+dateend.month.toString()+' năm '+dateend.year.toString(),
+                  icon: Icons.date_range,
+                  onPress: (){
+                    showDatePicker(
+                        context: context,
+                        initialDate: dateend,
+                        firstDate: datestart,
+                        lastDate: DateTime(2023)
+                    ).then((value) {
+                      setState(() {
+                        value == null ? dateend = datestart : dateend = value;
+                      });
+                    });
+                  }
               ),
               SizedBox(height: size.height * 0.03),
-              TextFieldContainer(
-                child: DropdownButton<String>(
-                  value: dropdownProduct,
-                  icon: const Icon(Icons.arrow_downward),
-                  iconSize: 24,
-                  elevation: 16,
-                  style: const TextStyle(
-                    color: Colors.black,
-                  ),
-                  underline: Container(
-                      height: 0
-                  ),
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      dropdownProduct = newValue!;
-                    });
-                  },
-                  items: <String>['Dâu', 'Cải xanh', 'Cà tím']
-                      .map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
-                ),
-              ),
               RoundedInputField(
-                hintText: "Link ảnh mùa vụ",
-                icon: Icons.picture_in_picture,
+                hintText: "Sản lượng (Kg)",
+                icon: Icons.add_shopping_cart,
+                onChanged: (value) {},
+              ),
+              SizedBox(height: size.height * 0.03),
+              RoundedInputField(
+                hintText: "Giá (VND)",
+                icon: Icons.monetization_on,
                 onChanged: (value) {},
               ),
               SizedBox(height: size.height * 0.03),

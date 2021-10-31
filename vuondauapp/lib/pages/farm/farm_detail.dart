@@ -69,8 +69,8 @@ class _DetailFarmState extends State<DetailFarm> {
                               cta: "Xem chi tiết",
                               title: harvest.name,
                               img: harvest.product.img,
-                              quantity: 'Số lượng còn lại: ${harvest.quantity} Kg',
-                              price: 'Giá: ${harvest.price}VND/Kg',
+                              nameFarm: "Nông trại Phan Nam",
+                              sold: DateTime.now(),
                               tap: () {
                                 Navigator.pushNamed(context, '/detailharvest');
                               }),

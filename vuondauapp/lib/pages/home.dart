@@ -4,6 +4,7 @@ import 'package:vuondauapp/object/harvestDTO.dart';
 import 'package:vuondauapp/object/productDTO.dart';
 import 'package:vuondauapp/widgets/compoment/card-farm.dart';
 import 'package:vuondauapp/widgets/compoment/card-harvest.dart';
+import 'package:vuondauapp/widgets/compoment/card-selling.dart';
 import 'package:vuondauapp/widgets/drawer.dart';
 import 'package:vuondauapp/widgets/icon/icon.dart';
 import 'package:vuondauapp/widgets/compoment/square_button.dart';
@@ -15,11 +16,6 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  List<FarmDTO> listfarm = [
-    FarmDTO(ID: 0,name: 'Nông trại Phan Nam',address: '',description: '', img: 'https://thamhiemmekong.com/wp-content/uploads/2020/12/nongtraiphannam01.jpg'),
-    FarmDTO(ID: 0, name: 'Nông trại Whiteface', address: '', description: '', img: 'https://kenh14cdn.com/M2JlccccccccccccEmJzVu2ZOVx8FL/Image/2015a/trangtrai/6-b1900.jpg'),
-    FarmDTO(ID: 0, name: 'Trường Thành Farm', address: '', description: '', img: 'https://tamnhin.trithuccuocsong.vn/stores/news_dataimages/phonghv/072019/18/07/5336_20190715_145456.jpg')
-  ];
   List<HarvestDTO> listharvest = [
     HarvestDTO(ID: 0, product: ProductDTO(ID: 0, name: 'Dâu', description: '', img: 'https://cdn1.tuoitre.vn/zoom/600_315/2020/9/22/dau-tay-1600743428804672157496-crop-16007435512231711659798.jpg',
         date: DateTime.now()), name: 'Vụ Dâu Đà Lạt Mùa Đông', description: '', price: 100000, quantity: 50),
@@ -37,7 +33,6 @@ class _HomeState extends State<Home> {
         title: Text('Trang chủ'),
         centerTitle: true
       ),
-      drawer: pageDrawer(currentPage: "Home"),
       body: Container(
         width: size.width,
         child: SingleChildScrollView(
@@ -88,7 +83,46 @@ class _HomeState extends State<Home> {
                 padding: EdgeInsets.fromLTRB(8, 8, 0, 0),
                 width: size.width,
                 child: Text(
-                  'Các đợt bán hiện tại của bạn',
+                  'Các đợt bán hiện tại',
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold
+                  ),
+                ),
+              ),
+              Container(
+                  width: size.width,
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: listharvest.map((harvest) => Container(
+                        child: Column(
+                          children: <Widget>[
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 32.0),
+                              child: CardSelling(
+                                  cta: "Xem chi tiết",
+                                  title: harvest.name,
+                                  img: harvest.product.img,
+                                  nameProduct: 'Sản phẩm: '+harvest.product.name,
+                                  quantity: 'Tổng sản lượng: ${harvest.quantity} Kg',
+                                  sold: 'Số lượng đã bán: 10 Kg',
+                                  price: 'Giá: ${harvest.price}VND/Kg',
+                                  tap: () {
+                                    Navigator.pushNamed(context, '/detailselling');
+                                  }),
+                            ),
+                          ],
+                        ),
+                      )).toList(),
+                    ),
+                  )
+              ),
+              Container(
+                padding: EdgeInsets.fromLTRB(8, 8, 0, 0),
+                width: size.width,
+                child: Text(
+                  'Các mùa vụ của bạn',
                   textAlign: TextAlign.left,
                   style: TextStyle(
                       fontWeight: FontWeight.bold
@@ -108,48 +142,11 @@ class _HomeState extends State<Home> {
                               child: CardHarvest(
                                   cta: "Xem chi tiết",
                                   title: harvest.name,
-                                  nameProduct: harvest.product.name,
                                   img: harvest.product.img,
-                                  quantity: '- Sản lượng: ${harvest.quantity} Kg',
-                                  price: '- Giá: ${harvest.price}VND/Kg',
-                                  sold: 'Đã đặt: 35 Kg',
+                                  nameFarm: "Nông trại Phan Nam",
+                                  sold: DateTime.now(),
                                   tap: () {
                                     Navigator.pushNamed(context, '/detailharvest');
-                                  }),
-                            ),
-                          ],
-                        ),
-                      )).toList(),
-                    ),
-                  )
-              ),
-              Container(
-                padding: EdgeInsets.fromLTRB(8, 8, 0, 0),
-                width: size.width,
-                child: Text(
-                  'Nông trại của bạn',
-                  textAlign: TextAlign.left,
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold
-                  ),
-                ),
-              ),
-              Container(
-                  width: size.width,
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: listfarm.map((farm) => Container(
-                        child: Column(
-                          children: <Widget>[
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 32.0),
-                              child: CardFarm(
-                                  cta: "Xem chi tiết",
-                                  title: farm.name,
-                                  img: farm.img,
-                                  tap: () {
-                                    Navigator.pushNamed(context, '/detailfarm');
                                   }),
                             ),
                           ],

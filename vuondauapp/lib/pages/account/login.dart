@@ -8,6 +8,7 @@ import 'package:vuondauapp/pages/account/signup.dart';
 import 'package:vuondauapp/widgets/compoment/or_divider.dart';
 import 'package:vuondauapp/widgets/compoment/social_icon.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 GoogleSignIn _googleSignIn = GoogleSignIn(
   scopes: [
@@ -21,6 +22,8 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  //FirebaseAuth auth = FirebaseAuth.instance;
+  //late UserCredential user;
 
   Future<void> _handleSignIn() async {
     try {
@@ -29,10 +32,14 @@ class _LoginScreenState extends State<LoginScreen> {
       if (googleSignInAccount != null){
         final GoogleSignInAuthentication googleSignInAuthentication
         = await googleSignInAccount.authentication;
-        print(googleSignInAccount.id);
-        print(googleSignInAuthentication.idToken);
+        // final credential = GoogleAuthProvider.credential(
+        //   accessToken: googleSignInAuthentication.accessToken,
+        //   idToken: googleSignInAuthentication.idToken,
+        // );
+        //user = await auth.signInWithCredential(credential);
+        //print(user.toString());
+        await _googleSignIn.signOut();
       }
-      await _googleSignIn.signOut();
     } catch (error) {
       print(error);
     }
@@ -85,8 +92,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   RoundedButton(
                     text: "LOGIN",
                     press: () {
-                      print('l');
-                      Navigator.pushReplacementNamed(context, '/home');
+                      Navigator.pushReplacementNamed(context, '/navpage');
                     },
                   ),
                   SizedBox(height: size.height * 0.03),

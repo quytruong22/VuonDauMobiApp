@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:vuondauapp/widgets/compoment/card-harvest-detail.dart';
+import 'package:vuondauapp/widgets/compoment/card-selling-detail.dart';
 
-class DetailHarvest extends StatefulWidget {
-  const DetailHarvest({Key? key}) : super(key: key);
+class DetailSelling extends StatefulWidget {
+  const DetailSelling({Key? key}) : super(key: key);
 
   @override
-  _DetailHarvestState createState() => _DetailHarvestState();
+  _DetailSellingState createState() => _DetailSellingState();
 }
 
-class _DetailHarvestState extends State<DetailHarvest> {
+class _DetailSellingState extends State<DetailSelling> {
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +16,7 @@ class _DetailHarvestState extends State<DetailHarvest> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.green,
-        title: Text('Chi tiết mùa vụ'),
+        title: Text('Chi tiết đợt bán'),
         centerTitle: true,
       ),
       body: Container(
@@ -28,7 +28,7 @@ class _DetailHarvestState extends State<DetailHarvest> {
               SizedBox(height: 8.0),
               Padding(
                 padding: const EdgeInsets.only(bottom: 32.0),
-                child: CardHarvestDetail(
+                child: CardSellingDetail(
                   description: "Mô tả: Dâu của nông trại Phan Nam thơm ngon, chín tươi.",
                   name: 'Tên sản phẩm: Dâu',
                   farmname: 'Nông trại: Nông trại Phan Nam',
@@ -36,7 +36,8 @@ class _DetailHarvestState extends State<DetailHarvest> {
                   imgproduct: 'https://cdn.tgdd.vn/Products/Images/8788/223378/bhx/dau-tay-hop-500g-202103180809491848.jpg',
                   quantity: 'Số lượng còn lại: 50Kg',
                   price: 'Giá: 50.000VND/Kg',
-                  sold: DateTime.now(),
+                  datestart: DateTime(2021,11,30),
+                  dateend: DateTime(2021,12,30),
                 ),
               ),
             ],

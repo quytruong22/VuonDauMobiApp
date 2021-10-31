@@ -1,9 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:vuondauapp/widgets/compoment/status_harvest.dart';
 
-class CardHarvestDetail extends StatelessWidget {
-  CardHarvestDetail({this.name = "Placeholder Title",this.description = "",required this.imgharvest,this. quantity = "",this.price = "",this.farmname = "",required this.imgproduct,required this.sold});
+class CardSellingDetail extends StatelessWidget {
+  CardSellingDetail({this.name = "Placeholder Title",this.description = "",required this.imgharvest,this. quantity = "",this.price = "",this.farmname = "",required this.imgproduct,required this.datestart,required this.dateend});
 
   final String description;
   final String imgharvest;
@@ -12,7 +13,8 @@ class CardHarvestDetail extends StatelessWidget {
   final String quantity;
   final String price;
   final String farmname;
-  final DateTime sold;
+  final DateTime datestart;
+  final DateTime dateend;
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -54,51 +56,59 @@ class CardHarvestDetail extends StatelessWidget {
                                     fontSize: 11,
                                     fontWeight: FontWeight.w600)),
                             SizedBox(height: 8.0,),
-                            Row(
-                              children: [
-                                Container(
-                                    height: size.height*0.25,
-                                    width: size.width*0.5,
-                                    decoration: BoxDecoration(
-                                        image: DecorationImage(
-                                          image: NetworkImage(imgproduct),
-                                          fit: BoxFit.cover,
-                                        )
+                            Container(
+                                height: size.height*0.25,
+                                width: size.width*0.5,
+                                decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                      image: NetworkImage(imgproduct),
+                                      fit: BoxFit.cover,
                                     )
-                                ),
-                                Container(
-                                  margin: EdgeInsets.fromLTRB(8, 0, 0, 0),
-                                  height: size.height*0.25,
-                                  width: size.width*0.4,
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Text(name,
-                                          style: TextStyle(
-                                              color: Colors.black, fontSize: 13
-                                          )
-                                      ),
-                                      Text('Ngày thu hoạch: '+DateFormat('dd/MM/yyyy').format(sold),
-                                          style: TextStyle(
-                                              color: Colors.black, fontSize: 10
-                                          )
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(height: 8.0,),
+                                )
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(name,
+                                    style: TextStyle(
+                                        color: Colors.black, fontSize: 13)),
+                                StatusHarvest(datestart: datestart, dateend: dateend)
                               ],
                             ),
+                            SizedBox(height: 8.0,),
+                            Text(quantity,
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.w600)),
+                            SizedBox(height: 8.0,),
+                            Text(price,
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.w600)),
+                            SizedBox(height: 8.0,),
+                            Text('Ngày mở bán: '+DateFormat('dd/MM/yyyy').format(datestart),
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.w600)),
+                            SizedBox(height: 8.0,),
+                            Text('Ngày kết thúc: '+DateFormat('dd/MM/yyyy').format(dateend),
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.w600)),
+                            SizedBox(height: 8.0,),
                             TextButton(
                                 style: TextButton.styleFrom(
                                   backgroundColor: Colors.green,
                                 ),
                                 onPressed: (){
-                                  Navigator.pushNamed(context, '/updateharvest');
+                                  Navigator.pushNamed(context, '/updateselling');
                                 },
                                 child: Text(
-                                  'Cập nhật mùa vụ',
+                                  'Cập nhật đợt bán',
                                   style: TextStyle(
                                     color: Colors.white,
                                   ),

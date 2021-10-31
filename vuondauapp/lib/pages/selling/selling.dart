@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:vuondauapp/object/harvestDTO.dart';
 import 'package:vuondauapp/object/productDTO.dart';
-import 'package:vuondauapp/widgets/compoment/card-harvest.dart';
-import 'package:vuondauapp/widgets/drawer.dart';
+import 'package:vuondauapp/widgets/compoment/card-selling.dart';
 import 'package:vuondauapp/widgets/compoment/rounded_icon_button.dart';
 
-class Harvest extends StatefulWidget {
-  const Harvest({Key? key}) : super(key: key);
+class Selling extends StatefulWidget {
+  const Selling({Key? key}) : super(key: key);
 
   @override
-  _HarvestState createState() => _HarvestState();
+  _SellingState createState() => _SellingState();
 }
 
-class _HarvestState extends State<Harvest> {
+class _SellingState extends State<Selling> {
   List<HarvestDTO> list = [
     HarvestDTO(ID: 0, product: ProductDTO(ID: 0, name: 'Dâu', description: '', img: 'https://cdn1.tuoitre.vn/zoom/600_315/2020/9/22/dau-tay-1600743428804672157496-crop-16007435512231711659798.jpg',
         date: DateTime.now()), name: 'Vụ Dâu Đà Lạt Mùa Đông', description: '', price: 100000, quantity: 50),
@@ -27,7 +26,7 @@ class _HarvestState extends State<Harvest> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.green,
-        title: Text('Mùa vụ'),
+        title: Text('Đợt bán'),
         centerTitle: true,
       ),
       body: Container(
@@ -38,9 +37,9 @@ class _HarvestState extends State<Harvest> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               RoundedIconButton(
-                text: "Tạo mùa vụ mới",
+                text: "Tạo đợt bán mới",
                 press: () {
-                  Navigator.pushNamed(context, '/addharvest');
+                  Navigator.pushNamed(context, '/addselling');
                 },
               ),
               Column(
@@ -50,14 +49,16 @@ class _HarvestState extends State<Harvest> {
                       SizedBox(height: 8.0),
                       Padding(
                         padding: const EdgeInsets.only(bottom: 32.0),
-                        child: CardHarvest(
+                        child: CardSelling(
                             cta: "Xem chi tiết",
                             title: harvest.name,
                             img: harvest.product.img,
-                            nameFarm: "Nông trại Phan Nam",
-                            sold: DateTime.now(),
+                            nameProduct: 'Sản phẩm: '+harvest.product.name,
+                            quantity: 'Tổng sản lượng: ${harvest.quantity} Kg',
+                            sold: 'Số lượng đã bán: 10 Kg',
+                            price: 'Giá: ${harvest.price}VND/Kg',
                             tap: () {
-                              Navigator.pushNamed(context, '/detailharvest');
+                              Navigator.pushNamed(context, '/detailselling');
                             }),
                       ),
                     ],

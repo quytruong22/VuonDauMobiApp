@@ -19,7 +19,6 @@ class _DashboardState extends State<Dashboard> {
         title: Text('Dashboard'),
         centerTitle: true,
       ),
-      drawer: pageDrawer(currentPage: "Dashboard"),
       body: Container(
         width: double.infinity,
         height: size.height,

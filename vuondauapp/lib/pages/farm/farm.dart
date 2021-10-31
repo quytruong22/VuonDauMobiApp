@@ -26,7 +26,6 @@ class _FarmState extends State<Farm> {
         title: Text('Nông trại'),
         centerTitle: true,
       ),
-      drawer: pageDrawer(currentPage: "Farms"),
       floatingActionButton: RoundedButton(
         text: "Thêm nông trại mới",
         press: () {
