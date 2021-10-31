@@ -127,10 +127,12 @@ class Body extends StatelessWidget {
                     onPressed: () {
                       Navigator.pushNamed(context, '/profileupdate');
                     },
-                    color: Colors.lightGreenAccent,
+                    color: Colors.white,
                     child: Row(
                       children: [
-                        Icon(Icons.account_circle_outlined),
+                        Icon(Icons.account_circle_outlined,
+                          color: Colors.lightGreen
+                        ),
                         SizedBox(width: 20),
                         Expanded(child: Text(
                           "Cập nhật thông tin cá nhân",
@@ -151,13 +153,93 @@ class Body extends StatelessWidget {
                     onPressed: () {
                       Navigator.pushNamed(context, "/changepassword");
                     },
-                    color: Colors.lightGreenAccent,
+                    color: Colors.white,
                     child: Row(
                       children: [
-                        Icon(Icons.vpn_key_outlined),
+                        Icon(Icons.vpn_key_outlined,
+                            color: Colors.lightGreen
+                        ),
                         SizedBox(width: 20),
                         Expanded(child: Text(
                           "Đổi mật khẩu",
+                          style: Theme.of(context).textTheme.bodyText1,
+                        )
+                        ),
+                        Icon(Icons.arrow_forward_ios)
+                      ],
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  child: FlatButton(
+                    padding: EdgeInsets.all(20),
+                    shape:
+                    RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                    onPressed: () {
+                      Navigator.pushNamed(context, "/farm");
+                    },
+                    color: Colors.white,
+                    child: Row(
+                      children: [
+                        Icon(Icons.home_outlined,
+                            color: Colors.lightGreen
+                        ),
+                        SizedBox(width: 20),
+                        Expanded(child: Text(
+                          "Nông trại",
+                          style: Theme.of(context).textTheme.bodyText1,
+                        )
+                        ),
+                        Icon(Icons.arrow_forward_ios)
+                      ],
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  child: FlatButton(
+                    padding: EdgeInsets.all(20),
+                    shape:
+                    RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                    onPressed: () {
+                      Navigator.pushNamed(context, "/aboutus");
+                    },
+                    color: Colors.white,
+                    child: Row(
+                      children: [
+                        Icon(Icons.info_outlined,
+                            color: Colors.lightGreen
+                        ),
+                        SizedBox(width: 20),
+                        Expanded(child: Text(
+                          "About us",
+                          style: Theme.of(context).textTheme.bodyText1,
+                        )
+                        ),
+                        Icon(Icons.arrow_forward_ios)
+                      ],
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  child: FlatButton(
+                    padding: EdgeInsets.all(20),
+                    shape:
+                    RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                    onPressed: () {
+                      Navigator.pushNamed(context, "/login");
+                    },
+                    color: Colors.white,
+                    child: Row(
+                      children: [
+                        Icon(Icons.logout,
+                            color: Colors.lightGreen
+                        ),
+                        SizedBox(width: 20),
+                        Expanded(child: Text(
+                          "Đăng Xuất",
                           style: Theme.of(context).textTheme.bodyText1,
                         )
                         ),

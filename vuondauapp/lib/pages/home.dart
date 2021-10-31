@@ -22,11 +22,11 @@ class _HomeState extends State<Home> {
   ];
   List<HarvestDTO> listharvest = [
     HarvestDTO(ID: 0, product: ProductDTO(ID: 0, name: 'Dâu', description: '', img: 'https://cdn1.tuoitre.vn/zoom/600_315/2020/9/22/dau-tay-1600743428804672157496-crop-16007435512231711659798.jpg',
-        date: DateTime.now()), name: 'Dâu', description: '', price: 50000, quantity: 50),
-    HarvestDTO(ID: 0, product: ProductDTO(ID: 0, name: 'Dâu', description: '', img: 'https://cdn1.tuoitre.vn/zoom/600_315/2020/9/22/dau-tay-1600743428804672157496-crop-16007435512231711659798.jpg',
-        date: DateTime.now()), name: 'Dâu', description: '', price: 50000, quantity: 50),
-    HarvestDTO(ID: 0, product: ProductDTO(ID: 0, name: 'Dâu', description: '', img: 'https://cdn1.tuoitre.vn/zoom/600_315/2020/9/22/dau-tay-1600743428804672157496-crop-16007435512231711659798.jpg',
-        date: DateTime.now()), name: 'Dâu', description: '', price: 50000, quantity: 50),
+        date: DateTime.now()), name: 'Vụ Dâu Đà Lạt Mùa Đông', description: '', price: 100000, quantity: 50),
+    HarvestDTO(ID: 0, product: ProductDTO(ID: 0, name: 'Cà Chua', description: '', img: 'https://hoayeuthuong.com/hinh-hoa-tuoi/moingay/11894_ca-chua-kg.jpg',
+        date: DateTime.now()), name: 'Vụ Cà chua Đà Lạt Mùa Đông', description: '', price: 50000, quantity: 100),
+    HarvestDTO(ID: 0, product: ProductDTO(ID: 0, name: 'Cải thảo', description: '', img: 'https://images.unsplash.com/photo-1614540527480-1a0818eafcbb?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=435&q=80',
+        date: DateTime.now()), name: 'Vụ rau Cải Thảo Đà Lạt Mùa Đông', description: '', price: 20000, quantity: 70),
   ];
   @override
   Widget build(BuildContext context) {
@@ -43,42 +43,42 @@ class _HomeState extends State<Home> {
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
-              Container(
-                padding: EdgeInsets.fromLTRB(8, 8, 0, 0),
-                width: size.width,
-                child: Text(
-                  'Các dịch vụ chính',
-                  textAlign: TextAlign.left,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold
-                  ),
-                ),
-              ),
+              //Container(
+              //  padding: EdgeInsets.fromLTRB(8, 8, 0, 0),
+              //  width: size.width,
+              //  child: Text(
+              //    'Các dịch vụ chính',
+              //    textAlign: TextAlign.left,
+              //    style: TextStyle(
+              //      fontWeight: FontWeight.bold
+              //    ),
+              //  ),
+              //),
               Container(
                 child: Row(
                   children: [
                     SquareButton(
                       text: 'Thêm nông trại',
                       icon: MyCustomIcons.farm,
-                      color: Colors.orangeAccent,
+                      color: Colors.lightGreen,
                       press: (){Navigator.pushNamed(context, '/addfarm');},
                     ),
                     SquareButton(
                       text: 'Tạo đợt bán',
                       icon: Icons.agriculture,
-                      color: Colors.black,
+                      color: Colors.lightGreen,
                       press: (){Navigator.pushNamed(context, '/addharvest');},
                     ),
                     SquareButton(
                       text: 'Xác nhận đơn hàng',
                       icon: Icons.shopping_cart,
-                      color: Colors.red,
+                      color: Colors.lightGreen,
                       press: (){},
                     ),
                     SquareButton(
                       text: 'Thống kê',
                       icon: Icons.dashboard,
-                      color: Colors.purple,
+                      color: Colors.lightGreen,
                       press: (){Navigator.pushReplacementNamed(context, '/dashboard');},
                     )
                   ],
@@ -108,9 +108,11 @@ class _HomeState extends State<Home> {
                               child: CardHarvest(
                                   cta: "Xem chi tiết",
                                   title: harvest.name,
+                                  nameProduct: harvest.product.name,
                                   img: harvest.product.img,
-                                  quantity: 'Số lượng còn lại: ${harvest.quantity} Kg',
-                                  price: 'Giá: ${harvest.price}VND/Kg',
+                                  quantity: '- Sản lượng: ${harvest.quantity} Kg',
+                                  price: '- Giá: ${harvest.price}VND/Kg',
+                                  sold: 'Đã đặt: 35 Kg',
                                   tap: () {
                                     Navigator.pushNamed(context, '/detailharvest');
                                   }),

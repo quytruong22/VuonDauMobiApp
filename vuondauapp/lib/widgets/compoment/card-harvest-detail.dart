@@ -48,7 +48,7 @@ class CardHarvestDetail extends StatelessWidget {
                           children: [
                             Text(farmname,
                                 style: TextStyle(
-                                    color: Colors.black, fontSize: 13)),
+                                    color: Colors.green, fontSize: 13, fontWeight: FontWeight.bold)),
                             SizedBox(height: 8.0,),
                             Text(description,
                                 style: TextStyle(

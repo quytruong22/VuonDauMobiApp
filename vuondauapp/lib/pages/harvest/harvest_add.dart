@@ -81,7 +81,7 @@ class _AddHarvestState extends State<AddHarvest> {
               Container(
                 width: size.width*0.8,
                   child: Text(
-                      'Ngày mở bán',
+                      'Ngày thu hoạch',
                       style: TextStyle(
 
                       ),
@@ -108,32 +108,32 @@ class _AddHarvestState extends State<AddHarvest> {
                 }
               ),
               SizedBox(height: size.height * 0.03),
-              Container(
-                  width: size.width*0.8,
-                  child: Text(
-                    'Ngày kết thúc',
-                    style: TextStyle(
+              //Container(
+              //    width: size.width*0.8,
+             //     child: Text(
+              //      'Ngày kết thúc',
+             //       style: TextStyle(
 
-                    ),
-                    textAlign: TextAlign.left,
-                  )
-              ),
-              RoundedDateInput(
-                  text: 'Ngày '+dateend.day.toString()+' tháng '+dateend.month.toString()+' năm '+dateend.year.toString(),
-                  icon: Icons.date_range,
-                  onPress: (){
-                    showDatePicker(
-                        context: context,
-                        initialDate: dateend,
-                        firstDate: datestart,
-                        lastDate: DateTime(2023)
-                    ).then((value) {
-                      setState(() {
-                        value == null ? dateend = datestart : dateend = value;
-                      });
-                    });
-                  }
-              ),
+             //       ),
+             //       textAlign: TextAlign.left,
+             //     )
+            //  ),
+             // RoundedDateInput(
+             //     text: 'Ngày '+dateend.day.toString()+' tháng '+dateend.month.toString()+' năm '+dateend.year.toString(),
+             //     icon: Icons.date_range,
+             //     onPress: (){
+             //       showDatePicker(
+              //          context: context,
+              //          initialDate: dateend,
+              //          firstDate: datestart,
+              //          lastDate: DateTime(2023)
+              //      ).then((value) {
+              //        setState(() {
+               //         value == null ? dateend = datestart : dateend = value;
+              //        });
+              //      });
+              //    }
+             // ),
               Text(
                 'Điền thông tin sản phẩm',
                 style: TextStyle(

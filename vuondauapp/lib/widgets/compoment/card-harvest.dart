@@ -8,6 +8,8 @@ class CardHarvest extends StatelessWidget {
       this.cta = "",
         this.price = "",
         this.quantity = "",
+        this.sold = "",
+        this.nameProduct = "",
       required this.img,
       required this.tap});
 
@@ -17,6 +19,8 @@ class CardHarvest extends StatelessWidget {
   final String price;
   final Function() tap;
   final String title;
+  final String sold;
+  final String nameProduct;
 
   @override
   Widget build(BuildContext context) {
@@ -54,8 +58,8 @@ class CardHarvest extends StatelessWidget {
                         children: [
                           Text(title,
                               style: TextStyle(
-                                  color: Colors.black, fontSize: 13)),
-                          Text("Sản phẩm: Dâu",
+                                  color: Colors.black, fontSize: 13, fontWeight: FontWeight.bold)),
+                          Text(nameProduct,
                               style: TextStyle(
                                   color: Colors.black, fontSize: 13)),
                           Text(quantity,
@@ -64,6 +68,9 @@ class CardHarvest extends StatelessWidget {
                           Text(price,
                               style: TextStyle(
                                   color: Colors.black, fontSize: 13)),
+                          Text(sold,
+                              style: TextStyle(
+                                  color: Colors.red, fontSize: 13)),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
