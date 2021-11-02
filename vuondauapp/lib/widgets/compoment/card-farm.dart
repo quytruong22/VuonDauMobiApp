@@ -3,9 +3,11 @@ import 'package:vuondauapp/object/farmDTO.dart';
 
 class CardFarm extends StatelessWidget {
   CardFarm(
-      {required this.farm,
+      {this.img = 'https://cdn.discordapp.com/attachments/900392963639750657/905113971948941332/iconVuondau.png',
+        required this.farm,
       required this.tap});
 
+  final String img;
   final FarmDTO farm;
   final Function() tap;
 

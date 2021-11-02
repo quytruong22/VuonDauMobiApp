@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 class FarmerDTO{
   final String id;
   final String email;
@@ -7,7 +9,7 @@ class FarmerDTO{
   final DateTime birth_day;
   final bool gender;
   final DateTime date_of_create;
-  final int status;
+  final bool status;
 
   FarmerDTO({
     required this.id,
@@ -22,16 +24,17 @@ class FarmerDTO{
   });
 
   factory FarmerDTO.fromJson(Map<String, dynamic> json){
+
     return FarmerDTO(
         id: json['id'],
         first_name: json['first_name'],
         email: json['email'],
         last_name: json['last_name'],
         phone: json['phone'],
-        birth_day: json['birth_day'],
-        gender: json['gender'],
-        date_of_create: json['date_of_create'],
-        status:     json['status']
+        birth_day: DateFormat('yyyy-MM-ddThh:mm:ss').parse(json['birth_day']),
+        gender: json['gender']== 0 ? false : true,
+        date_of_create: DateFormat('yyyy-MM-ddThh:mm:ss').parse(json['date_of_create']),
+        status:     json['status']== 0 ? false : true
     );
   }
   Map<String, dynamic> toJson() {

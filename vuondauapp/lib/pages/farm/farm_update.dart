@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:vuondauapp/object/farmDTO.dart';
 import 'package:vuondauapp/widgets/compoment/dialog.dart';
 import 'package:vuondauapp/widgets/compoment/rounded_input_field.dart';
 import 'package:vuondauapp/widgets/compoment/rounded_button.dart';
+import 'package:vuondauapp/widgets/compoment/rounded_input_form_field.dart';
 
 class UpdateFarm extends StatefulWidget {
   const UpdateFarm({Key? key}) : super(key: key);
@@ -13,6 +15,7 @@ class UpdateFarm extends StatefulWidget {
 class _UpdateFarmState extends State<UpdateFarm> {
   @override
   Widget build(BuildContext context) {
+    final FarmDTO farm = ModalRoute.of(context)!.settings.arguments as FarmDTO;
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
@@ -34,21 +37,21 @@ class _UpdateFarmState extends State<UpdateFarm> {
                 ),
               ),
               SizedBox(height: size.height * 0.03),
-              RoundedInputField(
+              RoundedInputForm(
                 icon: Icons.drive_file_rename_outline,
-                hintText: "Tên nông trại",
+                value: farm.name,
                 onChanged: (value) {},
               ),
               SizedBox(height: size.height * 0.03),
-              RoundedInputField(
+              RoundedInputForm(
                 icon: Icons.location_on,
-                hintText: "Địa chỉ nông trại",
+                value: farm.address,
                 onChanged: (value) {},
               ),
               SizedBox(height: size.height * 0.03),
-              RoundedInputField(
+              RoundedInputForm(
                 icon: Icons.description,
-                hintText: "Mô tả nông trại",
+                value: farm.description,
                 onChanged: (value) {},
               ),
               SizedBox(height: size.height * 0.03),

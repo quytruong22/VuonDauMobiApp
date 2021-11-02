@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vuondauapp/object/farmDTO.dart';
 import 'package:vuondauapp/object/harvestDTO.dart';
 import 'package:vuondauapp/object/productDTO.dart';
 import 'package:vuondauapp/widgets/compoment/rounded_button.dart';
@@ -24,6 +25,7 @@ class _DetailFarmState extends State<DetailFarm> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    final FarmDTO farm = ModalRoute.of(context)!.settings.arguments as FarmDTO;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.green,
@@ -31,7 +33,8 @@ class _DetailFarmState extends State<DetailFarm> {
         centerTitle: true,
       ),
       body: Container(
-        width: double.infinity,
+        margin: EdgeInsets.symmetric(horizontal: 10),
+        width: size.width-20,
         height: size.height,
         child: SingleChildScrollView(
           child: Column(
@@ -40,10 +43,7 @@ class _DetailFarmState extends State<DetailFarm> {
                 Padding(
                   padding: const EdgeInsets.only(bottom: 32.0),
                   child: CardFarmDetail(
-                      description: "Nông trại Phan Nam cung cấp nông sản tươi sạch, không thuốc.",
-                      name: 'Nông trại Phan Nam',
-                      img: 'https://thamhiemmekong.com/wp-content/uploads/2020/12/nongtraiphannam01.jpg',
-                      address: 'Mỹ Khánh, Thành phố Long Xuyên, An Giang',
+                      farm: farm,
                       ),
                 ),
                 RoundedButton(

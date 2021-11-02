@@ -1,9 +1,10 @@
+import 'package:intl/intl.dart';
 import 'package:vuondauapp/object/areaDTO.dart';
 import 'package:vuondauapp/object/farmType.dart';
 import 'package:vuondauapp/object/farmerDTO.dart';
 
 class FarmDTO {
-  final int ID;
+  final String ID;
   final FarmType farmType;
   final FarmerDTO farmer;
   final AreaDTO area;
@@ -35,8 +36,8 @@ class FarmDTO {
         name:         json['name'],
         address:      json['address'],
         description:  json['description'],
-        dateOfCreate: json['date_of_create'],
-        dayOfUpdate:  json['date_update'],
+        dateOfCreate: DateFormat('yyyy-MM-ddThh:mm:ss').parse(json['date_of_create']),
+        dayOfUpdate:  DateFormat('yyyy-MM-ddThh:mm:ss').parse(json['date_update']),
         status:     json['status']
     );
   }

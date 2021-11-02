@@ -1,88 +1,102 @@
 import 'package:flutter/material.dart';
+import 'package:vuondauapp/object/farmDTO.dart';
+import 'package:vuondauapp/pages/farm/farm_update.dart';
 
 class CardFarmDetail extends StatelessWidget {
   CardFarmDetail(
-      {this.name = "Placeholder Title",
-      this.description = "",
-      this.img = "https://via.placeholder.com/200",
-      this.address = "",
+      {required this.farm
       });
 
-  final String description;
-  final String img;
-  final String name;
-  final String address;
+  final FarmDTO farm;
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Container(
-        height: 325,
-        width: null,
-        child: GestureDetector(
-          child: Card(
+        width: size.width-20,
+        child: Card(
+              clipBehavior: Clip.antiAlias,
               elevation: 0.4,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(0.0))),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    height: size.height*0.25,
+                    height: size.height*0.3,
                     width: size.width-20,
-                      decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: NetworkImage('https://thamhiemmekong.com/wp-content/uploads/2020/12/nongtraiphannam01.jpg'),
-                            fit: BoxFit.cover,
-                          ))),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            top: 8.0, bottom: 8.0, left: 8.0),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                    child: Image(
+                      image: NetworkImage('https://thamhiemmekong.com/wp-content/uploads/2020/12/nongtraiphannam01.jpg'),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  ListTile(
+                    title: Text(farm.name),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
                           children: [
-                            Text(name,
-                                style: TextStyle(
-                                    color: Colors.black, fontSize: 13)),
-                            SizedBox(height: 4.0,),
-                            Row(
-                              children: [
-                                Text('Địa chỉ:'),
-                                Text(address,
-                                    style: TextStyle(
-                                        color: Colors.black38,
-                                        fontSize: 11,
-                                        fontWeight: FontWeight.w600)),
-
-                              ],
-                            ),
-                            SizedBox(height: 4.0,),
-                            Text(description,
-                                style: TextStyle(
-                                    color: Colors.black38,
-                                    fontSize: 11,
-                                    fontWeight: FontWeight.w600)),
-                            SizedBox(height: 4.0,),
-                            TextButton(
-                                style: TextButton.styleFrom(
-                                  backgroundColor: Colors.green,
-                                ),
-                                onPressed: (){
-                                  Navigator.pushNamed(context, '/updatefarm');
-                                  },
-                                child: Text(
-                                    'Cập nhật nông trại',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                    ),
-                                )
-                            )
+                            Text('Miền:'),
+                            Text(farm.area.name),
                           ],
                         ),
+                        Row(
+                          children: [
+                            Text('Địa chỉ:'),
+                            Text(farm.address),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Text('Mô tả:'),
+                            Text(farm.description),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  ButtonBar(
+                    alignment: MainAxisAlignment.start,
+                    children: [
+                      TextButton(
+                          style: TextButton.styleFrom(
+                            backgroundColor: Colors.green,
+                          ),
+                          onPressed: (){
+                            Navigator.push(context,MaterialPageRoute(
+                              builder: (context) => const UpdateFarm(),
+                              settings: RouteSettings(
+                                arguments: farm,
+                              ),
+                            ));
+                          },
+                          child: Text(
+                            'Cập nhật nông trại',
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          )
+                      ),
+                      TextButton(
+                          style: TextButton.styleFrom(
+                            backgroundColor: Colors.red,
+                          ),
+                          onPressed: (){
+
+                          },
+                          child: Text(
+                            'Xóa nông trại',
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          )
                       )
+                    ],
+                  )
                 ],
-              )),
-        ));
+              ),
+        )
+    );
   }
 }

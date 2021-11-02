@@ -22,7 +22,7 @@ class _AddFarmState extends State<AddFarm> {
       ),
       body: Container(
         margin: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
-        width: size.width,
+        width: size.width-20,
         height: size.height,
         child: SingleChildScrollView(
           child: Column(

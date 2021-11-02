@@ -1,4 +1,9 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:vuondauapp/object/farmDTO.dart';
+import 'package:vuondauapp/object/listFarms.dart';
+import 'package:vuondauapp/pages/farm/farm.dart';
 import 'profile_pic.dart';
 
 class Body extends StatelessWidget {
@@ -176,8 +181,24 @@ class Body extends StatelessWidget {
                     padding: EdgeInsets.all(20),
                     shape:
                     RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-                    onPressed: () {
-                      Navigator.pushNamed(context, "/farm");
+                    onPressed: () async {
+                      try {
+                        final response = await http.get(Uri.parse('http://52.221.245.187:90/api/v1/farms'));
+                        if (response.statusCode == 200) {
+                          List<FarmDTO> list = ListFarms.fromJson(jsonDecode(response.body)).farms;
+                          Navigator.push(context,MaterialPageRoute(
+                            builder: (context) => const Farm(),
+                            settings: RouteSettings(
+                              arguments: list,
+                            ),
+                          ));
+                        } else {
+                          throw Exception('Failed to load Farm');
+                        }
+                      } catch (e) {
+                        print('caught error: $e');
+                      }
+
                     },
                     color: Colors.white,
                     child: Row(

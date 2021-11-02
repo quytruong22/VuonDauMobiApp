@@ -92,6 +92,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   RoundedButton(
                     text: "LOGIN",
                     press: () {
+                      print(DateTime.now());
                       Navigator.pushReplacementNamed(context, '/navpage');
                     },
                   ),
