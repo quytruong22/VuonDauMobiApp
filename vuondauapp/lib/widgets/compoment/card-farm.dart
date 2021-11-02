@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:vuondauapp/object/farmDTO.dart';
 
 class CardFarm extends StatelessWidget {
   CardFarm(
-      {this.title = "Placeholder Title",
-      this.cta = "",
-      this.img = "https://via.placeholder.com/200",
+      {required this.farm,
       required this.tap});
 
-  final String cta;
-  final String img;
+  final FarmDTO farm;
   final Function() tap;
-  final String title;
 
   @override
   Widget build(BuildContext context) {
@@ -47,9 +44,9 @@ class CardFarm extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(title,
+                            Text(farm.name,
                                 style: TextStyle( fontSize: 13)),
-                            Text(cta,
+                            Text('Xem chi tiết',
                                 style: TextStyle(
                                     color: Colors.green,
                                     fontSize: 11,
