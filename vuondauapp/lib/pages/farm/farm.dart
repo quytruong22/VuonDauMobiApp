@@ -5,15 +5,15 @@ import 'package:vuondauapp/object/farmDTO.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-  Future<List<FarmDTO>> fetchFarmDTO() async {
-  final response = await http.get(Uri.parse('http://52.221.245.187:90/api/v1/farms'));
+  //Future<List<FarmDTO>> fetchFarmDTO() async {
+  //final response = await http.get(Uri.parse('http://52.221.245.187:90/api/v1/farms'));
 
-  if (response.statusCode == 200) {
-    return ListFarms.fromJson(jsonDecode(response.body));
-  } else {
-    throw Exception('Failed to load Farm');
-  }
-}
+  //if (response.statusCode == 200) {
+  //  return ListFarms.fromJson(jsonDecode(response.body));
+  //} else {
+  // throw Exception('Failed to load Farm');
+  //}
+//}
 
 class Farm extends StatefulWidget {
   const Farm({Key? key}) : super(key: key);
@@ -32,7 +32,7 @@ class _FarmState extends State<Farm> {
 
   Future<void> initState() async {
     super.initState();
-    list = await fetchFarmDTO();
+    //list = await fetchFarmDTO();
   }
 
   @override

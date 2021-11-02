@@ -31,10 +31,11 @@ class CardFarm extends StatelessWidget {
                               borderRadius: BorderRadius.only(
                                   topLeft: Radius.circular(6.0),
                                   topRight: Radius.circular(6.0)),
-                              image: DecorationImage(
-                                image: NetworkImage(img),
-                                fit: BoxFit.cover,
-                              )))),
+                              //image: DecorationImage(
+                                //image: NetworkImage(img),
+                               // fit: BoxFit.cover,
+                             // )
+                          ))),
                   Flexible(
                       flex: 1,
                       child: Padding(
