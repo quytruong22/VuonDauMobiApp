@@ -23,7 +23,7 @@ class CardHarvest extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     return Container(
         height: 130,
-        width: size.width,
+        width: size.width-20,
         child: GestureDetector(
           onTap: tap,
           child: Card(

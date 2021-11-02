@@ -29,7 +29,7 @@ class CardFarmDetail extends StatelessWidget {
                 children: [
                   Container(
                     height: size.height*0.25,
-                    width: size.width,
+                    width: size.width-20,
                       decoration: BoxDecoration(
                           image: DecorationImage(
                             image: NetworkImage('https://thamhiemmekong.com/wp-content/uploads/2020/12/nongtraiphannam01.jpg'),

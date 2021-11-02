@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:vuondauapp/object/farmDTO.dart';
 import 'package:vuondauapp/object/harvestDTO.dart';
 import 'package:vuondauapp/object/productDTO.dart';
-import 'package:vuondauapp/widgets/compoment/card-farm.dart';
 import 'package:vuondauapp/widgets/compoment/card-harvest.dart';
 import 'package:vuondauapp/widgets/compoment/card-selling.dart';
-import 'package:vuondauapp/widgets/drawer.dart';
 import 'package:vuondauapp/widgets/icon/icon.dart';
 import 'package:vuondauapp/widgets/compoment/square_button.dart';
 
@@ -34,21 +31,11 @@ class _HomeState extends State<Home> {
         centerTitle: true
       ),
       body: Container(
+        margin: EdgeInsets.symmetric(horizontal: 10),
         width: size.width,
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
-              //Container(
-              //  padding: EdgeInsets.fromLTRB(8, 8, 0, 0),
-              //  width: size.width,
-              //  child: Text(
-              //    'Các dịch vụ chính',
-              //    textAlign: TextAlign.left,
-              //    style: TextStyle(
-              //      fontWeight: FontWeight.bold
-              //    ),
-              //  ),
-              //),
               Container(
                 child: Row(
                   children: [
@@ -62,7 +49,7 @@ class _HomeState extends State<Home> {
                       text: 'Tạo đợt bán',
                       icon: Icons.agriculture,
                       color: Colors.lightGreen,
-                      press: (){Navigator.pushNamed(context, '/addharvest');},
+                      press: (){Navigator.pushNamed(context, '/addselling');},
                     ),
                     SquareButton(
                       text: 'Xác nhận đơn hàng',
@@ -74,14 +61,14 @@ class _HomeState extends State<Home> {
                       text: 'Thống kê',
                       icon: Icons.dashboard,
                       color: Colors.lightGreen,
-                      press: (){Navigator.pushReplacementNamed(context, '/dashboard');},
+                      press: (){Navigator.pushNamed(context, '/dashboard');},
                     )
                   ],
                 )
               ),
               Container(
-                padding: EdgeInsets.fromLTRB(8, 8, 0, 0),
-                width: size.width,
+                padding: EdgeInsets.fromLTRB(8, 10, 0, 0),
+                width: size.width-20,
                 child: Text(
                   'Các đợt bán hiện tại',
                   textAlign: TextAlign.left,
@@ -91,7 +78,7 @@ class _HomeState extends State<Home> {
                 ),
               ),
               Container(
-                  width: size.width,
+                  width: size.width-20,
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Row(
@@ -119,7 +106,7 @@ class _HomeState extends State<Home> {
                   )
               ),
               Container(
-                padding: EdgeInsets.fromLTRB(8, 8, 0, 0),
+                padding: EdgeInsets.fromLTRB(8, 10, 0, 0),
                 width: size.width,
                 child: Text(
                   'Các mùa vụ của bạn',
@@ -130,15 +117,14 @@ class _HomeState extends State<Home> {
                 ),
               ),
               Container(
-                width: size.width,
+                width: size.width-20,
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Row(
                       children: listharvest.map((harvest) => Container(
                         child: Column(
                           children: <Widget>[
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 32.0),
+                            Container(
                               child: CardHarvest(
                                   cta: "Xem chi tiết",
                                   title: harvest.name,

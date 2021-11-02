@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:vuondauapp/widgets/drawer.dart';
 
 class AboutUs extends StatefulWidget {
   const AboutUs({Key? key}) : super(key: key);

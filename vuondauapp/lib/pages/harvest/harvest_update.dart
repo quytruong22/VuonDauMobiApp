@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vuondauapp/widgets/compoment/dialog.dart';
 import 'package:vuondauapp/widgets/compoment/rounded_date_input.dart';
 import 'package:vuondauapp/widgets/compoment/rounded_input_field.dart';
 import 'package:vuondauapp/widgets/compoment/rounded_button.dart';
@@ -148,7 +149,14 @@ class _UpdateHarvestState extends State<UpdateHarvest> {
               SizedBox(height: size.height * 0.03),
               RoundedButton(
                 text: "Hoàn tất",
-                press: () {
+                press: () async {
+                  await showDialog(
+                      context: context,
+                      builder: (BuildContext context)=>Message_Dialog(
+                    title: 'Cập nhật mùa vụ',
+                    content: 'Cập nhật mùa vụ thành công',
+                  )
+                  );
                   Navigator.pop(context);
                 },
               ),

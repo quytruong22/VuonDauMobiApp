@@ -47,13 +47,13 @@ class _DetailFarmState extends State<DetailFarm> {
                       ),
                 ),
                 RoundedButton(
-                  text: "Tạo đợt bán mới",
+                  text: "Tạo mùa vụ mới",
                   press: () {
                     Navigator.pushNamed(context, '/addharvest');
                   },
                 ),
                 Text(
-                  'Các đợt bán của nông trại',
+                  'Các mùa vụ của nông trại',
                   style: TextStyle(
 
                   ),

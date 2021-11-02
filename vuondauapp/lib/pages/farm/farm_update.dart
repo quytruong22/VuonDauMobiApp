@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:vuondauapp/widgets/drawer.dart';
+import 'package:vuondauapp/widgets/compoment/dialog.dart';
 import 'package:vuondauapp/widgets/compoment/rounded_input_field.dart';
 import 'package:vuondauapp/widgets/compoment/rounded_button.dart';
 
@@ -60,8 +60,15 @@ class _UpdateFarmState extends State<UpdateFarm> {
               SizedBox(height: size.height * 0.03),
               RoundedButton(
                 text: "Hoàn tất",
-                press: () {
-                  Navigator.pushReplacementNamed(context, '/farm');
+                press: () async {
+                  await showDialog(
+                      context: context,
+                      builder: (BuildContext context)=>Message_Dialog(
+                        title: 'Cập nhật nông trại',
+                        content: 'Cập nhật nông trại thành công',
+                    )
+                  );
+                  Navigator.pop(context);
                 },
               ),
             ],

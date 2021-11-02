@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:vuondauapp/widgets/compoment/rounded_button.dart';
-import 'package:vuondauapp/widgets/drawer.dart';
 import 'package:vuondauapp/widgets/compoment/card-farm.dart';
 import 'package:vuondauapp/object/farmDTO.dart';
 
@@ -26,14 +24,18 @@ class _FarmState extends State<Farm> {
         title: Text('Nông trại'),
         centerTitle: true,
       ),
-      floatingActionButton: RoundedButton(
-        text: "Thêm nông trại mới",
-        press: () {
+      floatingActionButton: FloatingActionButton.extended(
+        backgroundColor: Colors.green,
+        foregroundColor: Colors.white,
+        onPressed: () {
           Navigator.pushNamed(context, '/addfarm');
         },
+        icon: Icon(Icons.add),
+        label: Text('Nông trại mới'),
       ),
       body: Container(
-        width: double.infinity,
+        margin: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+        width: size.width,
         height: size.height,
         child: SingleChildScrollView(
             child: Column(
@@ -43,9 +45,8 @@ class _FarmState extends State<Farm> {
                     children: list.map((farm) => Container(
                       child: Column(
                         children: <Widget>[
-                          SizedBox(height: 8.0),
                           Padding(
-                            padding: const EdgeInsets.only(bottom: 32.0),
+                            padding: const EdgeInsets.only(bottom: 10.0),
                             child: CardFarm(
                                 cta: "Xem chi tiết",
                                 title: farm.name,
@@ -59,7 +60,7 @@ class _FarmState extends State<Farm> {
                     )).toList(),
                   ),
                 ),
-                SizedBox(height: 50),
+                SizedBox(height: 45),
               ]
             )
         ),

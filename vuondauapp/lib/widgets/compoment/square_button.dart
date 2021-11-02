@@ -12,8 +12,8 @@ class SquareButton extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Container(
-      width: size.width * 0.25,
-      height: size.width * 0.25,
+      width: (size.width-20) * 0.25,
+      height: (size.width-20) * 0.25,
       child: ElevatedButton(
 
           child: Column(

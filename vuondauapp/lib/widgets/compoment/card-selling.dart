@@ -5,13 +5,13 @@ import 'package:vuondauapp/widgets/compoment/status_harvest.dart';
 class CardSelling extends StatelessWidget {
   CardSelling(
       {this.title = "Placeholder Title",
-      this.cta = "",
+        this.cta = "",
         this.price = "",
         this.quantity = "",
         this.sold = "",
         this.nameProduct = "",
-      required this.img,
-      required this.tap});
+        required this.img,
+        required this.tap});
 
   final String cta;
   final String img;
@@ -27,7 +27,7 @@ class CardSelling extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     return Container(
         height: 130,
-        width: size.width,
+        width: size.width-20,
         child: GestureDetector(
           onTap: tap,
           child: Card(

@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:vuondauapp/object/harvestDTO.dart';
 import 'package:vuondauapp/object/productDTO.dart';
 import 'package:vuondauapp/widgets/compoment/card-harvest.dart';
-import 'package:vuondauapp/widgets/drawer.dart';
-import 'package:vuondauapp/widgets/compoment/rounded_icon_button.dart';
+import 'package:vuondauapp/widgets/compoment/search_widget.dart';
 
 class Harvest extends StatefulWidget {
   const Harvest({Key? key}) : super(key: key);
@@ -13,7 +12,7 @@ class Harvest extends StatefulWidget {
 }
 
 class _HarvestState extends State<Harvest> {
-  List<HarvestDTO> list = [
+  List<HarvestDTO> data = [
     HarvestDTO(ID: 0, product: ProductDTO(ID: 0, name: 'Dâu', description: '', img: 'https://cdn1.tuoitre.vn/zoom/600_315/2020/9/22/dau-tay-1600743428804672157496-crop-16007435512231711659798.jpg',
         date: DateTime.now()), name: 'Vụ Dâu Đà Lạt Mùa Đông', description: '', price: 100000, quantity: 50),
     HarvestDTO(ID: 0, product: ProductDTO(ID: 0, name: 'Cà Chua', description: '', img: 'https://hoayeuthuong.com/hinh-hoa-tuoi/moingay/11894_ca-chua-kg.jpg',
@@ -21,6 +20,33 @@ class _HarvestState extends State<Harvest> {
     HarvestDTO(ID: 0, product: ProductDTO(ID: 0, name: 'Cải thảo', description: '', img: 'https://images.unsplash.com/photo-1614540527480-1a0818eafcbb?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=435&q=80',
         date: DateTime.now()), name: 'Vụ rau Cải Thảo Đà Lạt Mùa Đông', description: '', price: 20000, quantity: 70),
   ];
+  late List<HarvestDTO> list;
+  String query = '';
+
+  @override
+  void initState() {
+    super.initState();
+
+    list = data;
+  }
+
+  Widget buildSearch() => SearchWidget(
+    text: query,
+    hintText: 'Tên mùa vụ',
+    onChanged: searchHarvest,
+  );
+
+  void searchHarvest(String query) {
+    list = data.where((harvest) {
+      final namelower = harvest.name.toLowerCase();
+      final searchLower = query.toLowerCase();
+      return namelower.contains(searchLower);
+    }).toList();
+    setState(() {
+      this.query = query;
+      this.list=list;
+    });
+  }
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -30,26 +56,30 @@ class _HarvestState extends State<Harvest> {
         title: Text('Mùa vụ'),
         centerTitle: true,
       ),
+      floatingActionButton: FloatingActionButton.extended(
+        backgroundColor: Colors.green,
+        foregroundColor: Colors.white,
+        onPressed: () {
+          Navigator.pushNamed(context, '/addharvest');
+        },
+        icon: Icon(Icons.add),
+        label: Text('Mùa vụ mới'),
+      ),
       body: Container(
-        width: double.infinity,
+        margin: EdgeInsets.symmetric(horizontal: 10,),
+        width: size.width,
         height: size.height,
         child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-              RoundedIconButton(
-                text: "Tạo mùa vụ mới",
-                press: () {
-                  Navigator.pushNamed(context, '/addharvest');
-                },
-              ),
+              buildSearch(),
               Column(
                 children: list.map((harvest) => Container(
                   child: Column(
                     children: <Widget>[
-                      SizedBox(height: 8.0),
                       Padding(
-                        padding: const EdgeInsets.only(bottom: 32.0),
+                        padding: const EdgeInsets.only(bottom: 10.0),
                         child: CardHarvest(
                             cta: "Xem chi tiết",
                             title: harvest.name,
@@ -64,6 +94,7 @@ class _HarvestState extends State<Harvest> {
                   ),
                 )).toList(),
               ),
+              SizedBox(height: 45,)
             ],
           ),
         ),

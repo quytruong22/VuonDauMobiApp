@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vuondauapp/widgets/compoment/dialog.dart';
 import 'package:vuondauapp/widgets/compoment/rounded_input_field.dart';
 import 'package:vuondauapp/widgets/compoment/rounded_button.dart';
 import 'package:vuondauapp/widgets/compoment/text_field_container.dart';
@@ -148,8 +149,23 @@ class _AddHarvestState extends State<AddHarvest> {
               SizedBox(height: size.height * 0.03),
               RoundedButton(
                 text: "Hoàn tất",
-                press: () {
-                  Navigator.pop(context);
+                press: () async {
+                  bool confirm = await showDialog(context: context, builder: (BuildContext context) {
+                    return Confirm_Dialog(
+                      title: 'Tạo mùa vụ',
+                      content: 'Bạn muốn tạo mùa vụ mới?',
+                    );
+                  });
+                  if(confirm){
+                    await showDialog(
+                        context: context,
+                        builder: (BuildContext context)=>Message_Dialog(
+                          title: 'Tạo mùa vụ',
+                          content: 'Tạo mùa vụ thành công',
+                        )
+                    );
+                    Navigator.pop(context);
+                  }
                 },
               ),
             ],

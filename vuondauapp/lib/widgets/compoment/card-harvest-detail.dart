@@ -29,7 +29,7 @@ class CardHarvestDetail extends StatelessWidget {
                 children: [
                   Container(
                     height: size.height*0.25,
-                    width: size.width,
+                      width: size.width-20,
                       decoration: BoxDecoration(
                           image: DecorationImage(
                             image: NetworkImage(imgharvest),

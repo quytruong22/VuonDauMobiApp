@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:vuondauapp/widgets/drawer.dart';
+import 'package:vuondauapp/widgets/compoment/dialog.dart';
 import 'package:vuondauapp/widgets/compoment/rounded_input_field.dart';
 import 'package:vuondauapp/widgets/compoment/rounded_button.dart';
 
@@ -21,7 +21,8 @@ class _AddFarmState extends State<AddFarm> {
         centerTitle: true,
       ),
       body: Container(
-        width: double.infinity,
+        margin: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+        width: size.width,
         height: size.height,
         child: SingleChildScrollView(
           child: Column(
@@ -60,8 +61,23 @@ class _AddFarmState extends State<AddFarm> {
               SizedBox(height: size.height * 0.03),
               RoundedButton(
                 text: "Hoàn tất",
-                press: () {
-                  Navigator.pushReplacementNamed(context, '/farm');
+                press: () async {
+                  bool confirm = await showDialog(context: context, builder: (BuildContext context) {
+                    return Confirm_Dialog(
+                      title: 'Tạo nông trại',
+                      content: 'Bạn muốn tạo nông trại mới?',
+                    );
+                  });
+                  if(confirm){
+                    await showDialog(
+                        context: context,
+                        builder: (BuildContext context)=>Message_Dialog(
+                          title: 'Tạo nông trại',
+                          content: 'Tạo nông trại thành công',
+                        )
+                    );
+                    Navigator.pop(context);
+                  }
                 },
               ),
             ],
