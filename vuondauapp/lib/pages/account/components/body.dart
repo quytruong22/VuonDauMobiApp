@@ -2,11 +2,16 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:vuondauapp/object/farmDTO.dart';
+import 'package:vuondauapp/object/farmerDTO.dart';
 import 'package:vuondauapp/object/listFarms.dart';
 import 'package:vuondauapp/pages/farm/farm.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'profile_pic.dart';
 
 class Body extends StatelessWidget {
+  final FarmerDTO farmer;
+
+  Body({required this.farmer});
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -31,7 +36,7 @@ class Body extends StatelessWidget {
                         )
                     ),
                     Text(
-                        'Nguyễn Quý Trường',
+                        farmer.first_name+' '+farmer.last_name,
                         style: TextStyle(
                           letterSpacing: 2.0,
                           fontWeight: FontWeight.bold,
@@ -53,7 +58,7 @@ class Body extends StatelessWidget {
                         )
                     ),
                     Text(
-                        'Nam',
+                        farmer.gender ? 'Name':'Nữ',
                         style: TextStyle(
                           letterSpacing: 2.0,
                           fontWeight: FontWeight.bold,
@@ -75,7 +80,7 @@ class Body extends StatelessWidget {
                         )
                     ),
                     Text(
-                        '06/08/2000',
+                        '${farmer.birth_day.day}/${farmer.birth_day.month}/${farmer.birth_day.year}',
                         style: TextStyle(
                           letterSpacing: 2.0,
                           fontWeight: FontWeight.bold,
@@ -97,7 +102,7 @@ class Body extends StatelessWidget {
                         )
                     ),
                     Text(
-                      '012031283',
+                      farmer.phone,
                       style: TextStyle(
                         letterSpacing: 2.0,
                         fontWeight: FontWeight.bold,
@@ -114,7 +119,7 @@ class Body extends StatelessWidget {
                     ),
                     SizedBox(width: 10),
                     Text(
-                        'k1695nguyentruong@gmail.com',
+                        farmer.email,
                         style: TextStyle(
                           fontSize: 15,
                           letterSpacing: 1,
@@ -249,7 +254,8 @@ class Body extends StatelessWidget {
                     padding: EdgeInsets.all(20),
                     shape:
                     RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-                    onPressed: () {
+                    onPressed: () async {
+                      await FirebaseAuth.instance.signOut();
                       Navigator.pushReplacementNamed(context, "/login");
                     },
                     color: Colors.white,

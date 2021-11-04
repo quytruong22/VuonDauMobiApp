@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
 
 class FarmerDTO{
   final String id;
@@ -37,6 +40,7 @@ class FarmerDTO{
         status:     json['status']== 0 ? false : true
     );
   }
+
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;

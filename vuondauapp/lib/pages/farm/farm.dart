@@ -17,12 +17,6 @@ class _FarmState extends State<Farm> {
   //   FarmDTO(ID: 0, name: 'Trường Thành Farm', address: '', description: '', img: 'https://tamnhin.trithuccuocsong.vn/stores/news_dataimages/phonghv/072019/18/07/5336_20190715_145456.jpg')
   // ];
 
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     final List<FarmDTO> list=ModalRoute.of(context)!.settings.arguments as List<FarmDTO>;

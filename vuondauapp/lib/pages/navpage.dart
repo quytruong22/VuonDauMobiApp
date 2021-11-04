@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vuondauapp/object/farmerDTO.dart';
 import 'package:vuondauapp/pages/home.dart';
 import 'package:vuondauapp/pages/account/profile.dart';
 import 'package:vuondauapp/pages/harvest/harvest.dart';
@@ -26,6 +27,7 @@ class _NavigationPageState extends State<NavigationPage> {
 
   @override
   Widget build(BuildContext context) {
+    final FarmerDTO farmer=ModalRoute.of(context)!.settings.arguments as FarmerDTO;
     return Scaffold(
       body: PageView(
         controller: pageController,
@@ -34,7 +36,7 @@ class _NavigationPageState extends State<NavigationPage> {
           Dashboard(),
           Selling(),
           Harvest(),
-          Profile()
+          Profile(farmer: farmer,)
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(

@@ -1,5 +1,8 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:vuondauapp/object/farmerDTO.dart';
+import 'package:vuondauapp/pages/navpage.dart';
 import 'package:vuondauapp/widgets/compoment/rounded_button.dart';
 import 'package:vuondauapp/widgets/compoment/rounded_input_field.dart';
 import 'package:vuondauapp/widgets/compoment/rounded_password_field.dart';
@@ -9,6 +12,8 @@ import 'package:vuondauapp/widgets/compoment/or_divider.dart';
 import 'package:vuondauapp/widgets/compoment/social_icon.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:http/http.dart' as http;
+import 'package:jwt_decode/jwt_decode.dart';
 
 GoogleSignIn _googleSignIn = GoogleSignIn(
   scopes: [
@@ -22,23 +27,79 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  //FirebaseAuth auth = FirebaseAuth.instance;
-  //late UserCredential user;
+  FirebaseAuth auth = FirebaseAuth.instance;
+  late UserCredential user;
+  String email='';
+  String password='';
 
-  Future<void> _handleSignIn() async {
+  Future<void> _handleSignIn() async{
+    try{
+      user = await auth.createUserWithEmailAndPassword(email: email, password: password);
+      final idToken = await user.user?.getIdToken();
+      Map data = {
+        'access_token': '$idToken'
+      };
+      var body = json.encode(data);
+      final http.Response response = await http.post(
+          Uri.parse('http://52.221.245.187:90/api/v1/login'),
+          headers: {"Content-Type": "application/json"},
+          body: body
+      );
+      Map<String, dynamic> payload = Jwt.parseJwt(response.body);
+      print(payload);
+
+      final String getID = payload['ID'];
+      final getFarmerResponse = await http.get(Uri.parse('http://52.221.245.187:90/api/v1/farmers/$getID'));
+      final farmer = await FarmerDTO.fromJson(jsonDecode(getFarmerResponse.body));
+      _googleSignIn.signOut();
+      Navigator.pushReplacement(context, MaterialPageRoute(
+        builder: (context) => const NavigationPage(),
+        settings: RouteSettings(
+          arguments: farmer,
+        ),
+      ));
+    } catch(error){
+      print(error);
+    }
+
+  }
+
+  Future<void> _handleGoogleSignIn() async {
     try {
       final GoogleSignInAccount? googleSignInAccount
       = await _googleSignIn.signIn();
       if (googleSignInAccount != null){
         final GoogleSignInAuthentication googleSignInAuthentication
         = await googleSignInAccount.authentication;
-        // final credential = GoogleAuthProvider.credential(
-        //   accessToken: googleSignInAuthentication.accessToken,
-        //   idToken: googleSignInAuthentication.idToken,
-        // );
-        //user = await auth.signInWithCredential(credential);
-        //print(user.toString());
-        await _googleSignIn.signOut();
+
+        final AuthCredential credential = GoogleAuthProvider.credential(
+          accessToken: googleSignInAuthentication.accessToken,
+          idToken: googleSignInAuthentication.idToken,
+        );
+        user = await auth.signInWithCredential(credential);
+        final idToken = await user.user?.getIdToken();
+        Map data = {
+          'access_token': '$idToken'
+        };
+        var body = json.encode(data);
+        final http.Response response = await http.post(
+            Uri.parse('http://52.221.245.187:90/api/v1/login'),
+            headers: {"Content-Type": "application/json"},
+            body: body
+        );
+        Map<String, dynamic> payload = Jwt.parseJwt(response.body);
+        print(payload);
+
+        final String getID = payload['ID'];
+        final getFarmerResponse = await http.get(Uri.parse('http://52.221.245.187:90/api/v1/farmers/$getID'));
+        final farmer = await FarmerDTO.fromJson(jsonDecode(getFarmerResponse.body));
+        _googleSignIn.signOut();
+        Navigator.pushReplacement(context, MaterialPageRoute(
+          builder: (context) => const NavigationPage(),
+          settings: RouteSettings(
+            arguments: farmer,
+          ),
+        ));
       }
     } catch (error) {
       print(error);
@@ -83,17 +144,20 @@ class _LoginScreenState extends State<LoginScreen> {
                   RoundedInputField(
                     icon: Icons.email,
                     hintText: "Your Email",
-                    onChanged: (value) {},
+                    onChanged: (value) {
+                      email=value;
+                    },
                   ),
                   RoundedPasswordField(
                     hint: 'Password',
-                    onChanged: (value) {},
+                    onChanged: (value) {
+                      password=value;
+                    },
                   ),
                   RoundedButton(
                     text: "LOGIN",
                     press: () {
-                      print(DateTime.now());
-                      Navigator.pushReplacementNamed(context, '/navpage');
+                      _handleSignIn();
                     },
                   ),
                   SizedBox(height: size.height * 0.03),
@@ -116,7 +180,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       SocalIcon(
                         iconSrc: "assets/images/Google.png",
                         press: () {
-                          _handleSignIn();
+                          _handleGoogleSignIn();
                         },
                       ),
                     ],
@@ -130,4 +194,3 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 }
-

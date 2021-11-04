@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:vuondauapp/object/farmerDTO.dart';
 import 'components/body.dart';
 class Profile extends StatefulWidget {
-  const Profile({Key? key}) : super(key: key);
+  final FarmerDTO farmer;
+
+  Profile({required this.farmer});
 
   @override
   _ProfileState createState() => _ProfileState();
@@ -16,7 +19,7 @@ class _ProfileState extends State<Profile> {
           title: Text('Profile'),
           centerTitle: true,
       ),
-      body: Body(),
+      body: Body(farmer: widget.farmer),
     );
   }
 }
