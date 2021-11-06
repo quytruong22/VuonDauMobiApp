@@ -20,3 +20,17 @@ class AreaDTO {
     return data;
   }
 }
+
+class ListAreas{
+  final List<AreaDTO> areas;
+
+  ListAreas({required this.areas});
+
+  factory ListAreas.fromJson(List<dynamic> parsedJson) {
+
+    List<AreaDTO> areas = parsedJson.map((i)=>AreaDTO.fromJson(i)).toList();
+    return new ListAreas(
+      areas: areas,
+    );
+  }
+}

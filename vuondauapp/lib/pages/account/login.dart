@@ -1,7 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:vuondauapp/object/farmDTO.dart';
 import 'package:vuondauapp/object/farmerDTO.dart';
+import 'package:vuondauapp/object/harvestDTO.dart';
+import 'package:vuondauapp/object/harvestSellingDTO.dart';
+import 'package:vuondauapp/object/harvestSellingPriceDTO.dart';
 import 'package:vuondauapp/pages/navpage.dart';
 import 'package:vuondauapp/widgets/compoment/rounded_button.dart';
 import 'package:vuondauapp/widgets/compoment/rounded_input_field.dart';
@@ -31,78 +35,93 @@ class _LoginScreenState extends State<LoginScreen> {
   late UserCredential user;
   String email='';
   String password='';
+  late List<FarmDTO>  listFarms;
+  late List<HarvestDTO> listHarvests;
+  late List<HarvestSellingPriceDTO> listSellings;
+  late FarmerDTO farmer;
 
   Future<void> _handleSignIn() async{
     try{
-      user = await auth.createUserWithEmailAndPassword(email: email, password: password);
-      final idToken = await user.user?.getIdToken();
-      Map data = {
-        'access_token': '$idToken'
-      };
-      var body = json.encode(data);
-      final http.Response response = await http.post(
-          Uri.parse('http://52.221.245.187:90/api/v1/login'),
-          headers: {"Content-Type": "application/json"},
-          body: body
-      );
-      Map<String, dynamic> payload = Jwt.parseJwt(response.body);
-      print(payload);
-
-      final String getID = payload['ID'];
-      final getFarmerResponse = await http.get(Uri.parse('http://52.221.245.187:90/api/v1/farmers/$getID'));
-      final farmer = await FarmerDTO.fromJson(jsonDecode(getFarmerResponse.body));
-      _googleSignIn.signOut();
-      Navigator.pushReplacement(context, MaterialPageRoute(
-        builder: (context) => const NavigationPage(),
-        settings: RouteSettings(
-          arguments: farmer,
-        ),
-      ));
+      user = await auth.signInWithEmailAndPassword(email: email, password: password);
+      await SignIn();
     } catch(error){
       print(error);
     }
-
   }
 
   Future<void> _handleGoogleSignIn() async {
     try {
       final GoogleSignInAccount? googleSignInAccount
       = await _googleSignIn.signIn();
-      if (googleSignInAccount != null){
+      if (googleSignInAccount != null) {
         final GoogleSignInAuthentication googleSignInAuthentication
         = await googleSignInAccount.authentication;
-
         final AuthCredential credential = GoogleAuthProvider.credential(
           accessToken: googleSignInAuthentication.accessToken,
           idToken: googleSignInAuthentication.idToken,
         );
-        user = await auth.signInWithCredential(credential);
-        final idToken = await user.user?.getIdToken();
-        Map data = {
-          'access_token': '$idToken'
-        };
-        var body = json.encode(data);
-        final http.Response response = await http.post(
-            Uri.parse('http://52.221.245.187:90/api/v1/login'),
-            headers: {"Content-Type": "application/json"},
-            body: body
-        );
-        Map<String, dynamic> payload = Jwt.parseJwt(response.body);
-        print(payload);
-
-        final String getID = payload['ID'];
-        final getFarmerResponse = await http.get(Uri.parse('http://52.221.245.187:90/api/v1/farmers/$getID'));
-        final farmer = await FarmerDTO.fromJson(jsonDecode(getFarmerResponse.body));
         _googleSignIn.signOut();
-        Navigator.pushReplacement(context, MaterialPageRoute(
-          builder: (context) => const NavigationPage(),
-          settings: RouteSettings(
-            arguments: farmer,
-          ),
-        ));
+        user = await auth.signInWithCredential(credential);
+        await SignIn();
       }
     } catch (error) {
       print(error);
+    }
+  }
+  Future<void> SignIn() async{
+    final idToken = await user.user?.getIdToken();
+    Map data = {
+      'access_token': '$idToken'
+    };
+    var body = json.encode(data);
+    final http.Response response = await http.post(
+        Uri.parse('http://52.221.245.187:90/api/v1/login'),
+        headers: {"Content-Type": "application/json"},
+        body: body
+    );
+    print('hehe');
+    print(response.statusCode);
+    if (response.statusCode==200) {
+      Map<String, dynamic> payload = Jwt.parseJwt(response.body);
+      print(payload);
+
+      final String getID = payload['ID'];
+      final getFarmerResponse = await http.get(Uri.parse('http://52.221.245.187:90/api/v1/farmers/$getID'));
+      if(getFarmerResponse.statusCode==200){
+        farmer = FarmerDTO.fromJson(jsonDecode(getFarmerResponse.body));
+        await loadData();
+        _googleSignIn.signOut();
+        Navigator.pushReplacement(context, MaterialPageRoute(
+            builder: (context) => NavigationPage(harvests: listHarvests,  sellings: listSellings,farmer: farmer,farms: listFarms)
+        ));
+      }
+    }
+  }
+
+  Future<void> loadData() async{
+    final responseFarm = await http.get(Uri.parse('http://52.221.245.187:90/api/v1/farms/${farmer.id}'));
+    if(responseFarm.statusCode==200){
+      listFarms = ListFarms.fromJson(jsonDecode(responseFarm.body)).farms;
+      listFarms.forEach((farm) async {
+        final responseHarvest = await http.get(Uri.parse('http://52.221.245.187:90/api/v1/harvests/${farm.ID}'));
+        if(responseHarvest.statusCode==200){
+          final listgetharvest  = ListHarvests.fromJson(jsonDecode(responseHarvest.body)).harvests;
+          listHarvests.addAll(listgetharvest);
+        }
+      });
+      listHarvests.forEach((harvest) async {
+        final responseHarvestSelling = await http.get(Uri.parse('http://52.221.245.187:90/api/v1/harvests/${harvest.ID}'));
+        if(responseHarvestSelling.statusCode==200){
+          final listgetHarvestSelling  = ListHarvestSelling.fromJson(jsonDecode(responseHarvestSelling.body)).harvestsellings;
+          listgetHarvestSelling.forEach((harvestSelling) async {
+            final responseHarvestSellingPrice = await http.get(Uri.parse('http://52.221.245.187:90/api/v1/harvests/${harvestSelling.id}'));
+            if(responseHarvestSellingPrice.statusCode==200){
+              final harvestSellingPrice = HarvestSellingPriceDTO.fromJson(jsonDecode(responseHarvestSellingPrice.body));
+              listSellings.add(harvestSellingPrice);
+            }
+          });
+        }
+      });
     }
   }
 
@@ -163,7 +182,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   SizedBox(height: size.height * 0.03),
                   AlreadyHaveAnAccountCheck(
                     press: () {
-                      Navigator.push(
+                      Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
                           builder: (context) {

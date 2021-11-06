@@ -3,7 +3,6 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:vuondauapp/object/farmDTO.dart';
 import 'package:vuondauapp/object/farmerDTO.dart';
-import 'package:vuondauapp/object/listFarms.dart';
 import 'package:vuondauapp/pages/farm/farm.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'profile_pic.dart';
@@ -36,7 +35,7 @@ class Body extends StatelessWidget {
                         )
                     ),
                     Text(
-                        farmer.first_name+' '+farmer.last_name,
+                        farmer.full_name,
                         style: TextStyle(
                           letterSpacing: 2.0,
                           fontWeight: FontWeight.bold,
@@ -188,11 +187,11 @@ class Body extends StatelessWidget {
                     RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
                     onPressed: () async {
                       try {
-                        final response = await http.get(Uri.parse('http://52.221.245.187:90/api/v1/farms'));
+                        final response = await http.get(Uri.parse('http://52.221.245.187:90/api/v1/farms/${farmer.id}'));
                         if (response.statusCode == 200) {
                           List<FarmDTO> list = ListFarms.fromJson(jsonDecode(response.body)).farms;
                           Navigator.push(context,MaterialPageRoute(
-                            builder: (context) => const Farm(),
+                            builder: (context) => Farm(farmer:farmer),
                             settings: RouteSettings(
                               arguments: list,
                             ),

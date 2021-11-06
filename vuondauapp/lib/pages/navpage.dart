@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:vuondauapp/object/farmDTO.dart';
 import 'package:vuondauapp/object/farmerDTO.dart';
+import 'package:vuondauapp/object/harvestDTO.dart';
+import 'package:vuondauapp/object/harvestSellingPriceDTO.dart';
 import 'package:vuondauapp/pages/home.dart';
 import 'package:vuondauapp/pages/account/profile.dart';
 import 'package:vuondauapp/pages/harvest/harvest.dart';
@@ -8,7 +11,13 @@ import 'package:vuondauapp/pages/selling/selling.dart';
 import 'package:vuondauapp/widgets/icon/icon.dart';
 
 class NavigationPage extends StatefulWidget {
-  const NavigationPage({Key? key}) : super(key: key);
+  final List<FarmDTO> farms;
+  final List<HarvestDTO> harvests;
+  final List<HarvestSellingPriceDTO>  sellings;
+  final FarmerDTO farmer;
+
+
+  NavigationPage({required this.harvests, required this.sellings,required this.farms,required this.farmer});
 
   @override
   _NavigationPageState createState() => _NavigationPageState();
@@ -32,11 +41,11 @@ class _NavigationPageState extends State<NavigationPage> {
       body: PageView(
         controller: pageController,
         children: [
-          Home(),
+          Home(listselling: widget.sellings,listharvest: widget.harvests),
           Dashboard(),
-          Selling(),
-          Harvest(),
-          Profile(farmer: farmer,)
+          Selling(sellings: widget.sellings),
+          Harvest(harvests: widget.harvests),
+          Profile(farmer: farmer)
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(

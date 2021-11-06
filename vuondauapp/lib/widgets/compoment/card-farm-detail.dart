@@ -1,6 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:vuondauapp/object/areaDTO.dart';
 import 'package:vuondauapp/object/farmDTO.dart';
+import 'package:vuondauapp/object/farmType.dart';
 import 'package:vuondauapp/pages/farm/farm_update.dart';
+import 'package:http/http.dart' as http;
 
 class CardFarmDetail extends StatelessWidget {
   CardFarmDetail(
@@ -63,13 +68,21 @@ class CardFarmDetail extends StatelessWidget {
                           style: TextButton.styleFrom(
                             backgroundColor: Colors.green,
                           ),
-                          onPressed: (){
-                            Navigator.push(context,MaterialPageRoute(
-                              builder: (context) => const UpdateFarm(),
-                              settings: RouteSettings(
-                                arguments: farm,
-                              ),
-                            ));
+                          onPressed: () async {
+                            try{
+                              http.Response response = await http.get(Uri.parse('http://52.221.245.187:90/api/v1/areas'));
+                              List<AreaDTO> listArea  = ListAreas.fromJson(jsonDecode(response.body)).areas;
+                              response = await http.get(Uri.parse('http://52.221.245.187:90/api/v1/farm-types'));
+                              List<FarmType> listFarmType  = ListFarmTypes.fromJson(jsonDecode(response.body)).farmTypes;
+                              Navigator.push(context,MaterialPageRoute(
+                                builder: (context) => UpdateFarm(listArea: listArea,listFarmType: listFarmType,),
+                                settings: RouteSettings(
+                                  arguments: {farm},
+                                ),
+                              ));
+                            }catch(e){
+
+                            }
                           },
                           child: Text(
                             'Cập nhật nông trại',

@@ -1,22 +1,23 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:vuondauapp/object/farmerDTO.dart';
+import 'package:vuondauapp/object/harvestDTO.dart';
 import 'package:vuondauapp/pages/farm/farm_detail.dart';
 import 'package:vuondauapp/widgets/compoment/card-farm.dart';
 import 'package:vuondauapp/object/farmDTO.dart';
+import 'package:http/http.dart' as http;
 
 class Farm extends StatefulWidget {
-  const Farm({Key? key}) : super(key: key);
+  final FarmerDTO farmer;
+
+  Farm({required this.farmer});
 
   @override
   _FarmState createState() => _FarmState();
 }
 
 class _FarmState extends State<Farm> {
-  // List<FarmDTO> list = [
-  //   FarmDTO(ID: 0,name: 'Nông trại Phan Nam',address: '',description: '', img: 'https://thamhiemmekong.com/wp-content/uploads/2020/12/nongtraiphannam01.jpg'),
-  //   FarmDTO(ID: 0, name: 'Nông trại Whiteface', address: '', description: '', img: 'https://kenh14cdn.com/M2JlccccccccccccEmJzVu2ZOVx8FL/Image/2015a/trangtrai/6-b1900.jpg'),
-  //   FarmDTO(ID: 0, name: 'Trường Thành Farm', address: '', description: '', img: 'https://tamnhin.trithuccuocsong.vn/stores/news_dataimages/phonghv/072019/18/07/5336_20190715_145456.jpg')
-  // ];
-
   @override
   Widget build(BuildContext context) {
     final List<FarmDTO> list=ModalRoute.of(context)!.settings.arguments as List<FarmDTO>;
@@ -31,7 +32,7 @@ class _FarmState extends State<Farm> {
         backgroundColor: Colors.green,
         foregroundColor: Colors.white,
         onPressed: () {
-          Navigator.pushNamed(context, '/addfarm');
+          Navigator.pushNamed(context, '/addfarm',arguments: widget.farmer);
         },
         icon: Icon(Icons.add),
         label: Text('Nông trại mới'),
@@ -52,13 +53,19 @@ class _FarmState extends State<Farm> {
                             padding: const EdgeInsets.only(bottom: 10.0),
                             child: CardFarm(
                                 farm: farm,
-                                tap: () {
-                                  Navigator.push(context,MaterialPageRoute(
-                                      builder: (context) => const DetailFarm(),
-                                      settings: RouteSettings(
-                                      arguments: farm,
-                                      ),
-                                  ));
+                                tap: () async {
+                                  try {
+                                    final response = await http.get(Uri.parse('http://52.221.245.187:90/api/v1/harvests/${farm.ID}'));
+                                    List<HarvestDTO> list = await ListHarvests.fromJson(jsonDecode(response.body)).harvests;
+                                    Navigator.push(context,MaterialPageRoute(
+                                        builder: (context) => DetailFarm(farm:farm),
+                                        settings: RouteSettings(
+                                        arguments: {list}
+                                        ),
+                                    ));
+                                  } on Exception catch (e) {
+                                    // TODO
+                                  }
                                 }),
                           ),
                         ],

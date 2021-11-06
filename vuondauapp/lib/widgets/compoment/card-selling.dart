@@ -1,26 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:vuondauapp/object/harvestSellingPriceDTO.dart';
 import 'package:vuondauapp/widgets/compoment/status_harvest.dart';
 
 class CardSelling extends StatelessWidget {
   CardSelling(
-      {this.title = "Placeholder Title",
-        this.cta = "",
-        this.price = "",
-        this.quantity = "",
-        this.sold = "",
-        this.nameProduct = "",
-        required this.img,
+      {required this.selling,
+        this.img='',
         required this.tap});
 
-  final String cta;
-  final String img;
-  final String quantity;
-  final String price;
+  final HarvestSellingPriceDTO selling;
+  final String  img;
   final Function() tap;
-  final String title;
-  final String sold;
-  final String nameProduct;
 
   @override
   Widget build(BuildContext context) {
@@ -56,25 +47,22 @@ class CardSelling extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(title,
+                          Text(selling.harvestSelling.harvest.name,
                               style: TextStyle(
                                   color: Colors.black, fontSize: 13, fontWeight: FontWeight.bold)),
-                          Text(nameProduct,
+                          Text('Sản phẩm: '+selling.harvestSelling.harvest.product.name,
                               style: TextStyle(
                                   color: Colors.black, fontSize: 13)),
-                          Text(quantity,
+                          Text('Tổng sản lượng: ${selling.harvestSelling.totalWeight} Kg',
                               style: TextStyle(
                                   color: Colors.black, fontSize: 13)),
-                          Text(price,
+                          Text('Giá: ${selling.price}VND/Kg',
                               style: TextStyle(
                                   color: Colors.black, fontSize: 13)),
-                          Text(sold,
-                              style: TextStyle(
-                                  color: Colors.red, fontSize: 13)),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(cta,
+                              Text("Xem chi tiết",
                                   style: TextStyle(
                                       color: Colors.green,
                                       fontSize: 11,

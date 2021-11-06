@@ -1,22 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:vuondauapp/object/harvestDTO.dart';
 
 class CardHarvest extends StatelessWidget {
   CardHarvest(
-      {this.title = "Placeholder Title",
-      this.cta = "",
-      required this.sold,
-        this.nameFarm = "",
-      required this.img,
+      {required this.harvest,
+        this.img='https://cdn.discordapp.com/attachments/900392963639750657/905113971948941332/iconVuondau.png',
       required this.tap});
 
-  final String cta;
-  final String img;
+  final HarvestDTO harvest;
   final Function() tap;
-  final String title;
-  final DateTime sold;
-  final String nameFarm;
+  final String  img;
 
   @override
   Widget build(BuildContext context) {
@@ -52,16 +47,16 @@ class CardHarvest extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(title,
+                          Text(harvest.name,
                               style: TextStyle(
                                   color: Colors.black, fontSize: 13, fontWeight: FontWeight.bold)),
-                          Text('Nông trại: '+nameFarm,
+                          Text('Nông trại: '+harvest.farm.name,
                               style: TextStyle(
                                   color: Colors.black, fontSize: 13)),
-                          Text('Ngày thu hoạch dự kiến: '+DateFormat('dd/MM/yyyy').format(sold),
+                          Text('Ngày thu hoạch dự kiến: '+DateFormat('dd/MM/yyyy').format(harvest.start_date),
                               style: TextStyle(
                                   fontSize: 13)),
-                          Text(cta,
+                          Text('Xem chi tiết',
                               style: TextStyle(
                                   color: Colors.green,
                                   fontSize: 11,

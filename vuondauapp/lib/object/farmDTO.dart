@@ -57,9 +57,23 @@ class FarmDTO {
     data['name'] = this.name;
     data['address'] = this.address;
     data['description'] = this.description;
-    data['date_of_create'] = this.dateOfCreate;
-    data['date_update'] = this.dayOfUpdate;
+    data['date_of_create'] = DateFormat('yyyy-MM-ddThh:mm:ss').format(this.dateOfCreate);
+    data['date_update'] = DateFormat('yyyy-MM-ddThh:mm:ss').format(this.dayOfUpdate);
     data['status'] = this.status;
     return data;
+  }
+}
+
+class ListFarms{
+  final List<FarmDTO> farms;
+
+  ListFarms({required this.farms});
+
+  factory ListFarms.fromJson(List<dynamic> parsedJson) {
+
+    List<FarmDTO> farms = parsedJson.map((i)=>FarmDTO.fromJson(i)).toList();
+    return new ListFarms(
+      farms: farms,
+    );
   }
 }
