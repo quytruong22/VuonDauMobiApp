@@ -28,15 +28,13 @@ class _AddFarmState extends State<AddFarm> {
   String  address = '';
   String  description = '';
   String  link = '';
-  late  AreaDTO area;
-  late  FarmType farmType;
+  AreaDTO area=AreaDTO(ID: '', name: '', description: '');
+  FarmType farmType=FarmType(id: '', name: '', description: '');
 
   @override
   Widget build(BuildContext context) {
     final FarmerDTO farmer=ModalRoute.of(context)!.settings.arguments as FarmerDTO;
     Size size = MediaQuery.of(context).size;
-    area  = widget.listArea.first;
-    farmType  = widget.listFarmType.first;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.green,
@@ -59,7 +57,7 @@ class _AddFarmState extends State<AddFarm> {
               ),
               SizedBox(height: size.height * 0.03),
               TextFieldContainer(
-                child: DropdownButton<AreaDTO>(
+                child: DropdownButton(
                   value: area,
                   icon: const Icon(Icons.arrow_downward),
                   iconSize: 24,
@@ -75,7 +73,7 @@ class _AddFarmState extends State<AddFarm> {
                       area = newValue!;
                     });
                   },
-                  items: widget.listArea.map<DropdownMenuItem<AreaDTO>>((AreaDTO area) => DropdownMenuItem(
+                  items: widget.listArea.map((AreaDTO area) => DropdownMenuItem<AreaDTO>(
                       value: area,
                       child: Text(area.name)
                   )).toList(),
@@ -141,13 +139,6 @@ class _AddFarmState extends State<AddFarm> {
               RoundedButton(
                 text: "Hoàn tất",
                 press: () async {
-                  bool confirm = await showDialog(context: context, builder: (BuildContext context) {
-                    return Confirm_Dialog(
-                      title: 'Tạo nông trại',
-                      content: 'Bạn muốn tạo nông trại mới?',
-                    );
-                  });
-                  if(confirm){
                     try {
                       Map data = {
                         "farm_type_id": "${farmType.id}",
@@ -160,18 +151,26 @@ class _AddFarmState extends State<AddFarm> {
                       var body = json.encode(data);
                       final http.Response response = await http.post(
                           Uri.parse('http://52.221.245.187:90/api/v1/farms'),
-                          headers: {"Content-Type": "application/json-patch+json"},
+                          headers: {"Content-Type": "application/json"},
                           body: body
                       );
-                      if (response.statusCode==200) {
-                        await showDialog(
-                            context: context,
-                            builder: (BuildContext context)=>Message_Dialog(
-                              title: 'Tạo nông trại',
-                              content: 'Tạo nông trại thành công',
-                            )
-                        );
-                        Navigator.pop(context);
+                      if (response.statusCode==201) {
+                        print(response.body);
+                        final String farmID  = jsonDecode(response.body)['id'];
+                        final getFarm = await http.get(Uri.parse('http://52.221.245.187:90/api/v1/farms/$farmID'));
+                        print(getFarm.statusCode);
+                        print(getFarm.body);
+                        if (getFarm.statusCode==200) {
+                          final FarmDTO AddedFarm = FarmDTO.fromJson(jsonDecode(getFarm.body));
+                          await showDialog(
+                              context: context,
+                              builder: (BuildContext context)=>Message_Dialog(
+                                title: 'Tạo nông trại',
+                                content: 'Tạo nông trại thành công',
+                              )
+                          );
+                          Navigator.pop(context,AddedFarm);
+                        }
                       }
                     } on Exception catch (e) {
                       await showDialog(
@@ -179,7 +178,6 @@ class _AddFarmState extends State<AddFarm> {
                           builder: (BuildContext context)=>Message_Dialog(title: 'Lỗi tạo nông trại',content: e.toString())
                       );
                     }
-                  }
                 },
               ),
             ],

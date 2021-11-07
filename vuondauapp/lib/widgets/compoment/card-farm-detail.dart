@@ -9,10 +9,12 @@ import 'package:http/http.dart' as http;
 
 class CardFarmDetail extends StatelessWidget {
   CardFarmDetail(
-      {required this.farm
+      {required this.farm,
+        required  this.tap
       });
 
   final FarmDTO farm;
+  final Function()  tap;
 
   @override
   Widget build(BuildContext context) {
@@ -68,22 +70,7 @@ class CardFarmDetail extends StatelessWidget {
                           style: TextButton.styleFrom(
                             backgroundColor: Colors.green,
                           ),
-                          onPressed: () async {
-                            try{
-                              http.Response response = await http.get(Uri.parse('http://52.221.245.187:90/api/v1/areas'));
-                              List<AreaDTO> listArea  = ListAreas.fromJson(jsonDecode(response.body)).areas;
-                              response = await http.get(Uri.parse('http://52.221.245.187:90/api/v1/farm-types'));
-                              List<FarmType> listFarmType  = ListFarmTypes.fromJson(jsonDecode(response.body)).farmTypes;
-                              Navigator.push(context,MaterialPageRoute(
-                                builder: (context) => UpdateFarm(listArea: listArea,listFarmType: listFarmType,),
-                                settings: RouteSettings(
-                                  arguments: {farm},
-                                ),
-                              ));
-                            }catch(e){
-
-                            }
-                          },
+                          onPressed: tap,
                           child: Text(
                             'Cập nhật nông trại',
                             style: TextStyle(

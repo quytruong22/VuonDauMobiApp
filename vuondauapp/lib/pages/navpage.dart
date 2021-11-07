@@ -16,7 +16,6 @@ class NavigationPage extends StatefulWidget {
   final List<HarvestSellingPriceDTO>  sellings;
   final FarmerDTO farmer;
 
-
   NavigationPage({required this.harvests, required this.sellings,required this.farms,required this.farmer});
 
   @override
@@ -26,7 +25,6 @@ class NavigationPage extends StatefulWidget {
 class _NavigationPageState extends State<NavigationPage> {
   int _selectedIndex = 0;
   PageController pageController = PageController();
-
   void onTapped(int index){
     setState(() {
       _selectedIndex = index;
@@ -36,7 +34,6 @@ class _NavigationPageState extends State<NavigationPage> {
 
   @override
   Widget build(BuildContext context) {
-    final FarmerDTO farmer=ModalRoute.of(context)!.settings.arguments as FarmerDTO;
     return Scaffold(
       body: PageView(
         controller: pageController,
@@ -45,7 +42,7 @@ class _NavigationPageState extends State<NavigationPage> {
           Dashboard(),
           Selling(sellings: widget.sellings),
           Harvest(harvests: widget.harvests),
-          Profile(farmer: farmer)
+          Profile(farmer: widget.farmer)
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(

@@ -1,10 +1,11 @@
 import 'dart:convert';
 
 import 'package:intl/intl.dart';
-import 'package:http/http.dart' as http;
+import 'package:vuondauapp/object/customer_type.dart';
 
-class FarmerDTO{
+class Customer {
   String id;
+  CustomerType  customer_type;
   String email;
   String full_name;
   String phone;
@@ -13,8 +14,9 @@ class FarmerDTO{
   DateTime date_of_create;
   bool status;
 
-  FarmerDTO({
+  Customer({
     required this.id,
+    required this.customer_type,
     required this.email,
     required this.full_name,
     required this.phone,
@@ -24,10 +26,11 @@ class FarmerDTO{
     required this.status,
   });
 
-  factory FarmerDTO.fromJson(Map<String, dynamic> json){
+  factory Customer.fromJson(Map<String, dynamic> json){
 
-    return FarmerDTO(
+    return Customer(
         id: json['id'],
+        customer_type: CustomerType.fromJson(json['customer_type_navigation']),
         full_name: json['full_name'],
         email: json['email'],
         phone: json['phone'],
@@ -36,18 +39,5 @@ class FarmerDTO{
         date_of_create: DateFormat('yyyy-MM-ddThh:mm:ss').parse(json['date_of_create']),
         status:     json['status']== 0 ? false : true
     );
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['email'] = this.email;
-    data['full_name'] = this.full_name;
-    data['phone'] = this.phone;
-    data['birth_day'] = DateFormat('yyyy-MM-ddThh:mm:ss').format(this.birth_day);
-    data['gender'] = this.gender;
-    data['date_of_create'] = DateFormat('yyyy-MM-ddThh:mm:ss').format(this.date_of_create);
-    data['status'] = this.status;
-    return data;
   }
 }

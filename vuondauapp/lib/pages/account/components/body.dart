@@ -196,7 +196,16 @@ class Body extends StatelessWidget {
                               arguments: list,
                             ),
                           ));
-                        } else {
+                        } else  if(response.statusCode == 404){
+                          List<FarmDTO> list = [];
+                          Navigator.push(context,MaterialPageRoute(
+                            builder: (context) => Farm(farmer:farmer),
+                            settings: RouteSettings(
+                              arguments: list,
+                            ),
+                          ));
+                        }
+                        else {
                           throw Exception('Failed to load Farm');
                         }
                       } catch (e) {
