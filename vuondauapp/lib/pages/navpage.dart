@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:vuondauapp/object/farmDTO.dart';
 import 'package:vuondauapp/object/farmerDTO.dart';
 import 'package:vuondauapp/object/harvestDTO.dart';
+import 'package:vuondauapp/object/harvestSellingDTO.dart';
 import 'package:vuondauapp/object/harvestSellingPriceDTO.dart';
 import 'package:vuondauapp/pages/home.dart';
 import 'package:vuondauapp/pages/account/profile.dart';
@@ -9,14 +12,12 @@ import 'package:vuondauapp/pages/harvest/harvest.dart';
 import 'package:vuondauapp/pages/dashboard.dart';
 import 'package:vuondauapp/pages/selling/selling.dart';
 import 'package:vuondauapp/widgets/icon/icon.dart';
+import 'package:http/http.dart' as http;
 
 class NavigationPage extends StatefulWidget {
-  final List<FarmDTO> farms;
-  final List<HarvestDTO> harvests;
-  final List<HarvestSellingPriceDTO>  sellings;
   final FarmerDTO farmer;
 
-  NavigationPage({required this.harvests, required this.sellings,required this.farms,required this.farmer});
+  NavigationPage({required this.farmer});
 
   @override
   _NavigationPageState createState() => _NavigationPageState();
@@ -31,6 +32,41 @@ class _NavigationPageState extends State<NavigationPage> {
     });
     pageController.jumpToPage(index);
   }
+  List<FarmDTO>  listFarms=[];
+  List<HarvestDTO> listHarvests=[];
+  List<HarvestSellingPriceDTO> listSellings=[];
+
+  Future<void> loadData() async{
+    final responseFarm = await http.get(Uri.parse('http://52.221.245.187:90/api/v1/farms/${widget.farmer.id}'));
+    if(responseFarm.statusCode==200){
+      listFarms = ListFarms.fromJson(jsonDecode(responseFarm.body)).farms;
+      listFarms.forEach((farm) async {
+        final responseHarvest = await http.get(Uri.parse('http://52.221.245.187:90/api/v1/harvests/${farm.ID}'));
+        if(responseHarvest.statusCode==200){
+          final listgetharvest  = ListHarvests.fromJson(jsonDecode(responseHarvest.body)).harvests;
+          listHarvests.addAll(listgetharvest);
+        }
+      });
+      listHarvests.forEach((harvest) async {
+        final responseHarvestSelling = await http.get(Uri.parse('http://52.221.245.187:90/api/v1/harvests/${harvest.ID}'));
+        if(responseHarvestSelling.statusCode==200){
+          final listgetHarvestSelling  = ListHarvestSelling.fromJson(jsonDecode(responseHarvestSelling.body)).harvestsellings;
+          listgetHarvestSelling.forEach((harvestSelling) async {
+            final responseHarvestSellingPrice = await http.get(Uri.parse('http://52.221.245.187:90/api/v1/harvests/${harvestSelling.id}'));
+            if(responseHarvestSellingPrice.statusCode==200){
+              final harvestSellingPrice = HarvestSellingPriceDTO.fromJson(jsonDecode(responseHarvestSellingPrice.body));
+              listSellings.add(harvestSellingPrice);
+            }
+          });
+        }
+      });
+    }
+  }
+  @override
+  void initState() {
+    super.initState();
+    loadData();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,10 +74,10 @@ class _NavigationPageState extends State<NavigationPage> {
       body: PageView(
         controller: pageController,
         children: [
-          Home(listselling: widget.sellings,listharvest: widget.harvests),
+          Home(listselling: listSellings,listharvest: listHarvests),
           Dashboard(),
-          Selling(sellings: widget.sellings),
-          Harvest(harvests: widget.harvests),
+          Selling(sellings: listSellings),
+          Harvest(harvests: listHarvests,farms:listFarms),
           Profile(farmer: widget.farmer)
         ],
       ),

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:vuondauapp/object/areaDTO.dart';
 import 'package:vuondauapp/object/farmDTO.dart';
@@ -28,8 +29,15 @@ class _AddFarmState extends State<AddFarm> {
   String  address = '';
   String  description = '';
   String  link = '';
-  AreaDTO area=AreaDTO(ID: '', name: '', description: '');
-  FarmType farmType=FarmType(id: '', name: '', description: '');
+  late AreaDTO _Choosearea;
+  late FarmType _ChoosefarmType;
+
+  @override
+  void initState() {
+    super.initState();
+    _ChoosefarmType = widget.listFarmType.first;
+    _Choosearea = widget.listArea.first;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,9 +64,15 @@ class _AddFarmState extends State<AddFarm> {
                 ),
               ),
               SizedBox(height: size.height * 0.03),
+              Text(
+                'Vùng của nông trại',
+                style: TextStyle(
+
+                ),
+              ),
               TextFieldContainer(
                 child: DropdownButton(
-                  value: area,
+                  value: _Choosearea,
                   icon: const Icon(Icons.arrow_downward),
                   iconSize: 24,
                   elevation: 16,
@@ -70,19 +84,28 @@ class _AddFarmState extends State<AddFarm> {
                   ),
                   onChanged: (AreaDTO? newValue) {
                     setState(() {
-                      area = newValue!;
+                      _Choosearea = newValue!;
                     });
                   },
-                  items: widget.listArea.map((AreaDTO area) => DropdownMenuItem<AreaDTO>(
-                      value: area,
-                      child: Text(area.name)
-                  )).toList(),
+                  items: widget.listArea
+                      .map((AreaDTO value) {
+                    return DropdownMenuItem(
+                      value: value,
+                      child: Text(value.name),
+                    );
+                  }).toList(),
                 ),
               ),
               SizedBox(height: size.height * 0.03),
+              Text(
+                'Loại nông trại',
+                style: TextStyle(
+
+                ),
+              ),
               TextFieldContainer(
-                child: DropdownButton<FarmType>(
-                  value: farmType,
+                child: DropdownButton(
+                  value: _ChoosefarmType,
                   icon: const Icon(Icons.arrow_downward),
                   iconSize: 24,
                   elevation: 16,
@@ -94,13 +117,16 @@ class _AddFarmState extends State<AddFarm> {
                   ),
                   onChanged: (FarmType? newValue) {
                     setState(() {
-                      farmType = newValue!;
+                      _ChoosefarmType = newValue!;
                     });
                   },
-                  items: widget.listFarmType.map<DropdownMenuItem<FarmType>>((FarmType farmType) => DropdownMenuItem(
-                      value: farmType,
-                      child: Text(farmType.name)
-                  )).toList(),
+                  items: widget.listFarmType
+                      .map((FarmType value) {
+                    return DropdownMenuItem(
+                      value: value,
+                      child: Text(value.name),
+                    );
+                  }).toList(),
                 ),
               ),
               SizedBox(height: size.height * 0.03),
@@ -141,9 +167,9 @@ class _AddFarmState extends State<AddFarm> {
                 press: () async {
                     try {
                       Map data = {
-                        "farm_type_id": "${farmType.id}",
+                        "farm_type_id": "${_ChoosefarmType.id}",
                         "farmer_id": "${farmer.id}",
-                        "area_id": "${area.ID}",
+                        "area_id": "${_Choosearea.ID}",
                         "name": "$name",
                         "address": "$address",
                         "description": "$description",

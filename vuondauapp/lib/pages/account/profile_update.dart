@@ -1,7 +1,14 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:vuondauapp/object/farmerDTO.dart';
+import 'package:vuondauapp/widgets/compoment/dialog.dart';
 import 'package:vuondauapp/widgets/compoment/rounded_button.dart';
+import 'package:vuondauapp/widgets/compoment/rounded_date_input.dart';
 import 'package:vuondauapp/widgets/compoment/rounded_input_form_field.dart';
 import 'package:vuondauapp/widgets/compoment/text_field_container.dart';
+import 'package:http/http.dart' as http;
 
 class UpdateProfile extends StatefulWidget {
   const UpdateProfile({Key? key}) : super(key: key);
@@ -11,9 +18,13 @@ class UpdateProfile extends StatefulWidget {
 }
 
 class _UpdateProfileState extends State<UpdateProfile> {
+  String full_name='';
+  String phone = '';
+  DateTime birthday = DateTime.now();
   String dropdownValue = 'Nam';
   @override
   Widget build(BuildContext context) {
+    final FarmerDTO farmer=ModalRoute.of(context)!.settings.arguments as FarmerDTO;
     Size size = MediaQuery.of(context).size;
     return Scaffold(
         appBar: AppBar(
@@ -38,7 +49,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
               Container(
                 width: size.width * 0.8,
                 child: Text(
-                  'Họ:',
+                  'Họ và tên:',
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.bold,
@@ -46,24 +57,11 @@ class _UpdateProfileState extends State<UpdateProfile> {
                 ),
               ),
               RoundedInputForm(
-                  onChanged: (value){},
-                  value: 'Nguyễn',
+                  onChanged: (value){
+                    full_name=value;
+                  },
+                  value: farmer.full_name,
                   icon: Icons.drive_file_rename_outline,
-              ),
-              Container(
-                width: size.width * 0.8,
-                child: Text(
-                  'Tên:',
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              RoundedInputForm(
-                onChanged: (value){},
-                value: 'Quý Trường',
-                icon: Icons.drive_file_rename_outline,
               ),
               Container(
                 width: size.width * 0.8,
@@ -76,8 +74,10 @@ class _UpdateProfileState extends State<UpdateProfile> {
                 ),
               ),
               RoundedInputForm(
-                onChanged: (value){},
-                value: '81723712',
+                onChanged: (value){
+                  phone=value;
+                },
+                value: farmer.phone,
                 icon: Icons.phone,
               ),
               Container(
@@ -107,7 +107,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
                       dropdownValue = newValue!;
                     });
                   },
-                  items: <String>['Nam','Nữ']
+                  items: <String>['Nữ','Nam']
                       .map<DropdownMenuItem<String>>((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
@@ -116,9 +116,61 @@ class _UpdateProfileState extends State<UpdateProfile> {
                   }).toList(),
                 ),
               ),
-              RoundedButton(text: 'Hoàn tất', press: (){
-                Navigator.pop(context);
-              })
+              Container(
+                  width: size.width*0.8,
+                  child: Text(
+                    'Ngày Sinh',
+                    style: TextStyle(
+
+                    ),
+                    textAlign: TextAlign.left,
+                  )
+              ),
+              RoundedDateInput(
+                  text: 'Ngày '+birthday.day.toString()+' tháng '+birthday.month.toString()+' năm '+birthday.year.toString(),
+                  icon: Icons.date_range,
+                  onPress: (){
+                    showDatePicker(
+                        context: context,
+                        initialDate: farmer.birth_day,
+                        firstDate: DateTime(1900),
+                        lastDate: DateTime.now(),
+                    ).then((value) {
+                      setState(() {
+                        birthday  = value!;
+                        }
+                      );
+                    });
+                  }
+              ),
+              RoundedButton(
+                  text: 'Hoàn tất',
+                  press: () async {
+                    final int gender = dropdownValue == 'Nam'? 0 : 1;
+                    Map data = {
+                      "full_name": full_name,
+                      "password": "",
+                      "phone": phone,
+                      "birth_day": DateFormat('yyyy-MM-ddThh:mm:ss').format(birthday),
+                      "gender": gender,
+                      "status": 1
+                    };
+                    var body = json.encode(data);
+                    final http.Response response = await http.put(
+                        Uri.parse('http://52.221.245.187:90/api/v1/farmers/${farmer.id}'),
+                        headers: {"Content-Type": "application/json"},
+                        body: body
+                    );
+                    if(response.statusCode==200){
+                      await showDialog(
+                          context: context,
+                          builder: (BuildContext context)=>Message_Dialog(title: 'Cập nhật thành công',content: 'Cập nhật thông tin cá nhân thành công')
+                      );
+
+                      Navigator.pop(context);
+                    }
+                  }
+              )
             ],
           ),
         ),
