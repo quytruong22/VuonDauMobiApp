@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:localstorage/localstorage.dart';
 import 'package:vuondauapp/object/farmDTO.dart';
 import 'package:vuondauapp/object/farmerDTO.dart';
 import 'package:vuondauapp/object/harvestDTO.dart';
@@ -39,6 +40,7 @@ class _LoginScreenState extends State<LoginScreen> {
   List<HarvestDTO> listHarvests=[];
   List<HarvestSellingPriceDTO> listSellings=[];
   late FarmerDTO farmer;
+  final LocalStorage storage = new LocalStorage('farmer_info');
 
   Future<void> _handleSignIn() async{
     try{
@@ -85,6 +87,7 @@ class _LoginScreenState extends State<LoginScreen> {
       print(payload);
 
       final String getID = payload['ID'];
+      storage.setItem("Farmer_ID", getID);
      final getFarmerResponse = await http.get(Uri.parse('http://52.221.245.187:90/api/v1/farmers/$getID'));
     //   final getFarmerResponse = await http.get(Uri.parse('http://52.221.245.187:90/api/v1/farmers/ad9c79a1-4b3b-4611-ad0b-8812f28c7aab'));
       if(getFarmerResponse.statusCode==200){

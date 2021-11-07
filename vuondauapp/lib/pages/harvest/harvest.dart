@@ -20,7 +20,7 @@ class _HarvestState extends State<Harvest> {
   @override
   void initState() {
     super.initState();
-
+    data = widget.harvests;
     list = data;
   }
 
