@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vuondauapp/pages/account/change_password.dart';
+import 'package:vuondauapp/pages/feedback.dart';
 import 'package:vuondauapp/pages/harvest/harvest_update.dart';
 import 'package:vuondauapp/pages/account/profile_update.dart';
 import 'package:vuondauapp/pages/account/login.dart';
@@ -67,6 +68,7 @@ class _AppState extends State<App> {
         '/updateselling': (context) => UpdateSelling(),
         '/addselling': (context) => AddSelling(),
         '/detailselling': (context) => DetailSelling(),
+        '/feedback': (context) => FeedbackPage(),
       },
     );
   }
