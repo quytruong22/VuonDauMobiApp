@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart';
+import 'package:vuondauapp/object/feedback_dto.dart';
 import 'package:vuondauapp/object/order_detail_dto.dart';
 import 'package:vuondauapp/object/order_dto.dart';
 
@@ -18,7 +19,6 @@ class HttpOrderService {
     }
   }
 
-
   Future<List<OrderDetailDTO>> getOrderDetailForFarmer() async {
     Response res =
     await get(Uri.parse(endPoint + 'api/v1/order-details'));
@@ -27,6 +27,19 @@ class HttpOrderService {
       List<OrderDetailDTO> listOrderDetailDTO =
       body.map((dynamic item) => OrderDetailDTO.fromJson(item)).toList();
       return listOrderDetailDTO;
+    } else {
+      throw "Cannot get Order";
+    }
+  }
+
+  Future<List<FeedbackDTO>> getFeedback(orderID) async {
+    Response res =
+    await get(Uri.parse(endPoint + 'api/v1/feedbacks/$orderID'));
+    if (res.statusCode == 200) {
+      List<dynamic> body = jsonDecode(res.body);
+      List<FeedbackDTO> listFeedback =
+      body.map((dynamic item) => FeedbackDTO.fromJson(item)).toList();
+      return listFeedback;
     } else {
       throw "Cannot get Order";
     }
