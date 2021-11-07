@@ -69,24 +69,24 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
   Future<void> SignIn() async{
-    // final idToken = await user.user?.getIdToken();
-    // print(idToken);
-    // Map data = {
-    //   'access_token': '$idToken'
-    // };
-    // var body = json.encode(data);
-    // final http.Response response = await http.post(
-    //     Uri.parse('http://52.221.245.187:90/api/v1/login'),
-    //     headers: {"Content-Type": "application/json"},
-    //     body: body
-    // );
-    // if (response.statusCode==200) {
-    //   Map<String, dynamic> payload = Jwt.parseJwt(response.body);
-    //   print(payload);
-    //
-    //   final String getID = payload['ID'];
-    //  final getFarmerResponse = await http.get(Uri.parse('http://52.221.245.187:90/api/v1/farmers/$getID'));
-      final getFarmerResponse = await http.get(Uri.parse('http://52.221.245.187:90/api/v1/farmers/ad9c79a1-4b3b-4611-ad0b-8812f28c7aab'));
+    final idToken = await user.user?.getIdToken();
+    print(idToken);
+    Map data = {
+      'access_token': '$idToken'
+    };
+    var body = json.encode(data);
+    final http.Response response = await http.post(
+        Uri.parse('http://52.221.245.187:90/api/v1/login'),
+        headers: {"Content-Type": "application/json"},
+        body: body
+    );
+    if (response.statusCode==200) {
+      Map<String, dynamic> payload = Jwt.parseJwt(response.body);
+      print(payload);
+
+      final String getID = payload['ID'];
+     final getFarmerResponse = await http.get(Uri.parse('http://52.221.245.187:90/api/v1/farmers/$getID'));
+    //   final getFarmerResponse = await http.get(Uri.parse('http://52.221.245.187:90/api/v1/farmers/ad9c79a1-4b3b-4611-ad0b-8812f28c7aab'));
       if(getFarmerResponse.statusCode==200){
         farmer = FarmerDTO.fromJson(jsonDecode(getFarmerResponse.body));
         await loadData();
@@ -95,7 +95,7 @@ class _LoginScreenState extends State<LoginScreen> {
             builder: (context) => NavigationPage(harvests: listHarvests,  sellings: listSellings,farmer: farmer,farms: listFarms)
         ));
       }
-    //}
+    }
   }
 
   Future<void> loadData() async{
@@ -176,8 +176,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   RoundedButton(
                     text: "LOGIN",
                     press: () {
-                      //_handleSignIn();
-                      SignIn();
+                      _handleSignIn();
+                      // SignIn();
                     },
                   ),
                   SizedBox(height: size.height * 0.03),
