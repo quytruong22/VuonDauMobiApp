@@ -1,20 +1,19 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:vuondauapp/object/harvestSellingPriceDTO.dart';
 import 'package:vuondauapp/widgets/compoment/status_harvest.dart';
 
 class CardSellingDetail extends StatelessWidget {
-  CardSellingDetail({this.name = "Placeholder Title",this.description = "",required this.imgharvest,this. quantity = "",this.price = "",this.farmname = "",required this.imgproduct,required this.datestart,required this.dateend});
+  CardSellingDetail({required this.selling,required this.tap,
+    this.imgHarvest='https://cdn1.tuoitre.vn/zoom/600_315/2020/9/22/dau-tay-1600743428804672157496-crop-16007435512231711659798.jpg',
+    required this.imgProduct
+  });
 
-  final String description;
-  final String imgharvest;
-  final String imgproduct;
-  final String name;
-  final String quantity;
-  final String price;
-  final String farmname;
-  final DateTime datestart;
-  final DateTime dateend;
+  final HarvestSellingPriceDTO selling;
+  final Function()  tap;
+  final String  imgProduct;
+  final String  imgHarvest;
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -34,7 +33,7 @@ class CardSellingDetail extends StatelessWidget {
                       width: size.width-20,
                       decoration: BoxDecoration(
                           image: DecorationImage(
-                            image: NetworkImage(imgharvest),
+                            image: NetworkImage(imgHarvest),
                             fit: BoxFit.cover,
                           )
                       )
@@ -46,11 +45,11 @@ class CardSellingDetail extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(farmname,
+                            Text('Nông trại: '+selling.harvestSelling.harvest.farm.name,
                                 style: TextStyle(
                                     color: Colors.green, fontSize: 13, fontWeight: FontWeight.bold)),
                             SizedBox(height: 8.0,),
-                            Text(description,
+                            Text('Mô tả: '+selling.harvestSelling.harvest.description,
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 11,
@@ -61,7 +60,7 @@ class CardSellingDetail extends StatelessWidget {
                                 width: size.width*0.5,
                                 decoration: BoxDecoration(
                                     image: DecorationImage(
-                                      image: NetworkImage(imgproduct),
+                                      image: NetworkImage(imgProduct),
                                       fit: BoxFit.cover,
                                     )
                                 )
@@ -69,32 +68,32 @@ class CardSellingDetail extends StatelessWidget {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(name,
+                                Text('Tên sản phẩm: '+selling.harvestSelling.harvest.product.name,
                                     style: TextStyle(
                                         color: Colors.black, fontSize: 13)),
-                                StatusHarvest(datestart: datestart, dateend: dateend)
+                                StatusHarvest(datestart: selling.harvestSelling.dateOfCreate, dateend: selling.harvestSelling.endDate)
                               ],
                             ),
                             SizedBox(height: 8.0,),
-                            Text(quantity,
+                            Text('Tổng số lượng: ${selling.harvestSelling.totalWeight}Kg',
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 11,
                                     fontWeight: FontWeight.w600)),
                             SizedBox(height: 8.0,),
-                            Text(price,
+                            Text('Giá: ${selling.price}VND/Kg',
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 11,
                                     fontWeight: FontWeight.w600)),
                             SizedBox(height: 8.0,),
-                            Text('Ngày mở bán: '+DateFormat('dd/MM/yyyy').format(datestart),
+                            Text('Ngày mở bán: '+DateFormat('dd/MM/yyyy').format(selling.harvestSelling.dateOfCreate),
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 11,
                                     fontWeight: FontWeight.w600)),
                             SizedBox(height: 8.0,),
-                            Text('Ngày kết thúc: '+DateFormat('dd/MM/yyyy').format(dateend),
+                            Text('Ngày kết thúc: '+DateFormat('dd/MM/yyyy').format(selling.harvestSelling.endDate),
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 11,
@@ -104,9 +103,7 @@ class CardSellingDetail extends StatelessWidget {
                                 style: TextButton.styleFrom(
                                   backgroundColor: Colors.green,
                                 ),
-                                onPressed: (){
-                                  Navigator.pushNamed(context, '/updateselling');
-                                },
+                                onPressed: tap,
                                 child: Text(
                                   'Cập nhật đợt bán',
                                   style: TextStyle(

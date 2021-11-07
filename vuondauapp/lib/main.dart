@@ -55,16 +55,11 @@ class _AppState extends State<App> {
     return MaterialApp(
       initialRoute: '/login',
       routes: {
-        '/profileupdate': (context) => UpdateProfile(),
         '/changepassword': (context) => ChangePassword(),
         '/login': (context) => LoginScreen(),
         '/signup': (context) => SignUpScreen(),
         '/dashboard': (context) => Dashboard(),
         '/aboutus': (context) => AboutUs(),
-        '/updateharvest': (context) => UpdateHarvest(),
-        '/updateselling': (context) => UpdateSelling(),
-        '/addselling': (context) => AddSelling(),
-        '/detailselling': (context) => DetailSelling(),
       },
     );
   }

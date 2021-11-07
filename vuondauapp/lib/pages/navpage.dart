@@ -45,17 +45,17 @@ class _NavigationPageState extends State<NavigationPage> {
         if(responseHarvest.statusCode==200){
           final listgetharvest  = ListHarvests.fromJson(jsonDecode(responseHarvest.body)).harvests;
           listHarvests.addAll(listgetharvest);
-        }
-      });
-      listHarvests.forEach((harvest) async {
-        final responseHarvestSelling = await http.get(Uri.parse('http://52.221.245.187:90/api/v1/harvests/${harvest.ID}'));
-        if(responseHarvestSelling.statusCode==200){
-          final listgetHarvestSelling  = ListHarvestSelling.fromJson(jsonDecode(responseHarvestSelling.body)).harvestsellings;
-          listgetHarvestSelling.forEach((harvestSelling) async {
-            final responseHarvestSellingPrice = await http.get(Uri.parse('http://52.221.245.187:90/api/v1/harvests/${harvestSelling.id}'));
-            if(responseHarvestSellingPrice.statusCode==200){
-              final harvestSellingPrice = HarvestSellingPriceDTO.fromJson(jsonDecode(responseHarvestSellingPrice.body));
-              listSellings.add(harvestSellingPrice);
+          listgetharvest.forEach((harvest) async {
+            final responseHarvestSelling = await http.get(Uri.parse('http://52.221.245.187:90/api/v1/harvest-sellings/${harvest.ID}'));
+            if(responseHarvestSelling.statusCode==200){
+              final listgetHarvestSelling  = ListHarvestSelling.fromJson(jsonDecode(responseHarvestSelling.body)).harvestsellings;
+              listgetHarvestSelling.forEach((harvestSelling) async {
+                final responseHarvestSellingPrice = await http.get(Uri.parse('http://52.221.245.187:90/api/v1/harvest-selling-prices/${harvestSelling.id}'));
+                if(responseHarvestSellingPrice.statusCode==200){
+                  final harvestSellingPrice = ListHarvestSellingPrice.fromJson(jsonDecode(responseHarvestSellingPrice.body)).harvestsellingprice;
+                  listSellings.addAll(harvestSellingPrice);
+                }
+              });
             }
           });
         }
@@ -74,9 +74,9 @@ class _NavigationPageState extends State<NavigationPage> {
       body: PageView(
         controller: pageController,
         children: [
-          Home(listselling: listSellings,listharvest: listHarvests),
+          Home(listselling: listSellings,listharvest: listHarvests,farmer: widget.farmer),
           Dashboard(),
-          Selling(sellings: listSellings),
+          Selling(sellings: listSellings,harvests:listHarvests),
           Harvest(harvests: listHarvests,farms:listFarms),
           Profile(farmer: widget.farmer)
         ],

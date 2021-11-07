@@ -69,7 +69,6 @@ class _LoginScreenState extends State<LoginScreen> {
   }
   Future<void> SignIn() async{
     final idToken = await user.user?.getIdToken();
-    print(idToken);
     Map data = {
       'access_token': '$idToken'
     };
@@ -81,7 +80,6 @@ class _LoginScreenState extends State<LoginScreen> {
     );
     if (response.statusCode==200) {
       Map<String, dynamic> payload = Jwt.parseJwt(response.body);
-      print(payload);
 
       final String getID = payload['ID'];
      final getFarmerResponse = await http.get(Uri.parse('http://52.221.245.187:90/api/v1/farmers/$getID'));
