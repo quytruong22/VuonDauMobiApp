@@ -28,7 +28,7 @@ class _BodyState extends State<Body> {
         padding: EdgeInsets.fromLTRB(30, 40, 30, 0),
         child: SingleChildScrollView(
           child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 ProfilePic(),
                 SizedBox(height: 20),
@@ -143,10 +143,7 @@ class _BodyState extends State<Body> {
                     RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
                     onPressed: () async {
                       await Navigator.push(context,MaterialPageRoute(
-                        builder: (context) => UpdateProfile(),
-                        settings: RouteSettings(
-                          arguments: widget.farmer,
-                        ),
+                        builder: (context) => UpdateProfile(farmer:widget.farmer)
                       ));
                     },
                     color: Colors.white,

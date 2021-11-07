@@ -1,22 +1,56 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:vuondauapp/object/farmDTO.dart';
+import 'package:vuondauapp/object/harvestDTO.dart';
+import 'package:vuondauapp/object/productDTO.dart';
 import 'package:vuondauapp/widgets/compoment/dialog.dart';
 import 'package:vuondauapp/widgets/compoment/rounded_date_input.dart';
 import 'package:vuondauapp/widgets/compoment/rounded_input_field.dart';
 import 'package:vuondauapp/widgets/compoment/rounded_button.dart';
+import 'package:vuondauapp/widgets/compoment/rounded_input_form_field.dart';
 import 'package:vuondauapp/widgets/compoment/text_field_container.dart';
+import 'package:http/http.dart' as http;
 
 class UpdateHarvest extends StatefulWidget {
-  const UpdateHarvest({Key? key}) : super(key: key);
+  final List<ProductDTO>  listproduct;
+  final List<FarmDTO> listfarm;
+  final HarvestDTO  harvest;
+  UpdateHarvest({required this.listproduct,required  this.listfarm,required this.harvest});
 
   @override
   _UpdateHarvestState createState() => _UpdateHarvestState();
 }
 
 class _UpdateHarvestState extends State<UpdateHarvest> {
-  String dropdownValue = 'Nông Trại Phan Nam';
-  String dropdownProduct = 'Dâu';
   DateTime datestart = DateTime.now();
   DateTime dateend = DateTime.now();
+  String  description = '';
+  String  name='';
+  late ProductDTO _Chooseproduct;
+  late FarmDTO _Choosefarm;
+  late HarvestDTO harvest;
+
+  @override
+  void initState() {
+    super.initState();
+    harvest = widget.harvest;
+    datestart = harvest.start_date;
+    dateend = harvest.end_date;
+    description = harvest.description;
+    name=harvest.name;
+    widget.listproduct.forEach((element) {
+      if(element.id==harvest.product.id){
+        _Chooseproduct  = element;
+      }
+    });
+    widget.listfarm.forEach((element) {
+      if(element.ID==harvest.farm.ID){
+        _Choosefarm  = element;
+      }
+    });
+  }
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -40,9 +74,15 @@ class _UpdateHarvestState extends State<UpdateHarvest> {
                 ),
               ),
               SizedBox(height: size.height * 0.03),
+              Text(
+                'Chọn vườn/nông trại',
+                style: TextStyle(
+
+                ),
+              ),
               TextFieldContainer(
-                child: DropdownButton<String>(
-                  value: dropdownValue,
+                child: DropdownButton(
+                  value: _Choosefarm,
                   icon: const Icon(Icons.arrow_downward),
                   iconSize: 24,
                   elevation: 16,
@@ -52,31 +92,35 @@ class _UpdateHarvestState extends State<UpdateHarvest> {
                   underline: Container(
                       height: 0
                   ),
-                  onChanged: (String? newValue) {
+                  onChanged: (FarmDTO? newValue) {
                     setState(() {
-                      dropdownValue = newValue!;
+                      _Choosefarm = newValue!;
                     });
                   },
-                  items: <String>['Nông Trại Phan Nam', 'Nông trại Whiteface', 'Trường Thành Farm']
-                      .map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
+                  items: widget.listfarm
+                      .map((FarmDTO value) {
+                    return DropdownMenuItem(
                       value: value,
-                      child: Text(value),
+                      child: Text(value.name),
                     );
                   }).toList(),
                 ),
               ),
               SizedBox(height: size.height * 0.03),
-              RoundedInputField(
-                hintText: "Tên mùa vụ",
+              RoundedInputForm(
+                value: name,
                 icon: Icons.drive_file_rename_outline,
-                onChanged: (value) {},
+                onChanged: (value) {
+                  name = value;
+                },
               ),
               SizedBox(height: size.height * 0.03),
-              RoundedInputField(
-                hintText: "Mô tả",
+              RoundedInputForm(
+                value: description,
                 icon: Icons.info_rounded,
-                onChanged: (value) {},
+                onChanged: (value) {
+                  description = value;
+                },
               ),
               SizedBox(height: size.height * 0.03),
               Container(
@@ -109,6 +153,33 @@ class _UpdateHarvestState extends State<UpdateHarvest> {
                   }
               ),
               SizedBox(height: size.height * 0.03),
+              Container(
+                  width: size.width*0.8,
+                  child: Text(
+                    'Ngày kết thúc mùa vụ',
+                    style: TextStyle(
+
+                    ),
+                    textAlign: TextAlign.left,
+                  )
+              ),
+              RoundedDateInput(
+                  text: 'Ngày '+dateend.day.toString()+' tháng '+dateend.month.toString()+' năm '+dateend.year.toString(),
+                  icon: Icons.date_range,
+                  onPress: (){
+                    showDatePicker(
+                        context: context,
+                        initialDate: datestart,
+                        firstDate: datestart,
+                        lastDate: DateTime(2023)
+                    ).then((value) {
+                      setState(() {
+                        value == null ? datestart : dateend= value;
+                      });
+                    });
+                  }
+              ),
+              SizedBox(height: size.height * 0.03),
               Text(
                 'Sản phẩm',
                 style: TextStyle(
@@ -116,8 +187,8 @@ class _UpdateHarvestState extends State<UpdateHarvest> {
               ),
               SizedBox(height: size.height * 0.03),
               TextFieldContainer(
-                child: DropdownButton<String>(
-                  value: dropdownProduct,
+                child: DropdownButton(
+                  value: _Chooseproduct,
                   icon: const Icon(Icons.arrow_downward),
                   iconSize: 24,
                   elevation: 16,
@@ -127,16 +198,16 @@ class _UpdateHarvestState extends State<UpdateHarvest> {
                   underline: Container(
                       height: 0
                   ),
-                  onChanged: (String? newValue) {
+                  onChanged: (ProductDTO? newValue) {
                     setState(() {
-                      dropdownProduct = newValue!;
+                      _Chooseproduct = newValue!;
                     });
                   },
-                  items: <String>['Dâu', 'Cải xanh', 'Cà tím']
-                      .map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
+                  items: widget.listproduct
+                      .map((ProductDTO value) {
+                    return DropdownMenuItem(
                       value: value,
-                      child: Text(value),
+                      child: Text(value.name),
                     );
                   }).toList(),
                 ),
@@ -150,14 +221,31 @@ class _UpdateHarvestState extends State<UpdateHarvest> {
               RoundedButton(
                 text: "Hoàn tất",
                 press: () async {
-                  await showDialog(
-                      context: context,
-                      builder: (BuildContext context)=>Message_Dialog(
-                    title: 'Cập nhật mùa vụ',
-                    content: 'Cập nhật mùa vụ thành công',
-                  )
+                  Map data = {
+                    "name": name,
+                    "farm_id": _Choosefarm.ID,
+                    "product_id": _Chooseproduct.id,
+                    "description": description,
+                    "start_date": DateFormat('yyyy-MM-ddThh:mm:ss').format(datestart),
+                    "end_date": DateFormat('yyyy-MM-ddThh:mm:ss').format(dateend),
+                    "status": 1
+                  };
+                  var body = json.encode(data);
+                  final http.Response response = await http.put(
+                      Uri.parse('http://52.221.245.187:90/api/v1/harvests/${harvest.ID}'),
+                      headers: {"Content-Type": "application/json-patch+json"},
+                      body: body
                   );
-                  Navigator.pop(context);
+                  if(response.statusCode==200){
+                    await showDialog(
+                        context: context,
+                        builder: (BuildContext context)=>Message_Dialog(
+                          title: 'Cập nhật mùa vụ',
+                          content: 'Cập nhật mùa vụ thành công',
+                        )
+                    );
+                    Navigator.pop(context);
+                  }
                 },
               ),
             ],

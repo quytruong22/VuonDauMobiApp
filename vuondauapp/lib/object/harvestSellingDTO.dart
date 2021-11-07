@@ -5,17 +5,15 @@ import 'package:vuondauapp/object/harvestDTO.dart';
 class HarvestSellingDTO {
   String id;
   HarvestDTO harvest;
-  Campaign campaign;
   DateTime dateOfCreate;
   DateTime endDate;
-  int minWeight;
-  int totalWeight;
+  double minWeight;
+  double totalWeight;
   int status;
 
   HarvestSellingDTO(
       {required this.id,
         required this.harvest,
-        required this.campaign,
         required this.dateOfCreate,
         required this.endDate,
         required this.minWeight,
@@ -26,7 +24,6 @@ class HarvestSellingDTO {
     return  HarvestSellingDTO(
         id : json['id'],
         harvest : HarvestDTO.fromJson(json['harvest']),
-        campaign : Campaign.fromJson(json['campaign']),
         dateOfCreate : DateFormat('yyyy-MM-ddThh:mm:ss').parse(json['date_of_create']),
         endDate : DateFormat('yyyy-MM-ddThh:mm:ss').parse(json['end_date']),
         minWeight : json['min_weight'],
@@ -41,9 +38,6 @@ class HarvestSellingDTO {
     data['id'] = this.id;
     if (this.harvest != null) {
       data['harvest'] = this.harvest.toJson();
-    }
-    if (this.campaign != null) {
-      data['campaign'] = this.campaign.toJson();
     }
     data['date_of_create'] = DateFormat('yyyy-MM-ddThh:mm:ss').format(this.dateOfCreate);
     data['end_date'] = DateFormat('yyyy-MM-ddThh:mm:ss').format(this.endDate);

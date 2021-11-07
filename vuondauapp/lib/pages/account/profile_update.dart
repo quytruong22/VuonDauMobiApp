@@ -11,7 +11,10 @@ import 'package:vuondauapp/widgets/compoment/text_field_container.dart';
 import 'package:http/http.dart' as http;
 
 class UpdateProfile extends StatefulWidget {
-  const UpdateProfile({Key? key}) : super(key: key);
+  final FarmerDTO farmer;
+
+
+  UpdateProfile({required this.farmer});
 
   @override
   _UpdateProfileState createState() => _UpdateProfileState();
@@ -22,6 +25,15 @@ class _UpdateProfileState extends State<UpdateProfile> {
   String phone = '';
   DateTime birthday = DateTime.now();
   String dropdownValue = 'Nam';
+
+  @override
+  void initState() {
+    super.initState();
+    full_name = widget.farmer.full_name;
+    phone = widget.farmer.phone;
+    birthday = widget.farmer.birth_day;
+  }
+
   @override
   Widget build(BuildContext context) {
     final FarmerDTO farmer=ModalRoute.of(context)!.settings.arguments as FarmerDTO;
@@ -60,7 +72,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
                   onChanged: (value){
                     full_name=value;
                   },
-                  value: farmer.full_name,
+                  value: full_name,
                   icon: Icons.drive_file_rename_outline,
               ),
               Container(
@@ -73,11 +85,11 @@ class _UpdateProfileState extends State<UpdateProfile> {
                   ),
                 ),
               ),
-              RoundedInputForm(
+              RoundedNumberInputForm(
                 onChanged: (value){
                   phone=value;
                 },
-                value: farmer.phone,
+                value: phone,
                 icon: Icons.phone,
               ),
               Container(
@@ -132,7 +144,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
                   onPress: (){
                     showDatePicker(
                         context: context,
-                        initialDate: farmer.birth_day,
+                        initialDate: birthday,
                         firstDate: DateTime(1900),
                         lastDate: DateTime.now(),
                     ).then((value) {
@@ -157,7 +169,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
                     };
                     var body = json.encode(data);
                     final http.Response response = await http.put(
-                        Uri.parse('http://52.221.245.187:90/api/v1/farmers/${farmer.id}'),
+                        Uri.parse('http://52.221.245.187:90/api/v1/farmers/${widget.farmer.id}'),
                         headers: {"Content-Type": "application/json"},
                         body: body
                     );
@@ -166,7 +178,6 @@ class _UpdateProfileState extends State<UpdateProfile> {
                           context: context,
                           builder: (BuildContext context)=>Message_Dialog(title: 'Cập nhật thành công',content: 'Cập nhật thông tin cá nhân thành công')
                       );
-
                       Navigator.pop(context);
                     }
                   }

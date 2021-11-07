@@ -6,7 +6,7 @@ import 'package:vuondauapp/widgets/compoment/status_harvest.dart';
 class CardSelling extends StatelessWidget {
   CardSelling(
       {required this.selling,
-        this.img='',
+        this.img='https://cdn.discordapp.com/attachments/900392963639750657/905113971948941332/iconVuondau.png',
         required this.tap});
 
   final HarvestSellingPriceDTO selling;
@@ -68,7 +68,7 @@ class CardSelling extends StatelessWidget {
                                       fontSize: 11,
                                       fontWeight: FontWeight.w600)
                               ),
-                              StatusHarvest(datestart: DateTime(2021), dateend: DateTime(2023))
+                              StatusHarvest(datestart: selling.harvestSelling.dateOfCreate, dateend: selling.harvestSelling.endDate)
                             ],
                           )
                         ],
