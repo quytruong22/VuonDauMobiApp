@@ -1,15 +1,21 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:vuondauapp/object/harvestDTO.dart';
 import 'package:vuondauapp/object/harvestSellingPriceDTO.dart';
 import 'package:vuondauapp/object/productDTO.dart';
+import 'package:vuondauapp/object/productPicture.dart';
+import 'package:vuondauapp/pages/selling/selling_add.dart';
+import 'package:vuondauapp/pages/selling/selling_detail.dart';
 import 'package:vuondauapp/widgets/compoment/card-selling.dart';
 import 'package:vuondauapp/widgets/compoment/search_widget.dart';
+import 'package:http/http.dart' as http;
 
 class Selling extends StatefulWidget {
   final List<HarvestSellingPriceDTO>  sellings;
+  final List<HarvestDTO>  harvests;
 
-
-  Selling({required this.sellings});
+  Selling({required this.sellings,required  this.harvests});
 
   @override
   _SellingState createState() => _SellingState();
@@ -58,7 +64,9 @@ class _SellingState extends State<Selling> {
         backgroundColor: Colors.green,
         foregroundColor: Colors.white,
         onPressed: () {
-          Navigator.pushNamed(context, '/addselling');
+          Navigator.push(context,MaterialPageRoute(
+              builder: (context) => AddSelling(harvests: widget.harvests))
+          );
         },
         icon: Icon(Icons.add),
         label: Text('Đợt bán mới'),
@@ -80,8 +88,13 @@ class _SellingState extends State<Selling> {
                         padding: const EdgeInsets.only(bottom: 10.0),
                         child: CardSelling(
                             selling: selling,
-                            tap: () {
-                              Navigator.pushNamed(context, '/detailselling');
+                            tap: () async {
+                              final response = await http.get(Uri.parse('http://52.221.245.187:90/api/v1/product-pictures/${selling.harvestSelling.harvest.product.id}'));
+                              List<ProductPicture> pictures = ListProductPictures.fromJson(jsonDecode(response.body)).products;
+                              final String  imgProduct  = pictures.first.src;
+                              Navigator.push(context,MaterialPageRoute(
+                                  builder: (context) => DetailSelling(selling: selling,imgProduct:imgProduct)
+                              ));
                             }),
                       ),
                     ],

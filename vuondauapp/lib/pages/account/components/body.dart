@@ -3,14 +3,22 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:vuondauapp/object/farmDTO.dart';
 import 'package:vuondauapp/object/farmerDTO.dart';
+import 'package:vuondauapp/pages/account/profile_update.dart';
 import 'package:vuondauapp/pages/farm/farm.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'profile_pic.dart';
 
-class Body extends StatelessWidget {
-  final FarmerDTO farmer;
+class Body extends StatefulWidget {
+  FarmerDTO farmer;
 
   Body({required this.farmer});
+
+
+  @override
+  State<Body> createState() => _BodyState();
+}
+
+class _BodyState extends State<Body> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -20,7 +28,7 @@ class Body extends StatelessWidget {
         padding: EdgeInsets.fromLTRB(30, 40, 30, 0),
         child: SingleChildScrollView(
           child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 ProfilePic(),
                 SizedBox(height: 20),
@@ -35,7 +43,7 @@ class Body extends StatelessWidget {
                         )
                     ),
                     Text(
-                        farmer.full_name,
+                        widget.farmer.full_name,
                         style: TextStyle(
                           letterSpacing: 2.0,
                           fontWeight: FontWeight.bold,
@@ -57,7 +65,7 @@ class Body extends StatelessWidget {
                         )
                     ),
                     Text(
-                        farmer.gender ? 'Name':'Nữ',
+                        widget.farmer.gender ? 'Nữ':'Nam',
                         style: TextStyle(
                           letterSpacing: 2.0,
                           fontWeight: FontWeight.bold,
@@ -79,7 +87,7 @@ class Body extends StatelessWidget {
                         )
                     ),
                     Text(
-                        '${farmer.birth_day.day}/${farmer.birth_day.month}/${farmer.birth_day.year}',
+                        '${widget.farmer.birth_day.day}/${widget.farmer.birth_day.month}/${widget.farmer.birth_day.year}',
                         style: TextStyle(
                           letterSpacing: 2.0,
                           fontWeight: FontWeight.bold,
@@ -101,7 +109,7 @@ class Body extends StatelessWidget {
                         )
                     ),
                     Text(
-                      farmer.phone,
+                      widget.farmer.phone,
                       style: TextStyle(
                         letterSpacing: 2.0,
                         fontWeight: FontWeight.bold,
@@ -118,7 +126,7 @@ class Body extends StatelessWidget {
                     ),
                     SizedBox(width: 10),
                     Text(
-                        farmer.email,
+                        widget.farmer.email,
                         style: TextStyle(
                           fontSize: 15,
                           letterSpacing: 1,
@@ -133,8 +141,10 @@ class Body extends StatelessWidget {
                     padding: EdgeInsets.all(20),
                     shape:
                     RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/profileupdate');
+                    onPressed: () async {
+                      await Navigator.push(context,MaterialPageRoute(
+                        builder: (context) => UpdateProfile(farmer:widget.farmer)
+                      ));
                     },
                     color: Colors.white,
                     child: Row(
@@ -187,11 +197,11 @@ class Body extends StatelessWidget {
                     RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
                     onPressed: () async {
                       try {
-                        final response = await http.get(Uri.parse('http://52.221.245.187:90/api/v1/farms/${farmer.id}'));
+                        final response = await http.get(Uri.parse('http://52.221.245.187:90/api/v1/farms/${widget.farmer.id}'));
                         if (response.statusCode == 200) {
                           List<FarmDTO> list = ListFarms.fromJson(jsonDecode(response.body)).farms;
                           Navigator.push(context,MaterialPageRoute(
-                            builder: (context) => Farm(farmer:farmer),
+                            builder: (context) => Farm(farmer:widget.farmer),
                             settings: RouteSettings(
                               arguments: list,
                             ),
@@ -199,7 +209,7 @@ class Body extends StatelessWidget {
                         } else  if(response.statusCode == 404){
                           List<FarmDTO> list = [];
                           Navigator.push(context,MaterialPageRoute(
-                            builder: (context) => Farm(farmer:farmer),
+                            builder: (context) => Farm(farmer:widget.farmer),
                             settings: RouteSettings(
                               arguments: list,
                             ),

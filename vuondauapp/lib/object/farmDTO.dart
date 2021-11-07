@@ -69,8 +69,14 @@ class ListFarms{
   factory ListFarms.fromJson(List<dynamic> parsedJson) {
 
     List<FarmDTO> farms = parsedJson.map((i)=>FarmDTO.fromJson(i)).toList();
+    List<FarmDTO> available=[];
+    farms.forEach((element) {
+      if(element.status==1){
+        available.add(element);
+      }
+    });
     return new ListFarms(
-      farms: farms,
+      farms: available,
     );
   }
 }

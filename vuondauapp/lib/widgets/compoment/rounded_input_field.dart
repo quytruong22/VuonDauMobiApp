@@ -15,7 +15,37 @@ class RoundedInputField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFieldContainer(
       child: TextField(
+        onChanged: onChanged,
+        cursorColor: Colors.black,
+        decoration: InputDecoration(
+          icon: Icon(
+            icon,
+            color: Colors.green,
+          ),
+          hintText: hintText,
+          border: InputBorder.none,
+        ),
+      ),
+    );
+  }
+}
 
+class RoundedNumberInputField extends StatelessWidget {
+  final String hintText;
+  final IconData icon;
+  final ValueChanged<String> onChanged;
+  RoundedNumberInputField({
+    required this.hintText,
+    this.icon = Icons.person,
+    required this.onChanged,
+  });
+
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFieldContainer(
+      child: TextField(
+        keyboardType: TextInputType.number,
         onChanged: onChanged,
         cursorColor: Colors.black,
         decoration: InputDecoration(

@@ -14,8 +14,9 @@ import 'package:vuondauapp/widgets/compoment/text_field_container.dart';
 class UpdateFarm extends StatefulWidget {
   final List<AreaDTO> listArea;
   final List<FarmType> listFarmType;
+  final FarmDTO farm;
 
-  UpdateFarm({required this.listArea, required this.listFarmType});
+  UpdateFarm({required this.listArea, required this.listFarmType,required this.farm});
 
   @override
   _UpdateFarmState createState() => _UpdateFarmState();
@@ -26,15 +27,24 @@ class _UpdateFarmState extends State<UpdateFarm> {
   String  address = '';
   String  description = '';
   String  link = '';
-  late  AreaDTO area;
-  late  FarmType farmType;
+  late AreaDTO _Choosearea;
+  late FarmType _ChoosefarmType;
+  late FarmDTO farm;
+
+  @override
+  void initState() {
+    super.initState();
+    farm  = widget.farm;
+    address=farm.address;
+    description=farm.description;
+    name=farm.name;
+    _Choosearea = widget.listArea.first;
+    _ChoosefarmType = widget.listFarmType.first;
+  }
 
   @override
   Widget build(BuildContext context) {
-    final FarmDTO farm = ModalRoute.of(context)!.settings.arguments as FarmDTO;
     Size size = MediaQuery.of(context).size;
-    area  = farm.area;
-    farmType  = farm.farmType;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.green,
@@ -42,7 +52,8 @@ class _UpdateFarmState extends State<UpdateFarm> {
         centerTitle: true,
       ),
       body: Container(
-        width: double.infinity,
+        margin: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+        width: size.width-20,
         height: size.height,
         child: SingleChildScrollView(
           child: Column(
@@ -55,9 +66,15 @@ class _UpdateFarmState extends State<UpdateFarm> {
                 ),
               ),
               SizedBox(height: size.height * 0.03),
+              Text(
+                'Vùng của nông trại',
+                style: TextStyle(
+
+                ),
+              ),
               TextFieldContainer(
-                child: DropdownButton<AreaDTO>(
-                  value: area,
+                child: DropdownButton(
+                  value: _Choosearea,
                   icon: const Icon(Icons.arrow_downward),
                   iconSize: 24,
                   elevation: 16,
@@ -69,19 +86,28 @@ class _UpdateFarmState extends State<UpdateFarm> {
                   ),
                   onChanged: (AreaDTO? newValue) {
                     setState(() {
-                      area = newValue!;
+                      _Choosearea = newValue!;
                     });
                   },
-                  items: widget.listArea.map<DropdownMenuItem<AreaDTO>>((AreaDTO area) => DropdownMenuItem(
-                      value: area,
-                      child: Text(area.name)
-                  )).toList(),
+                  items: widget.listArea
+                      .map((AreaDTO value) {
+                    return DropdownMenuItem(
+                      value: value,
+                      child: Text(value.name),
+                    );
+                  }).toList(),
                 ),
               ),
               SizedBox(height: size.height * 0.03),
+              Text(
+                'Loại nông trại',
+                style: TextStyle(
+
+                ),
+              ),
               TextFieldContainer(
-                child: DropdownButton<FarmType>(
-                  value: farmType,
+                child: DropdownButton(
+                  value: _ChoosefarmType,
                   icon: const Icon(Icons.arrow_downward),
                   iconSize: 24,
                   elevation: 16,
@@ -93,43 +119,56 @@ class _UpdateFarmState extends State<UpdateFarm> {
                   ),
                   onChanged: (FarmType? newValue) {
                     setState(() {
-                      farmType = newValue!;
+                      _ChoosefarmType = newValue!;
                     });
                   },
-                  items: widget.listFarmType.map<DropdownMenuItem<FarmType>>((FarmType farmType) => DropdownMenuItem(
-                      value: farmType,
-                      child: Text(farmType.name)
-                  )).toList(),
+                  items: widget.listFarmType
+                      .map((FarmType value) {
+                    return DropdownMenuItem(
+                      value: value,
+                      child: Text(value.name),
+                    );
+                  }).toList(),
                 ),
               ),
               SizedBox(height: size.height * 0.03),
+              Text(
+                'Tên nông trại',
+                style: TextStyle(
+
+                ),
+              ),
               RoundedInputForm(
                 icon: Icons.drive_file_rename_outline,
-                value: farm.name,
+                value: name,
                 onChanged: (value) {
                   name = value;
                 },
               ),
               SizedBox(height: size.height * 0.03),
-              RoundedInputForm(
-                icon: Icons.drive_file_rename_outline,
-                value: farm.name,
-                onChanged: (value) {
-                  name = value;
-                },
+              Text(
+                'Địa chỉ nông trại',
+                style: TextStyle(
+
+                ),
               ),
-              SizedBox(height: size.height * 0.03),
               RoundedInputForm(
                 icon: Icons.location_on,
-                value: farm.address,
+                value: address,
                 onChanged: (value) {
                   address = value;
                 },
               ),
               SizedBox(height: size.height * 0.03),
+              Text(
+                'Mô tả nông trại',
+                style: TextStyle(
+
+                ),
+              ),
               RoundedInputForm(
                 icon: Icons.description,
-                value: farm.description,
+                value: description,
                 onChanged: (value) {
                   description = value;
                 },
@@ -148,19 +187,14 @@ class _UpdateFarmState extends State<UpdateFarm> {
                 press: () async {
                   try {
                     Map data = {
-                      "farm_type_id": "${farmType.id}",
+                      "farm_type_id": "${_ChoosefarmType.id}",
                       "farmer_id": "${farm.farmer.id}",
-                      "area_id": "${area.ID}",
+                      "area_id": "${_Choosearea.ID}",
                       "name": "$name",
                       "address": "$address",
                       "description": "$description",
                       "status": 1
                     };
-                    farm.area=area;
-                    farm.farmType=farmType;
-                    farm.address=address;
-                    farm.name=name;
-                    farm.description=description;
                     var body = json.encode(data);
                     final http.Response response = await http.put(
                         Uri.parse('http://52.221.245.187:90/api/v1/farms/${farm.ID}'),
@@ -175,7 +209,7 @@ class _UpdateFarmState extends State<UpdateFarm> {
                             content: 'Cập nhật nông trại thành công',
                         )
                       );
-                      Navigator.pop(context,farm);
+                      Navigator.pop(context);
                     }
                   } on Exception catch (e) {
                     Message_Dialog(title: 'Lỗi',content: 'Lỗi cập nhật nông trại:${e.toString()}');

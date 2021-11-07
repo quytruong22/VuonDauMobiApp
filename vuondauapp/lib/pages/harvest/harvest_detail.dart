@@ -1,8 +1,18 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:vuondauapp/object/farmDTO.dart';
+import 'package:vuondauapp/object/harvestDTO.dart';
+import 'package:vuondauapp/object/productDTO.dart';
 import 'package:vuondauapp/widgets/compoment/card-harvest-detail.dart';
 
+import 'harvest_update.dart';
+
 class DetailHarvest extends StatefulWidget {
-  const DetailHarvest({Key? key}) : super(key: key);
+  final HarvestDTO  harvest;
+
+
+  DetailHarvest({required this.harvest});
 
   @override
   _DetailHarvestState createState() => _DetailHarvestState();
@@ -29,14 +39,16 @@ class _DetailHarvestState extends State<DetailHarvest> {
               Padding(
                 padding: const EdgeInsets.only(bottom: 32.0),
                 child: CardHarvestDetail(
-                  description: "Mô tả: Dâu của nông trại Phan Nam thơm ngon, chín tươi.",
-                  name: 'Tên sản phẩm: Dâu',
-                  farmname: 'Nông trại: Nông trại Phan Nam',
-                  imgharvest: 'https://cdn1.tuoitre.vn/zoom/600_315/2020/9/22/dau-tay-1600743428804672157496-crop-16007435512231711659798.jpg',
-                  imgproduct: 'https://cdn.tgdd.vn/Products/Images/8788/223378/bhx/dau-tay-hop-500g-202103180809491848.jpg',
-                  quantity: 'Số lượng còn lại: 50Kg',
-                  price: 'Giá: 50.000VND/Kg',
-                  sold: DateTime.now(),
+                  harvest: widget.harvest,
+                  tap: () async {
+                    http.Response response = await http.get(Uri.parse('http://52.221.245.187:90/api/v1/products'));
+                    List<ProductDTO> listProduct  = ListProducts.fromJson(jsonDecode(response.body)).products;
+                    response = await http.get(Uri.parse('http://52.221.245.187:90/api/v1/farms'));
+                    List<FarmDTO> listFarm  = ListFarms.fromJson(jsonDecode(response.body)).farms;
+                    Navigator.push(context,MaterialPageRoute(
+                        builder: (context) => UpdateHarvest(listproduct: listProduct,listfarm: listFarm,harvest:widget.harvest))
+                    );
+                  }
                 ),
               ),
             ],
