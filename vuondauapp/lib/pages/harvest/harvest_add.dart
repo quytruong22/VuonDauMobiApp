@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:vuondauapp/object/farmDTO.dart';
+import 'package:vuondauapp/object/productDTO.dart';
 import 'package:vuondauapp/widgets/compoment/dialog.dart';
 import 'package:vuondauapp/widgets/compoment/rounded_input_field.dart';
 import 'package:vuondauapp/widgets/compoment/rounded_button.dart';
@@ -7,6 +9,9 @@ import 'package:vuondauapp/widgets/compoment/rounded_date_input.dart';
 import 'package:image_picker/image_picker.dart';
 
 class AddHarvest extends StatefulWidget {
+  final List<ProductDTO>  listproduct;
+  final List<FarmDTO> listfarm;
+  AddHarvest({required this.listproduct,required  this.listfarm});
 
   @override
   _AddHarvestState createState() => _AddHarvestState();
@@ -14,9 +19,18 @@ class AddHarvest extends StatefulWidget {
 
 class _AddHarvestState extends State<AddHarvest> {
   String dropdownValue = 'Nông Trại Phan Nam';
-  String dropdownProduct = 'Dâu';
   DateTime datestart = DateTime.now();
   DateTime dateend = DateTime.now();
+  late ProductDTO _Chooseproduct;
+  late  FarmDTO _Choosefarm;
+
+  @override
+  void initState() {
+    super.initState();
+    _Chooseproduct  = widget.listproduct.first;
+    _Choosefarm = widget.listfarm.first;
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -40,31 +54,37 @@ class _AddHarvestState extends State<AddHarvest> {
                 ),
               ),
               SizedBox(height: size.height * 0.03),
+              Text(
+                'Chọn vườn/nông trại',
+                style: TextStyle(
+
+                ),
+              ),
               TextFieldContainer(
-                  child: DropdownButton<String>(
-                    value: dropdownValue,
-                    icon: const Icon(Icons.arrow_downward),
-                    iconSize: 24,
-                    elevation: 16,
-                    style: const TextStyle(
-                        color: Colors.black,
-                    ),
-                    underline: Container(
-                        height: 0
-                    ),
-                    onChanged: (String? newValue) {
-                        setState(() {
-                            dropdownValue = newValue!;
-                        });
-                    },
-                    items: <String>['Nông Trại Phan Nam', 'Nông trại Whiteface', 'Trường Thành Farm']
-                        .map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
+                child: DropdownButton(
+                  value: _Choosefarm,
+                  icon: const Icon(Icons.arrow_downward),
+                  iconSize: 24,
+                  elevation: 16,
+                  style: const TextStyle(
+                    color: Colors.black,
                   ),
+                  underline: Container(
+                      height: 0
+                  ),
+                  onChanged: (FarmDTO? newValue) {
+                    setState(() {
+                      _Choosefarm = newValue!;
+                    });
+                  },
+                  items: widget.listfarm
+                      .map((FarmDTO value) {
+                    return DropdownMenuItem(
+                      value: value,
+                      child: Text(value.name),
+                    );
+                  }).toList(),
+                ),
               ),
               SizedBox(height: size.height * 0.03),
               RoundedInputField(
@@ -116,8 +136,8 @@ class _AddHarvestState extends State<AddHarvest> {
               ),
               SizedBox(height: size.height * 0.03),
               TextFieldContainer(
-                child: DropdownButton<String>(
-                  value: dropdownProduct,
+                child: DropdownButton(
+                  value: _Chooseproduct,
                   icon: const Icon(Icons.arrow_downward),
                   iconSize: 24,
                   elevation: 16,
@@ -127,16 +147,16 @@ class _AddHarvestState extends State<AddHarvest> {
                   underline: Container(
                       height: 0
                   ),
-                  onChanged: (String? newValue) {
+                  onChanged: (ProductDTO? newValue) {
                     setState(() {
-                      dropdownProduct = newValue!;
+                      _Chooseproduct = newValue!;
                     });
                   },
-                  items: <String>['Dâu', 'Cải xanh', 'Cà tím']
-                      .map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
+                  items: widget.listproduct
+                      .map((ProductDTO value) {
+                    return DropdownMenuItem(
                       value: value,
-                      child: Text(value),
+                      child: Text(value.name),
                     );
                   }).toList(),
                 ),

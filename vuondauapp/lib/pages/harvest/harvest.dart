@@ -1,12 +1,20 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:vuondauapp/object/farmDTO.dart';
 import 'package:vuondauapp/object/harvestDTO.dart';
+import 'package:vuondauapp/object/productDTO.dart';
+import 'package:vuondauapp/pages/harvest/harvest_add.dart';
+import 'package:vuondauapp/pages/harvest/harvest_detail.dart';
 import 'package:vuondauapp/widgets/compoment/card-harvest.dart';
 import 'package:vuondauapp/widgets/compoment/search_widget.dart';
+import 'package:http/http.dart' as http;
 
 class Harvest extends StatefulWidget {
   final List<HarvestDTO> harvests;
+  final List<FarmDTO> farms;
 
-  Harvest({required  this.harvests});
+  Harvest({required  this.harvests,required this.farms});
 
   @override
   _HarvestState createState() => _HarvestState();
@@ -20,7 +28,7 @@ class _HarvestState extends State<Harvest> {
   @override
   void initState() {
     super.initState();
-
+    data = widget.harvests;
     list = data;
   }
 
@@ -43,7 +51,6 @@ class _HarvestState extends State<Harvest> {
   }
   @override
   Widget build(BuildContext context) {
-    data = widget.harvests;
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
@@ -54,8 +61,12 @@ class _HarvestState extends State<Harvest> {
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: Colors.green,
         foregroundColor: Colors.white,
-        onPressed: () {
-          Navigator.pushNamed(context, '/addharvest');
+        onPressed: () async {
+          http.Response response = await http.get(Uri.parse('http://52.221.245.187:90/api/v1/products'));
+          List<ProductDTO> listProduct  = ListProducts.fromJson(jsonDecode(response.body)).products;
+          Navigator.push(context,MaterialPageRoute(
+              builder: (context) => AddHarvest(listproduct: listProduct,listfarm: widget.farms))
+          );
         },
         icon: Icon(Icons.add),
         label: Text('Mùa vụ mới'),
@@ -78,7 +89,9 @@ class _HarvestState extends State<Harvest> {
                         child: CardHarvest(
                             harvest: harvest,
                             tap: () {
-                              Navigator.pushNamed(context, '/detailharvest');
+                              Navigator.push(context,MaterialPageRoute(
+                                builder: (context) => DetailHarvest(harvest: harvest)
+                              ));
                             }),
                       ),
                     ],

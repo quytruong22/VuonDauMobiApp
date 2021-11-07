@@ -1,18 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:vuondauapp/object/harvestDTO.dart';
 
 class CardHarvestDetail extends StatelessWidget {
-  CardHarvestDetail({this.name = "Placeholder Title",this.description = "",required this.imgharvest,this. quantity = "",this.price = "",this.farmname = "",required this.imgproduct,required this.sold});
+  CardHarvestDetail({required this.harvest});
 
-  final String description;
-  final String imgharvest;
-  final String imgproduct;
-  final String name;
-  final String quantity;
-  final String price;
-  final String farmname;
-  final DateTime sold;
+  final HarvestDTO harvest;
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -32,7 +26,7 @@ class CardHarvestDetail extends StatelessWidget {
                       width: size.width-20,
                       decoration: BoxDecoration(
                           image: DecorationImage(
-                            image: NetworkImage(imgharvest),
+                            image: NetworkImage('https://cdn.discordapp.com/attachments/900392963639750657/905113971948941332/iconVuondau.png'),
                             fit: BoxFit.cover,
                           )
                       )
@@ -44,11 +38,11 @@ class CardHarvestDetail extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(farmname,
+                            Text('Mùa vụ: '+harvest.name,
                                 style: TextStyle(
                                     color: Colors.green, fontSize: 13, fontWeight: FontWeight.bold)),
                             SizedBox(height: 8.0,),
-                            Text(description,
+                            Text('Mô tả: '+harvest.description,
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 11,
@@ -61,7 +55,7 @@ class CardHarvestDetail extends StatelessWidget {
                                     width: size.width*0.5,
                                     decoration: BoxDecoration(
                                         image: DecorationImage(
-                                          image: NetworkImage(imgproduct),
+                                          image: NetworkImage('https://cdn.discordapp.com/attachments/900392963639750657/905113971948941332/iconVuondau.png'),
                                           fit: BoxFit.cover,
                                         )
                                     )
@@ -74,12 +68,12 @@ class CardHarvestDetail extends StatelessWidget {
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
-                                      Text(name,
+                                      Text('Tên sản phẩm: '+harvest.product.name,
                                           style: TextStyle(
                                               color: Colors.black, fontSize: 13
                                           )
                                       ),
-                                      Text('Ngày thu hoạch: '+DateFormat('dd/MM/yyyy').format(sold),
+                                      Text('Ngày thu hoạch: '+DateFormat('dd/MM/yyyy').format(harvest.start_date),
                                           style: TextStyle(
                                               color: Colors.black, fontSize: 10
                                           )

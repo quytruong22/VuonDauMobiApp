@@ -35,12 +35,10 @@ class _LoginScreenState extends State<LoginScreen> {
   late UserCredential user;
   String email='';
   String password='';
-  List<FarmDTO>  listFarms=[];
-  List<HarvestDTO> listHarvests=[];
-  List<HarvestSellingPriceDTO> listSellings=[];
   late FarmerDTO farmer;
 
   Future<void> _handleSignIn() async{
+    auth.signOut();
     try{
       user = await auth.signInWithEmailAndPassword(email: email, password: password);
       await SignIn();
@@ -50,6 +48,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> _handleGoogleSignIn() async {
+    auth.signOut();
     try {
       final GoogleSignInAccount? googleSignInAccount
       = await _googleSignIn.signIn();
@@ -69,59 +68,30 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
   Future<void> SignIn() async{
-    // final idToken = await user.user?.getIdToken();
-    // print(idToken);
-    // Map data = {
-    //   'access_token': '$idToken'
-    // };
-    // var body = json.encode(data);
-    // final http.Response response = await http.post(
-    //     Uri.parse('http://52.221.245.187:90/api/v1/login'),
-    //     headers: {"Content-Type": "application/json"},
-    //     body: body
-    // );
-    // if (response.statusCode==200) {
-    //   Map<String, dynamic> payload = Jwt.parseJwt(response.body);
-    //   print(payload);
-    //
-    //   final String getID = payload['ID'];
-    //  final getFarmerResponse = await http.get(Uri.parse('http://52.221.245.187:90/api/v1/farmers/$getID'));
-      final getFarmerResponse = await http.get(Uri.parse('http://52.221.245.187:90/api/v1/farmers/ad9c79a1-4b3b-4611-ad0b-8812f28c7aab'));
+    final idToken = await user.user?.getIdToken();
+    print(idToken);
+    Map data = {
+      'access_token': '$idToken'
+    };
+    var body = json.encode(data);
+    final http.Response response = await http.post(
+        Uri.parse('http://52.221.245.187:90/api/v1/login'),
+        headers: {"Content-Type": "application/json"},
+        body: body
+    );
+    if (response.statusCode==200) {
+      Map<String, dynamic> payload = Jwt.parseJwt(response.body);
+      print(payload);
+
+      final String getID = payload['ID'];
+     final getFarmerResponse = await http.get(Uri.parse('http://52.221.245.187:90/api/v1/farmers/$getID'));
       if(getFarmerResponse.statusCode==200){
         farmer = FarmerDTO.fromJson(jsonDecode(getFarmerResponse.body));
-        await loadData();
         _googleSignIn.signOut();
         Navigator.pushReplacement(context, MaterialPageRoute(
-            builder: (context) => NavigationPage(harvests: listHarvests,  sellings: listSellings,farmer: farmer,farms: listFarms)
+            builder: (context) => NavigationPage(farmer: farmer)
         ));
       }
-    //}
-  }
-
-  Future<void> loadData() async{
-    final responseFarm = await http.get(Uri.parse('http://52.221.245.187:90/api/v1/farms/${farmer.id}'));
-    if(responseFarm.statusCode==200){
-      listFarms = ListFarms.fromJson(jsonDecode(responseFarm.body)).farms;
-      listFarms.forEach((farm) async {
-        final responseHarvest = await http.get(Uri.parse('http://52.221.245.187:90/api/v1/harvests/${farm.ID}'));
-        if(responseHarvest.statusCode==200){
-          final listgetharvest  = ListHarvests.fromJson(jsonDecode(responseHarvest.body)).harvests;
-          listHarvests.addAll(listgetharvest);
-        }
-      });
-      listHarvests.forEach((harvest) async {
-        final responseHarvestSelling = await http.get(Uri.parse('http://52.221.245.187:90/api/v1/harvests/${harvest.ID}'));
-        if(responseHarvestSelling.statusCode==200){
-          final listgetHarvestSelling  = ListHarvestSelling.fromJson(jsonDecode(responseHarvestSelling.body)).harvestsellings;
-          listgetHarvestSelling.forEach((harvestSelling) async {
-            final responseHarvestSellingPrice = await http.get(Uri.parse('http://52.221.245.187:90/api/v1/harvests/${harvestSelling.id}'));
-            if(responseHarvestSellingPrice.statusCode==200){
-              final harvestSellingPrice = HarvestSellingPriceDTO.fromJson(jsonDecode(responseHarvestSellingPrice.body));
-              listSellings.add(harvestSellingPrice);
-            }
-          });
-        }
-      });
     }
   }
 
@@ -176,8 +146,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   RoundedButton(
                     text: "LOGIN",
                     press: () {
-                      //_handleSignIn();
-                      SignIn();
+                      _handleSignIn();
                     },
                   ),
                   SizedBox(height: size.height * 0.03),

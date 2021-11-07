@@ -61,8 +61,6 @@ class _AppState extends State<App> {
         '/signup': (context) => SignUpScreen(),
         '/dashboard': (context) => Dashboard(),
         '/aboutus': (context) => AboutUs(),
-        '/addharvest': (context) => AddHarvest(),
-        '/detailharvest': (context) => DetailHarvest(),
         '/updateharvest': (context) => UpdateHarvest(),
         '/updateselling': (context) => UpdateSelling(),
         '/addselling': (context) => AddSelling(),

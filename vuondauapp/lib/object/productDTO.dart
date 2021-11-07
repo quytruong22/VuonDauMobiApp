@@ -16,7 +16,7 @@ class ProductDTO{
     return ProductDTO(
         id: json['id'],
         name: json['name'],
-        description: json['email'],
+        description: json['description'],
         data_of_create: DateFormat('yyyy-MM-ddThh:mm:ss').parse(json['data_of_create']),
         status:     json['status']== 0 ? false : true,
         product_type: ProductType.fromJson(json['product_type'])

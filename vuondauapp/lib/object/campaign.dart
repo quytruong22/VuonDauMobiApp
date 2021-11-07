@@ -27,11 +27,11 @@ class Campaign {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['start_time'] = DateFormat('yyyy-MM-ddThh:mm:ss').format(this.startTime);
-    data['end_time'] = DateFormat('yyyy-MM-ddThh:mm:ss').format(this.endTime);
-    data['min_order_amount'] = this.minOrderAmount;
-    data['status'] = this.status;
+    data['id'] = id;
+    data['start_time'] = DateFormat('yyyy-MM-ddThh:mm:ss').format(startTime);
+    data['end_time'] = DateFormat('yyyy-MM-ddThh:mm:ss').format(endTime);
+    data['min_order_amount'] = minOrderAmount;
+    data['status'] = status;
     return data;
   }
 }

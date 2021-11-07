@@ -13,8 +13,9 @@ import 'farm_update.dart';
 
 class DetailFarm extends StatefulWidget {
   final FarmDTO farm;
+  final List<HarvestDTO>  listharvest;
 
-  DetailFarm({required this.farm});
+  DetailFarm({required this.farm,required this.listharvest});
 
   @override
   _DetailFarmState createState() => _DetailFarmState();
@@ -24,7 +25,6 @@ class _DetailFarmState extends State<DetailFarm> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    final List<HarvestDTO> list = ModalRoute.of(context)!.settings.arguments as List<HarvestDTO>;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.green,
@@ -50,28 +50,16 @@ class _DetailFarmState extends State<DetailFarm> {
                           response = await http.get(Uri.parse('http://52.221.245.187:90/api/v1/farm-types'));
                           List<FarmType> listFarmType  = ListFarmTypes.fromJson(jsonDecode(response.body)).farmTypes;
                           final FarmDTO farmUpdated = Navigator.push(context,MaterialPageRoute(
-                            builder: (context) => UpdateFarm(listArea: listArea,listFarmType: listFarmType),
-                            settings: RouteSettings(
-                              arguments: {widget.farm},
-                            ),
+                            builder: (context) => UpdateFarm(listArea: listArea,listFarmType: listFarmType,farm:widget.farm),
                           )) as FarmDTO;
                           Navigator.pushReplacement(context,MaterialPageRoute(
-                            builder: (context) => DetailFarm(farm:farmUpdated),
-                            settings: RouteSettings(
-                                arguments: {list}
-                            ),
+                            builder: (context) => DetailFarm(farm:farmUpdated,listharvest: widget.listharvest)
                           ));
                         }catch(e){
 
                         }
                       },
                   ),
-                ),
-                RoundedButton(
-                  text: "Tạo mùa vụ mới",
-                  press: () {
-                    Navigator.pushNamed(context, '/addharvest');
-                  },
                 ),
                 Text(
                   'Các mùa vụ của nông trại',
@@ -80,7 +68,7 @@ class _DetailFarmState extends State<DetailFarm> {
                   ),
                 ),
                 Column(
-                  children: list.map((harvest) => Container(
+                  children: widget.listharvest.map((harvest) => Container(
                     child: Column(
                       children: <Widget>[
                         SizedBox(height: 8.0),

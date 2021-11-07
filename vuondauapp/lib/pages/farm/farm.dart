@@ -10,6 +10,7 @@ import 'package:vuondauapp/pages/farm/farm_detail.dart';
 import 'package:vuondauapp/widgets/compoment/card-farm.dart';
 import 'package:vuondauapp/object/farmDTO.dart';
 import 'package:http/http.dart' as http;
+import 'package:vuondauapp/widgets/compoment/dialog.dart';
 
 class Farm extends StatefulWidget {
   final FarmerDTO farmer;
@@ -39,19 +40,21 @@ class _FarmState extends State<Farm> {
           List<AreaDTO> listArea  = ListAreas.fromJson(jsonDecode(response.body)).areas;
           response = await http.get(Uri.parse('http://52.221.245.187:90/api/v1/farm-types'));
           List<FarmType> listFarmType  = ListFarmTypes.fromJson(jsonDecode(response.body)).farmTypes;
-          final FarmDTO AddedFarm=Navigator.push(context,MaterialPageRoute(
+          final FarmDTO AddedFarm=await Navigator.push(context,MaterialPageRoute(
             builder: (context) => AddFarm(listArea: listArea,listFarmType: listFarmType),
             settings: RouteSettings(
               arguments: widget.farmer,
             ),
           )) as FarmDTO;
-          listfarm.add(AddedFarm);
-          Navigator.pushReplacement(context,MaterialPageRoute(
-            builder: (context) => Farm(farmer: widget.farmer),
-            settings: RouteSettings(
-                arguments: listfarm
-            ),
-          ));
+          if (FarmDTO!=Null) {
+            listfarm.add(AddedFarm);
+            Navigator.pushReplacement(context,MaterialPageRoute(
+              builder: (context) => Farm(farmer: widget.farmer),
+              settings: RouteSettings(
+                  arguments: listfarm
+              ),
+            ));
+          }
         },
         icon: Icon(Icons.add),
         label: Text('Nông trại mới'),
@@ -75,15 +78,22 @@ class _FarmState extends State<Farm> {
                                 tap: () async {
                                   try {
                                     final response = await http.get(Uri.parse('http://52.221.245.187:90/api/v1/harvests/${farm.ID}'));
-                                    List<HarvestDTO> list = await ListHarvests.fromJson(jsonDecode(response.body)).harvests;
-                                    Navigator.push(context,MaterialPageRoute(
-                                        builder: (context) => DetailFarm(farm:farm),
-                                        settings: RouteSettings(
-                                        arguments: {list}
-                                        ),
-                                    ));
+                                    if (response.statusCode==200) {
+                                      final List<HarvestDTO> list = ListHarvests.fromJson(jsonDecode(response.body)).harvests;
+                                      Navigator.push(context,MaterialPageRoute(
+                                          builder: (context) => DetailFarm(farm:farm,listharvest:list),
+                                      ));
+                                    } else if (response.statusCode==404){
+                                      final List<HarvestDTO> list = [];
+                                      Navigator.push(context,MaterialPageRoute(
+                                        builder: (context) => DetailFarm(farm:farm,listharvest:list),
+                                      ));
+                                    }
                                   } on Exception catch (e) {
-                                    // TODO
+                                    await showDialog(
+                                        context: context,
+                                        builder: (BuildContext context)=>Message_Dialog(title: 'Lỗi nông trại',content: e.toString())
+                                    );
                                   }
                                 }),
                           ),
