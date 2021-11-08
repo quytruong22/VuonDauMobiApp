@@ -2,15 +2,11 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:vuondauapp/object/harvestDTO.dart';
 import 'package:vuondauapp/object/harvestSellingPriceDTO.dart';
-import 'package:vuondauapp/pages/selling/selling.dart';
 import 'package:vuondauapp/widgets/compoment/dialog.dart';
 import 'package:vuondauapp/widgets/compoment/rounded_input_field.dart';
 import 'package:vuondauapp/widgets/compoment/rounded_button.dart';
-import 'package:vuondauapp/widgets/compoment/text_field_container.dart';
 import 'package:vuondauapp/widgets/compoment/rounded_date_input.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 
 class UpdateSelling extends StatefulWidget {
@@ -80,7 +76,7 @@ class _UpdateSellingState extends State<UpdateSelling> {
                         lastDate: DateTime(2023)
                     ).then((value) {
                       setState(() {
-                        value == null ? DateTime.now() : datestart = value;
+                        value == null ? datestart =datestart : datestart = value;
                         if(datestart.isAfter(dateend)){
                           dateend = datestart;
                         }
@@ -143,42 +139,56 @@ class _UpdateSellingState extends State<UpdateSelling> {
               RoundedButton(
                 text: "Hoàn tất",
                 press: () async {
-                  Map dataHarvestSelling = {
-                    "harvest_id": widget.selling.harvestSelling.harvest.ID,
-                    "campaign_id": "",
-                    "start_date": DateFormat('yyyy-MM-ddThh:mm:ss').format(datestart),
-                    "end_date": DateFormat('yyyy-MM-ddThh:mm:ss').format(dateend),
-                    "min_weight": 0,
-                    "total_weight": 0,
-                    "status": 1
-                  };
-                  var bodyHarvestSelling = json.encode(dataHarvestSelling);
-                  final http.Response response = await http.put(
-                      Uri.parse('http://52.221.245.187:90/api/v1/harvest-sellings/${widget.selling.harvestSelling.id}'),
-                      headers: {"Content-Type": "application/json-patch+json"},
-                      body: bodyHarvestSelling
+                  bool confirm = false;
+                  confirm = await await showDialog(
+                  context: context,
+                  builder: (BuildContext context)=>Confirm_Dialog(
+                  title: 'Xác nhận',
+                  content: 'Bạn muốn cập nhật đợt bán?',
+                  )
                   );
-                  if(response.statusCode==200){
-                    Map data = {
-                      "price": price,
-                      "harvest_selling_id": widget.selling.harvestSelling.id,
+                  if(confirm) {
+                    Map dataHarvestSelling = {
+                      "harvest_id": widget.selling.harvestSelling.harvest.ID,
+                      "campaign_id": "",
+                      "start_date": DateFormat('yyyy-MM-ddThh:mm:ss').format(datestart),
+                      "end_date": DateFormat('yyyy-MM-ddThh:mm:ss').format(dateend),
+                      "min_weight": 0,
+                      "total_weight": 0,
                       "status": 1
                     };
-                    var body = json.encode(data);
-                    final http.Response response2 = await http.put(
-                        Uri.parse('http://52.221.245.187:90/api/v1/harvest-selling-prices/${widget.selling.id}'),
+                    var bodyHarvestSelling = json.encode(dataHarvestSelling);
+                    final http.Response response = await http.put(
+                        Uri.parse('http://52.221.245.187:90/api/v1/harvest-sellings/${widget
+                            .selling.harvestSelling.id}'),
                         headers: {"Content-Type": "application/json-patch+json"},
-                        body: body
+                        body: bodyHarvestSelling
                     );
-                    if(response2.statusCode==200){
-                      await showDialog(
-                          context: context,
-                          builder: (BuildContext context)=>Message_Dialog(
-                            title: 'Cập nhật đợt bán',
-                            content: 'Cập nhật đợt bán thành công',
-                          )
+                    if (response.statusCode == 200) {
+                      Map data = {
+                        "price": price,
+                        "harvest_selling_id": widget.selling.harvestSelling.id,
+                        "status": 1
+                      };
+                      var body = json.encode(data);
+                      final http.Response response2 = await http.put(
+                          Uri.parse(
+                              'http://52.221.245.187:90/api/v1/harvest-selling-prices/${widget
+                                  .selling.id}'),
+                          headers: {"Content-Type": "application/json-patch+json"},
+                          body: body
                       );
-                      Navigator.pop(context);
+                      if (response2.statusCode == 200) {
+                        await showDialog(
+                            context: context,
+                            builder: (BuildContext context) =>
+                                Message_Dialog(
+                                  title: 'Cập nhật đợt bán',
+                                  content: 'Cập nhật đợt bán thành công',
+                                )
+                        );
+                        Navigator.pop(context);
+                      }
                     }
                   }
                 },

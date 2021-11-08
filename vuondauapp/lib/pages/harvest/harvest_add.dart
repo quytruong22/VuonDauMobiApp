@@ -128,7 +128,7 @@ class _AddHarvestState extends State<AddHarvest> {
                       lastDate: DateTime(2023)
                   ).then((value) {
                     setState(() {
-                      value == null ? DateTime.now() : datestart = value;
+                      value == null ? datestart =datestart : datestart = value;
                       if(datestart.isAfter(dateend)){
                         dateend = datestart;
                       }
@@ -205,30 +205,40 @@ class _AddHarvestState extends State<AddHarvest> {
               RoundedButton(
                 text: "Hoàn tất",
                 press: () async {
-                  Map data= {
-                    "name": "$name",
-                    "farm_id": "${_Choosefarm.ID}",
-                    "product_id": "${_Chooseproduct.id}",
-                    "description": "$description}",
-                    "start_date": DateFormat('yyyy-MM-ddThh:mm:ss').format(datestart),
-                    "end_date": DateFormat('yyyy-MM-ddThh:mm:ss').format(dateend)
-                  };
-                  var body = json.encode(data);
-                  final http.Response response = await http.post(
-                      Uri.parse('http://52.221.245.187:90/api/v1/harvests'),
-                      headers: {"Content-Type": "application/json"},
-                      body: body
+                  bool confirm = false;
+                  confirm = await await showDialog(
+                  context: context,
+                  builder: (BuildContext context)=>Confirm_Dialog(
+                  title: 'Xác nhận',
+                  content: 'Bạn muốn tạo mùa vụ?',
+                  )
                   );
-                  if(response.statusCode==201) {
-                    await showDialog(
-                        context: context,
-                        builder: (BuildContext context) =>
-                            Message_Dialog(
-                              title: 'Tạo mùa vụ',
-                              content: 'Tạo mùa vụ thành công',
-                            )
+                  if(confirm) {
+                    Map data = {
+                      "name": "$name",
+                      "farm_id": "${_Choosefarm.ID}",
+                      "product_id": "${_Chooseproduct.id}",
+                      "description": "$description}",
+                      "start_date": DateFormat('yyyy-MM-ddThh:mm:ss').format(datestart),
+                      "end_date": DateFormat('yyyy-MM-ddThh:mm:ss').format(dateend)
+                    };
+                    var body = json.encode(data);
+                    final http.Response response = await http.post(
+                        Uri.parse('http://52.221.245.187:90/api/v1/harvests'),
+                        headers: {"Content-Type": "application/json"},
+                        body: body
                     );
-                    Navigator.pop(context);
+                    if (response.statusCode == 201) {
+                      await showDialog(
+                          context: context,
+                          builder: (BuildContext context) =>
+                              Message_Dialog(
+                                title: 'Tạo mùa vụ',
+                                content: 'Tạo mùa vụ thành công',
+                              )
+                      );
+                      Navigator.pop(context);
+                    }
                   }
                 },
               ),

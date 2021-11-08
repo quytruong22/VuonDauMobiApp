@@ -109,7 +109,7 @@ class _AddSellingState extends State<AddSelling> {
                       lastDate: DateTime(2023)
                   ).then((value) {
                     setState(() {
-                      value == null ? DateTime.now() : datestart = value;
+                      value == null ? datestart =datestart : datestart = value;
                       if(datestart.isAfter(dateend)){
                         dateend = datestart;
                       }
@@ -171,41 +171,51 @@ class _AddSellingState extends State<AddSelling> {
               RoundedButton(
                 text: "Hoàn tất",
                 press: () async {
-                  Map dataHarvestSelling= {
-                    "harvest_id": _Chooseharvest.ID,
-                    "campaign_id": "",
-                    "date_of_create": DateFormat('yyyy-MM-ddThh:mm:ss').format(datestart),
-                    "end_date": DateFormat('yyyy-MM-ddThh:mm:ss').format(dateend),
-                    "min_weight": 5,
-                    "total_weight": weight
-                  };
-                  var bodyHarvestSelling = json.encode(dataHarvestSelling);
-                  final http.Response response = await http.post(
-                      Uri.parse('http://52.221.245.187:90/api/v1/harvest-sellings'),
-                      headers: {"Content-Type": "application/json"},
-                      body: bodyHarvestSelling
+                  bool confirm = false;
+                  confirm = await await showDialog(
+                      context: context,
+                      builder: (BuildContext context)=>Confirm_Dialog(
+                        title: 'Xác nhận',
+                        content: 'Bạn muốn tạo đợt bán?',
+                      )
                   );
-                  if(response.statusCode==201){
-                    Map dataHarvestSellingPrice= {
-                      "price": price,
-                      "harvest_selling_id": jsonDecode(response.body)['id']
+                  if(confirm){
+                    Map dataHarvestSelling= {
+                      "harvest_id": _Chooseharvest.ID,
+                      "campaign_id": "",
+                      "date_of_create": DateFormat('yyyy-MM-ddThh:mm:ss').format(datestart),
+                      "end_date": DateFormat('yyyy-MM-ddThh:mm:ss').format(dateend),
+                      "min_weight": 5,
+                      "total_weight": weight
                     };
-                    var body = json.encode(dataHarvestSellingPrice);
-                    final http.Response response2 = await http.post(
-                        Uri.parse('http://52.221.245.187:90/api/v1/harvest-selling-prices'),
+                    var bodyHarvestSelling = json.encode(dataHarvestSelling);
+                    final http.Response response = await http.post(
+                        Uri.parse('http://52.221.245.187:90/api/v1/harvest-sellings'),
                         headers: {"Content-Type": "application/json"},
-                        body: body
+                        body: bodyHarvestSelling
                     );
-                    if(response2.statusCode==201){
-                      await showDialog(
-                          context: context,
-                          builder: (BuildContext context)=>Message_Dialog(
-                            title: 'Tạo đợt bán',
-                            content: 'Tạo đợt bán thành công',
-                          )
+                    if(response.statusCode==201){
+                      Map dataHarvestSellingPrice= {
+                        "price": price,
+                        "harvest_selling_id": jsonDecode(response.body)['id']
+                      };
+                      var body = json.encode(dataHarvestSellingPrice);
+                      final http.Response response2 = await http.post(
+                          Uri.parse('http://52.221.245.187:90/api/v1/harvest-selling-prices'),
+                          headers: {"Content-Type": "application/json"},
+                          body: body
                       );
-                      Navigator.pop(context);
-                    }
+                      if(response2.statusCode==201){
+                        await showDialog(
+                            context: context,
+                            builder: (BuildContext context)=>Message_Dialog(
+                              title: 'Tạo đợt bán',
+                              content: 'Tạo đợt bán thành công',
+                            )
+                        );
+                        Navigator.pop(context);
+                      }
+                  }
                   }
                 },
               ),
