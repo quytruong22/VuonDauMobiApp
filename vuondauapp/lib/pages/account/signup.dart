@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vuondauapp/pages/account/profile_update.dart';
 import 'package:vuondauapp/widgets/compoment/rounded_button.dart';
 import 'package:vuondauapp/widgets/compoment/rounded_input_field.dart';
 import 'package:vuondauapp/widgets/compoment/rounded_password_field.dart';
@@ -9,6 +10,8 @@ import 'package:vuondauapp/pages/account/login.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart' as http;
+
+import 'createAccount.dart';
 
 GoogleSignIn _googleSignIn = GoogleSignIn(
   scopes: [
@@ -103,8 +106,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                   RoundedButton(
                     text: "SIGNUP",
-                    press: () {
+                    press: () async {
                       _handleSignUp();
+                      await Navigator.push(context,MaterialPageRoute(
+                        builder: (context) => CreateAccount(email:email),
+                        settings: RouteSettings(
+                          arguments: null,
+                        ),
+                      ));
                     },
                   ),
                   SizedBox(height: size.height * 0.03),

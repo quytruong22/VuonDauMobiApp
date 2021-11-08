@@ -12,33 +12,19 @@ import 'package:http/http.dart' as http;
 
 import '../navpage.dart';
 
-class UpdateProfile extends StatefulWidget {
-  final FarmerDTO farmer;
-
-
-  UpdateProfile({required this.farmer});
+class CreateAccount extends StatefulWidget {
+  final String email;
+  CreateAccount({required this.email});
 
   @override
-  _UpdateProfileState createState() => _UpdateProfileState();
+  _CreateAccountState createState() => _CreateAccountState();
 }
 
-class _UpdateProfileState extends State<UpdateProfile> {
+class _CreateAccountState extends State<CreateAccount> {
   String full_name='';
   String phone = '';
   DateTime birthday = DateTime.now();
   String dropdownValue = 'Nam';
-  late  FarmerDTO farmer;
-
-  @override
-  void initState() {
-    super.initState();
-    farmer=widget.farmer;
-    full_name=farmer.full_name;
-    phone=farmer.phone;
-    birthday=farmer.birth_day;
-  }
-
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -76,7 +62,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
                 onChanged: (value){
                   full_name=value;
                 },
-                value: farmer.full_name,
+                value: full_name,
                 icon: Icons.drive_file_rename_outline,
               ),
               Container(
@@ -93,7 +79,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
                 onChanged: (value){
                   phone=value;
                 },
-                value: farmer.phone,
+                value: phone,
                 icon: Icons.phone,
               ),
               Container(
@@ -148,7 +134,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
                   onPress: (){
                     showDatePicker(
                       context: context,
-                      initialDate: farmer.birth_day,
+                      initialDate: birthday,
                       firstDate: DateTime(1900),
                       lastDate: DateTime.now(),
                     ).then((value) {
@@ -164,28 +150,26 @@ class _UpdateProfileState extends State<UpdateProfile> {
                   press: () async {
                     final int gender = dropdownValue == 'Nam'? 0 : 1;
                     Map data = {
+                      "email" : widget.email,
                       "full_name": full_name,
                       "password": "",
                       "phone": phone,
                       "birth_day": DateFormat('yyyy-MM-ddThh:mm:ss').format(birthday),
-                      "gender": gender,
-                      "status": 1
+                      "gender": gender
                     };
                     var body = json.encode(data);
-                    final http.Response response = await http.put(
-                        Uri.parse('http://52.221.245.187:90/api/v1/farmers/${farmer.id}'),
+                    final http.Response response = await http.post(
+                        Uri.parse('http://52.221.245.187:90/api/v1/farmers'),
                         headers: {"Content-Type": "application/json"},
                         body: body
                     );
-                    if(response.statusCode==200){
-                      final farmer2 = FarmerDTO.fromJson(jsonDecode(response.body));
+                    if(response.statusCode==201){
+                      Navigator.pop(context);
                       await showDialog(
                           context: context,
                           builder: (BuildContext context)=>Message_Dialog(title: 'Cập nhật thành công',content: 'Cập nhật thông tin cá nhân thành công')
                       );
-                      Navigator.pushReplacement(context, MaterialPageRoute(
-                          builder: (context) => NavigationPage(farmer: farmer2)
-                      ));
+                      Navigator.pop(context);
                     }
                   }
               )
