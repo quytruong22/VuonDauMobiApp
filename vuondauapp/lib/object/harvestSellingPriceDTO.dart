@@ -1,10 +1,10 @@
 import 'package:vuondauapp/object/harvestSellingDTO.dart';
 
 class HarvestSellingPriceDTO {
-  String id;
-  double price;
-  HarvestSellingDTO harvestSelling;
-  int status;
+  final String id;
+  final double price;
+  final HarvestSellingDTO harvestSelling;
+  final int status;
 
   HarvestSellingPriceDTO({
     required this.id,

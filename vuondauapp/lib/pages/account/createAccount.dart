@@ -12,28 +12,28 @@ import 'package:http/http.dart' as http;
 
 import '../navpage.dart';
 
-class UpdateProfile extends StatefulWidget {
-  const UpdateProfile({Key? key}) : super(key: key);
+class CreateAccount extends StatefulWidget {
+  final String email;
+  CreateAccount({required this.email});
 
   @override
-  _UpdateProfileState createState() => _UpdateProfileState();
+  _CreateAccountState createState() => _CreateAccountState();
 }
 
-class _UpdateProfileState extends State<UpdateProfile> {
+class _CreateAccountState extends State<CreateAccount> {
   String full_name='';
   String phone = '';
   DateTime birthday = DateTime.now();
   String dropdownValue = 'Nam';
   @override
   Widget build(BuildContext context) {
-    final FarmerDTO farmer=ModalRoute.of(context)!.settings.arguments as FarmerDTO;
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.green,
-          title: Text('Cập nhật Profile'),
-          centerTitle: true,
-        ),
+      appBar: AppBar(
+        backgroundColor: Colors.green,
+        title: Text('Cập nhật Profile'),
+        centerTitle: true,
+      ),
       body: Container(
         width: double.infinity,
         height: size.height,
@@ -59,11 +59,11 @@ class _UpdateProfileState extends State<UpdateProfile> {
                 ),
               ),
               RoundedInputForm(
-                  onChanged: (value){
-                    full_name=value;
-                  },
-                  value: farmer.full_name,
-                  icon: Icons.drive_file_rename_outline,
+                onChanged: (value){
+                  full_name=value;
+                },
+                value: full_name,
+                icon: Icons.drive_file_rename_outline,
               ),
               Container(
                 width: size.width * 0.8,
@@ -79,7 +79,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
                 onChanged: (value){
                   phone=value;
                 },
-                value: farmer.phone,
+                value: phone,
                 icon: Icons.phone,
               ),
               Container(
@@ -133,14 +133,14 @@ class _UpdateProfileState extends State<UpdateProfile> {
                   icon: Icons.date_range,
                   onPress: (){
                     showDatePicker(
-                        context: context,
-                        initialDate: farmer.birth_day,
-                        firstDate: DateTime(1900),
-                        lastDate: DateTime.now(),
+                      context: context,
+                      initialDate: birthday,
+                      firstDate: DateTime(1900),
+                      lastDate: DateTime.now(),
                     ).then((value) {
                       setState(() {
                         birthday  = value!;
-                        }
+                      }
                       );
                     });
                   }
@@ -150,29 +150,25 @@ class _UpdateProfileState extends State<UpdateProfile> {
                   press: () async {
                     final int gender = dropdownValue == 'Nam'? 0 : 1;
                     Map data = {
+                      "email" : widget.email,
                       "full_name": full_name,
                       "password": "",
                       "phone": phone,
                       "birth_day": DateFormat('yyyy-MM-ddThh:mm:ss').format(birthday),
-                      "gender": gender,
-                      "status": 1
+                      "gender": gender
                     };
                     var body = json.encode(data);
-                    final http.Response response = await http.put(
-                        Uri.parse('http://52.221.245.187:90/api/v1/farmers/${farmer.id}'),
+                    final http.Response response = await http.post(
+                        Uri.parse('http://52.221.245.187:90/api/v1/farmers'),
                         headers: {"Content-Type": "application/json"},
                         body: body
                     );
-                    if(response.statusCode==200){
-                      final farmer2 = FarmerDTO.fromJson(jsonDecode(response.body));
-                      Navigator.pushReplacement(context, MaterialPageRoute(
-                          builder: (context) => NavigationPage(farmer: farmer2)
-                      ));
+                    if(response.statusCode==201){
+                      Navigator.pop(context);
                       await showDialog(
                           context: context,
                           builder: (BuildContext context)=>Message_Dialog(title: 'Cập nhật thành công',content: 'Cập nhật thông tin cá nhân thành công')
                       );
-
                       Navigator.pop(context);
                     }
                   }

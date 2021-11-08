@@ -181,8 +181,11 @@ class _AddFarmState extends State<AddFarm> {
                           body: body
                       );
                       if (response.statusCode==201) {
+                        print(response.body);
                         final String farmID  = jsonDecode(response.body)['id'];
                         final getFarm = await http.get(Uri.parse('http://52.221.245.187:90/api/v1/farms/$farmID'));
+                        print(getFarm.statusCode);
+                        print(getFarm.body);
                         if (getFarm.statusCode==200) {
                           final FarmDTO AddedFarm = FarmDTO.fromJson(jsonDecode(getFarm.body));
                           await showDialog(

@@ -3,14 +3,14 @@ import 'package:vuondauapp/object/farmDTO.dart';
 import 'package:vuondauapp/object/productDTO.dart';
 
 class HarvestDTO {
-  String ID;
-  ProductDTO product;
-  String name;
-  String description;
-  DateTime  start_date;
-  DateTime  end_date;
-  FarmDTO farm;
-  bool  status;
+  final int ID;
+  final ProductDTO product;
+  final String name;
+  final String description;
+  final DateTime  start_date;
+  final DateTime  end_date;
+  final FarmDTO farm;
+  final bool  status;
 
   HarvestDTO({required this.ID, required this.product, required this.name, required this.description,
       required this.start_date, required this.end_date, required this.farm,required this.status});
@@ -24,7 +24,7 @@ class HarvestDTO {
         description:  json['description'],
         start_date: DateFormat('yyyy-MM-ddThh:mm:ss').parse(json['start_date']),
         end_date:  DateFormat('yyyy-MM-ddThh:mm:ss').parse(json['end_date']),
-        status:     json['status']== 0 ? false : true
+        status:     json['status']
     );
   }
 

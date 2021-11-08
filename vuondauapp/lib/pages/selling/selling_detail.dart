@@ -1,13 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:vuondauapp/object/harvestSellingPriceDTO.dart';
-import 'package:vuondauapp/pages/selling/selling_update.dart';
 import 'package:vuondauapp/widgets/compoment/card-selling-detail.dart';
 
 class DetailSelling extends StatefulWidget {
-  final HarvestSellingPriceDTO  selling;
-  final String  imgProduct;
-
-  DetailSelling({required this.selling,required this.imgProduct});
+  const DetailSelling({Key? key}) : super(key: key);
 
   @override
   _DetailSellingState createState() => _DetailSellingState();
@@ -34,14 +29,15 @@ class _DetailSellingState extends State<DetailSelling> {
               Padding(
                 padding: const EdgeInsets.only(bottom: 32.0),
                 child: CardSellingDetail(
-                  selling: widget.selling,
-                  tap: (){
-
-                    Navigator.push(context,MaterialPageRoute(
-                        builder: (context) => UpdateSelling(selling: widget.selling))
-                    );
-                  },
-                  imgProduct: widget.imgProduct,
+                  description: "Mô tả: Dâu của nông trại Phan Nam thơm ngon, chín tươi.",
+                  name: 'Tên sản phẩm: Dâu',
+                  farmname: 'Nông trại: Nông trại Phan Nam',
+                  imgharvest: 'https://cdn1.tuoitre.vn/zoom/600_315/2020/9/22/dau-tay-1600743428804672157496-crop-16007435512231711659798.jpg',
+                  imgproduct: 'https://cdn.tgdd.vn/Products/Images/8788/223378/bhx/dau-tay-hop-500g-202103180809491848.jpg',
+                  quantity: 'Số lượng còn lại: 50Kg',
+                  price: 'Giá: 50.000VND/Kg',
+                  datestart: DateTime(2021,11,30),
+                  dateend: DateTime(2021,12,30),
                 ),
               ),
             ],
