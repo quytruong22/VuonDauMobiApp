@@ -4,10 +4,9 @@ import 'package:intl/intl.dart';
 import 'package:vuondauapp/object/harvestDTO.dart';
 
 class CardHarvestDetail extends StatelessWidget {
-  CardHarvestDetail({required this.harvest,required this.tap});
+  CardHarvestDetail({required this.harvest});
 
   final HarvestDTO harvest;
-  final Function()  tap;
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -89,7 +88,9 @@ class CardHarvestDetail extends StatelessWidget {
                                 style: TextButton.styleFrom(
                                   backgroundColor: Colors.green,
                                 ),
-                                onPressed: tap,
+                                onPressed: (){
+                                  Navigator.pushNamed(context, '/updateharvest');
+                                },
                                 child: Text(
                                   'Cập nhật mùa vụ',
                                   style: TextStyle(

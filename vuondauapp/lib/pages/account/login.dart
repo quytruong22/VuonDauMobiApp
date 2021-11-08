@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:localstorage/localstorage.dart';
 import 'package:vuondauapp/object/farmDTO.dart';
 import 'package:vuondauapp/object/farmerDTO.dart';
 import 'package:vuondauapp/object/harvestDTO.dart';
@@ -37,7 +36,6 @@ class _LoginScreenState extends State<LoginScreen> {
   String email='';
   String password='';
   late FarmerDTO farmer;
-  final LocalStorage storage = new LocalStorage('farmer_info');
 
   Future<void> _handleSignIn() async{
     auth.signOut();
@@ -71,6 +69,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
   Future<void> SignIn() async{
     final idToken = await user.user?.getIdToken();
+    print(idToken);
     Map data = {
       'access_token': '$idToken'
     };
@@ -82,8 +81,9 @@ class _LoginScreenState extends State<LoginScreen> {
     );
     if (response.statusCode==200) {
       Map<String, dynamic> payload = Jwt.parseJwt(response.body);
+      print(payload);
+
       final String getID = payload['ID'];
-      storage.setItem("Farmer_ID", getID);
      final getFarmerResponse = await http.get(Uri.parse('http://52.221.245.187:90/api/v1/farmers/$getID'));
       if(getFarmerResponse.statusCode==200){
         farmer = FarmerDTO.fromJson(jsonDecode(getFarmerResponse.body));

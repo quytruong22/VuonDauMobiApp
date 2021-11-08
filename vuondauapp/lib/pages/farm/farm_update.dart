@@ -195,6 +195,11 @@ class _UpdateFarmState extends State<UpdateFarm> {
                       "description": "$description",
                       "status": 1
                     };
+                    farm.area=_Choosearea;
+                    farm.farmType=_ChoosefarmType;
+                    farm.address=address;
+                    farm.name=name;
+                    farm.description=description;
                     var body = json.encode(data);
                     final http.Response response = await http.put(
                         Uri.parse('http://52.221.245.187:90/api/v1/farms/${farm.ID}'),
@@ -209,7 +214,7 @@ class _UpdateFarmState extends State<UpdateFarm> {
                             content: 'Cập nhật nông trại thành công',
                         )
                       );
-                      Navigator.pop(context);
+                      Navigator.pop(context,farm);
                     }
                   } on Exception catch (e) {
                     Message_Dialog(title: 'Lỗi',content: 'Lỗi cập nhật nông trại:${e.toString()}');
