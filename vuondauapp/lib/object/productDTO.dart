@@ -6,10 +6,9 @@ class ProductDTO{
   final ProductType product_type;
   final String name;
   final String description;
-  final DateTime data_of_create;
   final bool  status;
 
-  ProductDTO({required this.id, required this.name, required this.description, required this.product_type, required this.data_of_create,required  this.status});
+  ProductDTO({required this.id, required this.name, required this.description, required this.product_type,required  this.status});
 
   factory ProductDTO.fromJson(Map<String, dynamic> json){
 
@@ -17,7 +16,6 @@ class ProductDTO{
         id: json['id'],
         name: json['name'],
         description: json['description'],
-        data_of_create: DateFormat('yyyy-MM-ddThh:mm:ss').parse(json['data_of_create']),
         status:     json['status']== 0 ? false : true,
         product_type: ProductType.fromJson(json['product_type'])
     );
@@ -31,7 +29,6 @@ class ProductDTO{
     }
     data['name'] = this.name;
     data['description'] = this.description;
-    data['data_of_create'] = DateFormat('yyyy-MM-ddThh:mm:ss').format(this.data_of_create);
     data['status'] = this.status;
     return data;
   }
