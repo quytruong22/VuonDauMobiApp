@@ -12,6 +12,8 @@ import 'package:vuondauapp/object/farmDTO.dart';
 import 'package:http/http.dart' as http;
 import 'package:vuondauapp/widgets/compoment/dialog.dart';
 
+import '../navpage.dart';
+
 class Farm extends StatefulWidget {
   final FarmerDTO farmer;
 
@@ -46,15 +48,9 @@ class _FarmState extends State<Farm> {
               arguments: widget.farmer,
             ),
           )) as FarmDTO;
-          if (FarmDTO!=Null) {
-            listfarm.add(AddedFarm);
-            Navigator.pushReplacement(context,MaterialPageRoute(
-              builder: (context) => Farm(farmer: widget.farmer),
-              settings: RouteSettings(
-                  arguments: listfarm
-              ),
-            ));
-          }
+          Navigator.pushReplacement(context, MaterialPageRoute(
+              builder: (context) => NavigationPage(farmer: widget.farmer)
+          ));
         },
         icon: Icon(Icons.add),
         label: Text('Nông trại mới'),

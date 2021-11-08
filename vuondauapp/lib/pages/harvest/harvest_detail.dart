@@ -7,6 +7,7 @@ import 'package:vuondauapp/object/harvestDTO.dart';
 import 'package:vuondauapp/object/productDTO.dart';
 import 'package:vuondauapp/widgets/compoment/card-harvest-detail.dart';
 
+import '../navpage.dart';
 import 'harvest_update.dart';
 
 class DetailHarvest extends StatefulWidget {
@@ -46,9 +47,12 @@ class _DetailHarvestState extends State<DetailHarvest> {
                     List<ProductDTO> listProduct  = ListProducts.fromJson(jsonDecode(response.body)).products;
                     response = await http.get(Uri.parse('http://52.221.245.187:90/api/v1/farms'));
                     List<FarmDTO> listFarm  = ListFarms.fromJson(jsonDecode(response.body)).farms;
-                    Navigator.push(context,MaterialPageRoute(
+                    await Navigator.push(context,MaterialPageRoute(
                         builder: (context) => UpdateHarvest(listproduct: listProduct,listfarm: listFarm,harvest:widget.harvest))
                     );
+                    Navigator.pushReplacement(context, MaterialPageRoute(
+                        builder: (context) => NavigationPage(farmer: widget.harvest.farm.farmer)
+                    ));
                   }
                 ),
               ),

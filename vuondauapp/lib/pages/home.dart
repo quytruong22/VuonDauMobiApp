@@ -19,6 +19,7 @@ import 'package:http/http.dart' as http;
 import 'farm/farm_add.dart';
 import 'harvest/harvest_add.dart';
 import 'harvest/harvest_detail.dart';
+import 'navpage.dart';
 
 class Home extends StatefulWidget {
   final List<HarvestDTO> listharvest;
@@ -63,11 +64,14 @@ class _HomeState extends State<Home> {
                         List<AreaDTO> listArea  = ListAreas.fromJson(jsonDecode(response.body)).areas;
                         response = await http.get(Uri.parse('http://52.221.245.187:90/api/v1/farm-types'));
                         List<FarmType> listFarmType  = ListFarmTypes.fromJson(jsonDecode(response.body)).farmTypes;
-                        Navigator.push(context,MaterialPageRoute(
+                        await Navigator.push(context,MaterialPageRoute(
                           builder: (context) => AddFarm(listArea: listArea,listFarmType: listFarmType),
                           settings: RouteSettings(
                             arguments: widget.farmer,
                           ),
+                        ));
+                        Navigator.pushReplacement(context, MaterialPageRoute(
+                            builder: (context) => NavigationPage(farmer: widget.farmer)
                         ));
                         },
                     ),
@@ -75,10 +79,13 @@ class _HomeState extends State<Home> {
                       text: 'Tạo đợt bán',
                       icon: Icons.agriculture,
                       color: Colors.lightGreen,
-                      press: (){
-                        Navigator.push(context,MaterialPageRoute(
+                      press: () async {
+                        await Navigator.push(context,MaterialPageRoute(
                             builder: (context) => AddSelling(harvests: widget.listharvest))
                         );
+                        Navigator.pushReplacement(context, MaterialPageRoute(
+                            builder: (context) => NavigationPage(farmer: widget.farmer)
+                        ));
                         },
                     ),
                     SquareButton(
@@ -88,9 +95,12 @@ class _HomeState extends State<Home> {
                       press: () async {
                         http.Response response = await http.get(Uri.parse('http://52.221.245.187:90/api/v1/products'));
                         List<ProductDTO> listProduct  = ListProducts.fromJson(jsonDecode(response.body)).products;
-                        Navigator.push(context,MaterialPageRoute(
+                        await Navigator.push(context,MaterialPageRoute(
                             builder: (context) => AddHarvest(listproduct: listProduct,listfarm: widget.farms))
                         );
+                        Navigator.pushReplacement(context, MaterialPageRoute(
+                            builder: (context) => NavigationPage(farmer: widget.farmer)
+                        ));
                       },
                     ),
                     SquareButton(

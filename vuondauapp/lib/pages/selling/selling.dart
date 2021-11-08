@@ -11,6 +11,8 @@ import 'package:vuondauapp/widgets/compoment/card-selling.dart';
 import 'package:vuondauapp/widgets/compoment/search_widget.dart';
 import 'package:http/http.dart' as http;
 
+import '../navpage.dart';
+
 class Selling extends StatefulWidget {
   final List<HarvestSellingPriceDTO>  sellings;
   final List<HarvestDTO>  harvests;
@@ -63,10 +65,13 @@ class _SellingState extends State<Selling> {
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: Colors.green,
         foregroundColor: Colors.white,
-        onPressed: () {
-          Navigator.push(context,MaterialPageRoute(
+        onPressed: () async {
+          await Navigator.push(context,MaterialPageRoute(
               builder: (context) => AddSelling(harvests: widget.harvests))
           );
+          Navigator.pushReplacement(context, MaterialPageRoute(
+              builder: (context) => NavigationPage(farmer: widget.harvests.first.farm.farmer)
+          ));
         },
         icon: Icon(Icons.add),
         label: Text('Đợt bán mới'),

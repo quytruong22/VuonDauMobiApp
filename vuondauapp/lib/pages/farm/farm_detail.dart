@@ -9,6 +9,7 @@ import 'package:vuondauapp/widgets/compoment/rounded_button.dart';
 import 'package:vuondauapp/widgets/compoment/card-harvest.dart';
 import 'package:vuondauapp/widgets/compoment/card-farm-detail.dart';
 import 'package:http/http.dart' as http;
+import '../navpage.dart';
 import 'farm_update.dart';
 
 class DetailFarm extends StatefulWidget {
@@ -49,11 +50,11 @@ class _DetailFarmState extends State<DetailFarm> {
                           List<AreaDTO> listArea  = ListAreas.fromJson(jsonDecode(response.body)).areas;
                           response = await http.get(Uri.parse('http://52.221.245.187:90/api/v1/farm-types'));
                           List<FarmType> listFarmType  = ListFarmTypes.fromJson(jsonDecode(response.body)).farmTypes;
-                          final FarmDTO farmUpdated = Navigator.push(context,MaterialPageRoute(
+                          final FarmDTO farmUpdated = await Navigator.push(context,MaterialPageRoute(
                             builder: (context) => UpdateFarm(listArea: listArea,listFarmType: listFarmType,farm:widget.farm),
                           )) as FarmDTO;
-                          Navigator.pushReplacement(context,MaterialPageRoute(
-                            builder: (context) => DetailFarm(farm:farmUpdated,listharvest: widget.listharvest)
+                          Navigator.pushReplacement(context, MaterialPageRoute(
+                              builder: (context) => NavigationPage(farmer: widget.farm.farmer)
                           ));
                         }catch(e){
 

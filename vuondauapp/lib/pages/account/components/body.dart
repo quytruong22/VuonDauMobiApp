@@ -65,7 +65,7 @@ class _BodyState extends State<Body> {
                         )
                     ),
                     Text(
-                        widget.farmer.gender ? 'Nữ':'Nam',
+                        widget.farmer.gender ? 'Nam':'Nữ',
                         style: TextStyle(
                           letterSpacing: 2.0,
                           fontWeight: FontWeight.bold,

@@ -3,6 +3,8 @@ import 'package:vuondauapp/object/harvestSellingPriceDTO.dart';
 import 'package:vuondauapp/pages/selling/selling_update.dart';
 import 'package:vuondauapp/widgets/compoment/card-selling-detail.dart';
 
+import '../navpage.dart';
+
 class DetailSelling extends StatefulWidget {
   final HarvestSellingPriceDTO  selling;
   final String  imgProduct;
@@ -35,11 +37,14 @@ class _DetailSellingState extends State<DetailSelling> {
                 padding: const EdgeInsets.only(bottom: 32.0),
                 child: CardSellingDetail(
                   selling: widget.selling,
-                  tap: (){
+                  tap: () async {
 
-                    Navigator.push(context,MaterialPageRoute(
+                    await Navigator.push(context,MaterialPageRoute(
                         builder: (context) => UpdateSelling(selling: widget.selling))
                     );
+                    Navigator.pushReplacement(context, MaterialPageRoute(
+                        builder: (context) => NavigationPage(farmer: widget.selling.harvestSelling.harvest.farm.farmer)
+                    ));
                   },
                   imgProduct: widget.imgProduct,
                 ),

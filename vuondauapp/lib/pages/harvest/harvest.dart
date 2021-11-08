@@ -10,6 +10,8 @@ import 'package:vuondauapp/widgets/compoment/card-harvest.dart';
 import 'package:vuondauapp/widgets/compoment/search_widget.dart';
 import 'package:http/http.dart' as http;
 
+import '../navpage.dart';
+
 class Harvest extends StatefulWidget {
   final List<HarvestDTO> harvests;
   final List<FarmDTO> farms;
@@ -64,9 +66,12 @@ class _HarvestState extends State<Harvest> {
         onPressed: () async {
           http.Response response = await http.get(Uri.parse('http://52.221.245.187:90/api/v1/products'));
           List<ProductDTO> listProduct  = ListProducts.fromJson(jsonDecode(response.body)).products;
-          Navigator.push(context,MaterialPageRoute(
+          await Navigator.push(context,MaterialPageRoute(
               builder: (context) => AddHarvest(listproduct: listProduct,listfarm: widget.farms))
           );
+          Navigator.pushReplacement(context, MaterialPageRoute(
+              builder: (context) => NavigationPage(farmer: widget.farms.first.farmer)
+          ));
         },
         icon: Icon(Icons.add),
         label: Text('Mùa vụ mới'),
