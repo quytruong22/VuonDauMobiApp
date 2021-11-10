@@ -25,6 +25,7 @@ class _AddSellingState extends State<AddSelling> {
   DateTime dateend = DateTime.now();
   String  name='';
   double price=0;
+  double minWeight=0;
   double  weight=0;
   late  HarvestDTO  _Chooseharvest;
   @override
@@ -158,6 +159,18 @@ class _AddSellingState extends State<AddSelling> {
               ),
               SizedBox(height: size.height * 0.03),
               RoundedNumberInputField(
+                hintText: "Sản lượng (Kg)",
+                icon: Icons.add_shopping_cart,
+                onChanged: (value) {
+                  try{
+                    minWeight  = double.parse(value);
+                  }catch(e){
+
+                  }
+                },
+              ),
+              SizedBox(height: size.height * 0.03),
+              RoundedNumberInputField(
                 hintText: "Giá (VND)",
                 icon: Icons.monetization_on,
                 onChanged: (value) {
@@ -185,7 +198,7 @@ class _AddSellingState extends State<AddSelling> {
                       "campaign_id": "",
                       "date_of_create": DateFormat('yyyy-MM-ddThh:mm:ss').format(datestart),
                       "end_date": DateFormat('yyyy-MM-ddThh:mm:ss').format(dateend),
-                      "min_weight": 5,
+                      "min_weight": minWeight,
                       "total_weight": weight
                     };
                     var bodyHarvestSelling = json.encode(dataHarvestSelling);

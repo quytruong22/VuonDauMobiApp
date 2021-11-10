@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:vuondauapp/object/farmDTO.dart';
 import 'package:vuondauapp/object/farmPicture.dart';
 import 'package:vuondauapp/services/http_service.dart';
+import 'package:vuondauapp/widgets/compoment/status_farm.dart';
 
 class CardFarm extends StatefulWidget {
   CardFarm(
@@ -71,14 +72,19 @@ class _CardFarmState extends State<CardFarm> {
                   Flexible(
                       flex: 1,
                       child: Padding(
-                        padding: const EdgeInsets.only(
-                            top: 8.0, bottom: 8.0, left: 8.0),
+                        padding: const EdgeInsets.all(8),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(widget.farm.name,
-                                style: TextStyle( fontSize: 13)),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(widget.farm.name,
+                                    style: TextStyle( fontSize: 13)),
+                                StatusFarm(status: widget.farm.status)
+                              ],
+                            ),
                             Text('Xem chi tiết',
                                 style: TextStyle(
                                     color: Colors.green,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:vuondauapp/object/farmDTO.dart';
 import 'package:vuondauapp/object/farmPicture.dart';
 import 'package:vuondauapp/services/http_service.dart';
+import 'package:vuondauapp/widgets/compoment/status_farm.dart';
 
 class CardFarmDetail extends StatefulWidget {
   CardFarmDetail(
@@ -55,7 +56,13 @@ class _CardFarmDetailState extends State<CardFarmDetail> {
                         return const Center(child: CircularProgressIndicator());
                       }),
                   ListTile(
-                    title: Text(widget.farm.name),
+                    title: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(widget.farm.name),
+                          StatusFarm(status: widget.farm.status)
+                        ],
+                    ),
                   ),
                   Container(
                     padding: const EdgeInsets.all(16.0),

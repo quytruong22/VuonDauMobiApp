@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:vuondauapp/object/harvestSellingPriceDTO.dart';
-import 'package:vuondauapp/widgets/compoment/status_harvest.dart';
+import 'package:vuondauapp/widgets/compoment/status_selling.dart';
 
 class CardSellingDetail extends StatelessWidget {
   CardSellingDetail({required this.selling,required this.tap,
@@ -71,7 +71,7 @@ class CardSellingDetail extends StatelessWidget {
                                 Text('Tên sản phẩm: '+selling.harvestSelling.harvest.product.name,
                                     style: TextStyle(
                                         color: Colors.black, fontSize: 13)),
-                                StatusHarvest(datestart: selling.harvestSelling.dateOfCreate, dateend: selling.harvestSelling.endDate)
+                                StatusSelling(datestart: selling.harvestSelling.dateOfCreate, dateend: selling.harvestSelling.endDate)
                               ],
                             ),
                             SizedBox(height: 8.0,),

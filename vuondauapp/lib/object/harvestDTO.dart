@@ -10,7 +10,7 @@ class HarvestDTO {
   DateTime  start_date;
   DateTime  end_date;
   FarmDTO farm;
-  bool  status;
+  int  status;
 
   HarvestDTO({required this.ID, required this.product, required this.name, required this.description,
       required this.start_date, required this.end_date, required this.farm,required this.status});
@@ -24,7 +24,7 @@ class HarvestDTO {
         description:  json['description'],
         start_date: DateFormat('yyyy-MM-ddThh:mm:ss').parse(json['start_date']),
         end_date:  DateFormat('yyyy-MM-ddThh:mm:ss').parse(json['end_date']),
-        status:     json['status']== 0 ? false : true
+        status:     json['status']
     );
   }
 

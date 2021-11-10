@@ -70,12 +70,12 @@ class ListFarms{
 
     List<FarmDTO> farms = parsedJson.map((i)=>FarmDTO.fromJson(i)).toList();
     List<FarmDTO> available=[];
-    farms.forEach((element) {
-      if(element.status==1){
+    for (var element in farms) {
+      if(element.status!=0){
         available.add(element);
       }
-    });
-    return new ListFarms(
+    }
+    return ListFarms(
       farms: available,
     );
   }

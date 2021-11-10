@@ -22,6 +22,7 @@ class _UpdateSellingState extends State<UpdateSelling> {
   DateTime dateend = DateTime.now();
   double weight=0;
   double  price=0;
+  double minWeight=0;
 
   @override
   void initState() {
@@ -30,6 +31,7 @@ class _UpdateSellingState extends State<UpdateSelling> {
     dateend=widget.selling.harvestSelling.endDate;
     weight=widget.selling.harvestSelling.totalWeight;
     price=widget.selling.price;
+    minWeight=widget.selling.harvestSelling.minWeight;
   }
 
   @override
@@ -125,6 +127,18 @@ class _UpdateSellingState extends State<UpdateSelling> {
               ),
               SizedBox(height: size.height * 0.03),
               RoundedNumberInputField(
+                hintText: "Sản lượng (Kg)",
+                icon: Icons.add_shopping_cart,
+                onChanged: (value) {
+                  try{
+                    minWeight  = double.parse(value);
+                  }catch(e){
+
+                  }
+                },
+              ),
+              SizedBox(height: size.height * 0.03),
+              RoundedNumberInputField(
                 hintText: "Giá (VND)",
                 icon: Icons.monetization_on,
                 onChanged: (value) {
@@ -153,9 +167,9 @@ class _UpdateSellingState extends State<UpdateSelling> {
                       "campaign_id": "",
                       "start_date": DateFormat('yyyy-MM-ddThh:mm:ss').format(datestart),
                       "end_date": DateFormat('yyyy-MM-ddThh:mm:ss').format(dateend),
-                      "min_weight": 0,
-                      "total_weight": 0,
-                      "status": 1
+                      "min_weight": minWeight,
+                      "total_weight": weight,
+                      "status": widget.selling.harvestSelling.status
                     };
                     var bodyHarvestSelling = json.encode(dataHarvestSelling);
                     final http.Response response = await http.put(
@@ -168,7 +182,7 @@ class _UpdateSellingState extends State<UpdateSelling> {
                       Map data = {
                         "price": price,
                         "harvest_selling_id": widget.selling.harvestSelling.id,
-                        "status": 1
+                        "status": widget.selling.status
                       };
                       var body = json.encode(data);
                       final http.Response response2 = await http.put(

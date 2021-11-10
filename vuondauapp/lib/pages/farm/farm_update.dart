@@ -229,7 +229,7 @@ class _UpdateFarmState extends State<UpdateFarm> {
                       "name": "$name",
                       "address": "$address",
                       "description": "$description",
-                      "status": 1
+                      "status": farm.status
                     };
                     var body = json.encode(data);
                     final http.Response response = await http.put(

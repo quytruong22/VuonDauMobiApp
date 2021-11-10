@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 
-class StatusHarvest extends StatelessWidget {
-  final DateTime datestart;
-  final DateTime dateend;
+class StatusFarm extends StatelessWidget {
+  final int status;
 
-  StatusHarvest({required this.datestart, required this.dateend});
+  StatusFarm({required this.status});
 
   Container Status(BuildContext context,String textbar, Color colorbar){
     return Container(
@@ -28,15 +27,14 @@ class StatusHarvest extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    DateTime currentdate = DateTime.now();
-    if(datestart.isAfter(currentdate)){ //đang chuẩn bị
-      return Status(context, 'Đang chuẩn bị', Colors.amber);
+    if(status==2){
+      return Status(context, 'Chờ phê duyệt', Colors.amber);
     }
-    else if(dateend.isAfter(currentdate)){ //đang mở bán
-      return Status(context, 'Đang mở bán', Colors.green);
+    else if(status==1){
+      return Status(context, 'Đang hoạt đông', Colors.green);
     }
-    else{ //đã kết thúc
-      return Status(context, 'Đã kết thúc', Colors.red);
+    else{
+      return Status(context, 'Ngưng hoạt động', Colors.red);
     }
   }
 }

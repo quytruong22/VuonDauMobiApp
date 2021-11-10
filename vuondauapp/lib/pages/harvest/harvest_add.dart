@@ -248,7 +248,7 @@ class _AddHarvestState extends State<AddHarvest> {
                       "name": "$name",
                       "farm_id": "${_Choosefarm.ID}",
                       "product_id": "${_Chooseproduct.id}",
-                      "description": "$description}",
+                      "description": "$description",
                       "start_date": DateFormat('yyyy-MM-ddThh:mm:ss').format(datestart),
                       "end_date": DateFormat('yyyy-MM-ddThh:mm:ss').format(dateend)
                     };

@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:vuondauapp/object/harvestDTO.dart';
 import 'package:vuondauapp/object/harvestPicture.dart';
 import 'package:vuondauapp/services/http_service.dart';
+import 'package:vuondauapp/widgets/compoment/status_harvests.dart';
 
 class CardHarvest extends StatefulWidget {
   CardHarvest(
@@ -75,19 +76,20 @@ class _CardHarvestState extends State<CardHarvest> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(widget.harvest.name,
-                              style: TextStyle(
-                                  color: Colors.black, fontSize: 13, fontWeight: FontWeight.bold)),
+                              style: TextStyle(color: Colors.black, fontSize: 13, fontWeight: FontWeight.bold)),
                           Text('Nông trại: '+widget.harvest.farm.name,
-                              style: TextStyle(
-                                  color: Colors.black, fontSize: 13)),
+                              style: TextStyle(color: Colors.black, fontSize: 13)),
                           Text('Ngày thu hoạch dự kiến: '+DateFormat('dd/MM/yyyy').format(widget.harvest.start_date),
                               style: TextStyle(
                                   fontSize: 13)),
-                          Text('Xem chi tiết',
-                              style: TextStyle(
-                                  color: Colors.green,
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.w600)
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text('Xem chi tiết',
+                                style: TextStyle(color: Colors.green, fontSize: 11, fontWeight: FontWeight.w600)
+                              ),
+                              StatusHarvest(status: widget.harvest.status)
+                            ],
                           ),
                         ],
                       ),

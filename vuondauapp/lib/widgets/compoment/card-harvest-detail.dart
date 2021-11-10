@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:vuondauapp/object/harvestDTO.dart';
 import 'package:vuondauapp/object/harvestPicture.dart';
 import 'package:vuondauapp/services/http_service.dart';
+import 'package:vuondauapp/widgets/compoment/status_harvests.dart';
 
 class CardHarvestDetail extends StatefulWidget {
   CardHarvestDetail({required this.harvest,required this.tap});
@@ -31,7 +32,6 @@ class _CardHarvestDetailState extends State<CardHarvestDetail> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-
                       Padding(
                         padding: const EdgeInsets.only(
                             top: 8.0, bottom: 8.0, left: 8.0),
@@ -39,9 +39,15 @@ class _CardHarvestDetailState extends State<CardHarvestDetail> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('Mùa vụ: '+widget.harvest.name,
-                                style: TextStyle(
-                                    color: Colors.green, fontSize: 13, fontWeight: FontWeight.bold)),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text('Mùa vụ: '+widget.harvest.name,
+                                    style: TextStyle(
+                                        color: Colors.green, fontSize: 13, fontWeight: FontWeight.bold)),
+                                StatusHarvest(status: widget.harvest.status)
+                              ],
+                            ),
                             SizedBox(height: 8.0,),
                             Text('Mô tả: '+widget.harvest.description,
                                 style: TextStyle(

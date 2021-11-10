@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:vuondauapp/object/harvestSellingPriceDTO.dart';
-import 'package:vuondauapp/widgets/compoment/status_harvest.dart';
+import 'package:vuondauapp/widgets/compoment/status_selling.dart';
 
 class CardSelling extends StatelessWidget {
   CardSelling(
@@ -68,7 +68,7 @@ class CardSelling extends StatelessWidget {
                                       fontSize: 11,
                                       fontWeight: FontWeight.w600)
                               ),
-                              StatusHarvest(datestart: selling.harvestSelling.dateOfCreate, dateend: selling.harvestSelling.endDate)
+                              StatusSelling(datestart: selling.harvestSelling.dateOfCreate, dateend: selling.harvestSelling.endDate)
                             ],
                           )
                         ],
