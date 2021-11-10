@@ -18,26 +18,6 @@ class ProfilePic extends StatelessWidget{
           CircleAvatar(
             backgroundImage: AssetImage("assets/images/profile_image.jpg"),
           ),
-          Positioned(
-            right: -12,
-            bottom: 0,
-            child: SizedBox(
-                height: 46,
-                width: 46,
-                child: TextButton(
-                  style: TextButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(50),
-                      side: BorderSide(color: Colors.white),
-                    ),
-                    primary: Colors.black54,
-                    backgroundColor: Color(0xFFF5F6F9),
-                  ),
-                  onPressed: () {},
-                  child: Icon(Icons.camera_alt_rounded),
-                ),
-            ),
-          )
         ],
       ),
     );

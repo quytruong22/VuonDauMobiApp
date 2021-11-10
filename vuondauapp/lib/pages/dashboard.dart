@@ -38,7 +38,7 @@ class _DashboardState extends State<Dashboard> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.green,
-        title: const Text('Order'),
+        title: const Text('Hóa đơn'),
         centerTitle: true,
       ),
       body: SizedBox(
@@ -52,7 +52,7 @@ class _DashboardState extends State<Dashboard> {
               Container(
                 padding: EdgeInsets.only(left: size.width * 0.06),
                 child: const Text(
-                  'Overview',
+                  'Thống kê',
                   textAlign: TextAlign.left,
                   style: TextStyle(
                     fontSize: 25,
@@ -90,7 +90,7 @@ class _DashboardState extends State<Dashboard> {
                               ),
                               child: Column(children: [
                                 Text(
-                                  'TOTAL ORDER',
+                                  'TỔNG ĐƠN HÀNG',
                                   style: TextStyle(
                                     color: Colors.grey[700],
                                     fontWeight: FontWeight.bold,
@@ -138,7 +138,7 @@ class _DashboardState extends State<Dashboard> {
               Container(
                 padding: EdgeInsets.only(left: size.width * 0.06),
                 child: const Text(
-                  'Your Recent Orders',
+                  'Lịch sử đơn hàng',
                   style: TextStyle(
                     fontSize: 25,
                   ),
@@ -215,7 +215,7 @@ class _DashboardState extends State<Dashboard> {
                                             Column(
                                               children: [
                                                 Text(
-                                                  'Total price: ${oCcy.format(dto.price * dto.weight)}đ',
+                                                  'Tổng: ${oCcy.format(dto.price * dto.weight)}đ',
                                                   style: TextStyle(
                                                     color: Colors.red[700],
                                                     fontWeight: FontWeight.bold,
@@ -228,7 +228,7 @@ class _DashboardState extends State<Dashboard> {
                                         Row(
                                           children: [
                                             Text(
-                                              'Harvest: ${dto.harvestselling["harvest"]["name"]}',
+                                              'Mùa vụ: ${dto.harvestselling["harvest"]["name"]}',
                                               style: TextStyle(
                                                 color: Colors.grey[700],
                                                 fontWeight: FontWeight.bold,
@@ -241,14 +241,14 @@ class _DashboardState extends State<Dashboard> {
                                               MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(
-                                              'Product: ${dto.harvestselling["harvest"]["product"]["name"]}',
+                                              'Sản phẩm: ${dto.harvestselling["harvest"]["product"]["name"]}',
                                               style: TextStyle(
                                                 color: Colors.grey[700],
                                                 fontWeight: FontWeight.bold,
                                               ),
                                             ),
                                             Text(
-                                              'Status: ${dto.order['status'] == 0 ? "Đã Hủy" : dto.order['status'] == 1 ? "Đã Đặt" : dto.order['status'] == 2 ? "Đang giao" : "Đã Nhận"}',
+                                              'Trạng thái: ${dto.order['status'] == 0 ? "Đã Hủy" : dto.order['status'] == 1 ? "Đã Đặt" : dto.order['status'] == 2 ? "Đang giao" : "Đã Nhận"}',
                                               style: TextStyle(
                                                 color: getStatusColor(
                                                     dto.order['status']),

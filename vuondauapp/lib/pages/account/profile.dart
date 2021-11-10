@@ -15,7 +15,7 @@ class _ProfileState extends State<Profile> {
     return Scaffold(
       appBar: AppBar(
           backgroundColor: Colors.green,
-          title: Text('Profile'),
+          title: Text('Hồ sơ'),
           centerTitle: true,
       ),
       body: Body()

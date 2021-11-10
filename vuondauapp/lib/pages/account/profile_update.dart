@@ -45,7 +45,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.green,
-        title: Text('Cập nhật Profile'),
+        title: Text('Cập nhật thông tin cá nhân'),
         centerTitle: true,
       ),
       body: Container(

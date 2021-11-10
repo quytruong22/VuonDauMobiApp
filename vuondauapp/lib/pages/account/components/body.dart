@@ -42,7 +42,7 @@ class _BodyState extends State<Body> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       ProfilePic(),
-                      SizedBox(height: 20),
+                      SizedBox(height: 8),
                       Row(
                         children: <Widget>[
                           Text(
@@ -64,7 +64,7 @@ class _BodyState extends State<Body> {
                           ),
                         ],
                       ),
-                      SizedBox(height: 30.0),
+                      SizedBox(height: 8.0),
                       Row(
                         children: <Widget>[
                           Text(
@@ -86,7 +86,7 @@ class _BodyState extends State<Body> {
                           ),
                         ],
                       ),
-                      SizedBox(height: 30.0),
+                      SizedBox(height: 8.0),
                       Row(
                         children: <Widget>[
                           Text(
@@ -108,7 +108,7 @@ class _BodyState extends State<Body> {
                           ),
                         ],
                       ),
-                      SizedBox(height: 30.0),
+                      SizedBox(height: 8.0),
                       Row(
                         children: <Widget>[
                           Text(
@@ -129,7 +129,7 @@ class _BodyState extends State<Body> {
                           ),
                         ],
                       ),
-                      SizedBox(height: 30.0),
+                      SizedBox(height: 8.0),
                       Row(
                         children: <Widget>[
                           Icon(

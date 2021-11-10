@@ -7,9 +7,9 @@ class StatusHarvest extends StatelessWidget {
 
   Container Status(BuildContext context,String textbar, Color colorbar){
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 3.5),
-      width: 70,
-      height: 15,
+      padding: EdgeInsets.symmetric(vertical: 3.0),
+      width: 100,
+      height: 20,
       decoration: BoxDecoration(
           color: colorbar,
           borderRadius: BorderRadius.circular(7.5)
@@ -18,7 +18,7 @@ class StatusHarvest extends StatelessWidget {
         textbar,
         textAlign: TextAlign.center,
         style: TextStyle(
-          fontSize: 8,
+          fontSize: 13,
           color: Colors.white,
         ),
       ),

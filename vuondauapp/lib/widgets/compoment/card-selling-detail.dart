@@ -26,79 +26,88 @@ class CardSellingDetail extends StatelessWidget {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(0.0))),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Container(
-                    height: size.height*0.25,
-                      width: size.width-20,
-                      decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: NetworkImage(imgHarvest),
-                            fit: BoxFit.cover,
-                          )
-                      )
-                  ),
+                  //Container(
+                  //  height: size.height*0.5,
+                  //    width: size.width-20,
+                  //    decoration: BoxDecoration(
+                  //        image: DecorationImage(
+                  //         image: NetworkImage(imgHarvest),
+                  //          fit: BoxFit.cover,
+                  //        )
+                  //    )
+                  //),
                       Padding(
                         padding: const EdgeInsets.only(
                             top: 8.0, bottom: 8.0, left: 8.0),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Text('Nông trại: '+selling.harvestSelling.harvest.farm.name,
-                                style: TextStyle(
-                                    color: Colors.green, fontSize: 13, fontWeight: FontWeight.bold)),
                             SizedBox(height: 8.0,),
-                            Text('Mô tả: '+selling.harvestSelling.harvest.description,
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 11,
-                                    fontWeight: FontWeight.w600)),
-                            SizedBox(height: 8.0,),
-                            Container(
-                                height: size.height*0.25,
-                                width: size.width*0.5,
-                                decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                      image: NetworkImage(imgProduct),
-                                      fit: BoxFit.cover,
-                                    )
-                                )
-                            ),
-                            Row(
+                            Column(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text('Tên sản phẩm: '+selling.harvestSelling.harvest.product.name,
                                     style: TextStyle(
-                                        color: Colors.black, fontSize: 13)),
-                                StatusSelling(datestart: selling.harvestSelling.dateOfCreate, dateend: selling.harvestSelling.endDate)
+                                        color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold)),
+                                SizedBox(height: 8.0,),
+                                Text('Nông trại: ' +selling.harvestSelling.harvest.farm.name),
+                                SizedBox(height: 8.0,),
+                                Text('Mùa vụ: ' +selling.harvestSelling.harvest.name+''),
+                                SizedBox(height: 8.0,),
+                                StatusSelling(datestart: selling.harvestSelling.dateOfCreate, dateend: selling.harvestSelling.endDate),
+                                SizedBox(height: 8.0,),
                               ],
                             ),
-                            SizedBox(height: 8.0,),
-                            Text('Tổng số lượng: ${selling.harvestSelling.totalWeight}Kg',
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 11,
-                                    fontWeight: FontWeight.w600)),
-                            SizedBox(height: 8.0,),
-                            Text('Giá: ${selling.price}VND/Kg',
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 11,
-                                    fontWeight: FontWeight.w600)),
-                            SizedBox(height: 8.0,),
-                            Text('Ngày mở bán: '+DateFormat('dd/MM/yyyy').format(selling.harvestSelling.dateOfCreate),
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 11,
-                                    fontWeight: FontWeight.w600)),
-                            SizedBox(height: 8.0,),
-                            Text('Ngày kết thúc: '+DateFormat('dd/MM/yyyy').format(selling.harvestSelling.endDate),
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 11,
-                                    fontWeight: FontWeight.w600)),
-                            SizedBox(height: 8.0,),
+                            Row(
+                              children: [
+                                Container(
+                                    height: size.height*0.25,
+                                    width: size.width*0.5,
+                                    decoration: BoxDecoration(
+                                        image: DecorationImage(
+                                          image: NetworkImage(imgProduct),
+                                          fit: BoxFit.cover,
+                                        )
+                                    )
+                                ),
+                                Container(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text('  Tổng sản lượng: ${selling.harvestSelling.totalWeight}Kg',
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.w600)),
+                                      SizedBox(height: 8.0,),
+                                      Text('  Giá: ${selling.price}VND/Kg',
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.w600)),
+                                      SizedBox(height: 8.0,),
+                                      Text('  Ngày mở bán: '+DateFormat('dd/MM/yyyy').format(selling.harvestSelling.dateOfCreate),
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.w600)),
+                                      SizedBox(height: 8.0,),
+                                      Text('  Ngày kết thúc: '+DateFormat('dd/MM/yyyy').format(selling.harvestSelling.endDate),
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.w600)),
+                                      SizedBox(height: 8.0,),
+                                    ]
+                                  )
+                                )
+                              ],
+
+                            ),
                             TextButton(
                                 style: TextButton.styleFrom(
                                   backgroundColor: Colors.green,

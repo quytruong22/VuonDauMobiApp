@@ -79,9 +79,12 @@ class _DetailFarmState extends State<DetailFarm> {
                 Text(
                   'Các mùa vụ của nông trại:',
                   style: TextStyle(
-
+                      fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
                   ),
                 ),
+                SizedBox(height: 8.0,),
                 FutureBuilder(
                     future: httpService.getListHarvestsByFarmID(farmID),
                     builder: (BuildContext context,
