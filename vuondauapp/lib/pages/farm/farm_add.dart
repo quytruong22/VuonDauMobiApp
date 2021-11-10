@@ -1,11 +1,14 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:vuondauapp/object/areaDTO.dart';
 import 'package:vuondauapp/object/farmDTO.dart';
 import 'package:vuondauapp/object/farmType.dart';
-import 'package:vuondauapp/object/farmerDTO.dart';
+import 'package:vuondauapp/services/http_service.dart';
 import 'package:vuondauapp/widgets/compoment/dialog.dart';
 import 'package:vuondauapp/widgets/compoment/rounded_input_field.dart';
 import 'package:vuondauapp/widgets/compoment/rounded_button.dart';
@@ -15,8 +18,9 @@ import 'package:http/http.dart' as http;
 class AddFarm extends StatefulWidget {
   final List<AreaDTO> listArea;
   final List<FarmType> listFarmType;
+  final String farmerID;
 
-  AddFarm({required this.listArea, required this.listFarmType});
+  AddFarm({required this.listArea, required this.listFarmType,required this.farmerID});
 
   @override
   _AddFarmState createState()  {
@@ -25,10 +29,12 @@ class AddFarm extends StatefulWidget {
 }
 
 class _AddFarmState extends State<AddFarm> {
+  File? image;
+  final HttpService httpService = HttpService();
+  final picker = ImagePicker();
   String  name = '';
   String  address = '';
   String  description = '';
-  String  link = '';
   late AreaDTO _Choosearea;
   late FarmType _ChoosefarmType;
 
@@ -39,9 +45,22 @@ class _AddFarmState extends State<AddFarm> {
     _Choosearea = widget.listArea.first;
   }
 
+  Future  pickImage(ImageSource source) async {
+    try{
+      final image = await picker.pickImage(source: source);
+      if(image==null) return;
+
+      final imageTemporary = File(image.path);
+      setState(() {
+        this.image = imageTemporary;
+      });
+    }on PlatformException catch(e){
+      print('failed to pick image: '+e.toString());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final FarmerDTO farmer=ModalRoute.of(context)!.settings.arguments as FarmerDTO;
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
@@ -154,21 +173,26 @@ class _AddFarmState extends State<AddFarm> {
                 },
               ),
               SizedBox(height: size.height * 0.03),
-              RoundedInputField(
-                icon: Icons.picture_in_picture,
-                hintText: "Link ảnh nông trại",
-                onChanged: (value) {
-                  link  = value;
-                },
+              image!=null? Image.file(image!,width: 150,height: 150,fit: BoxFit.cover): Text('no image selected'),
+              IconButton(
+                  onPressed: () {
+                    pickImage(ImageSource.camera);
+                  },
+                  icon: Icon(Icons.camera_alt_outlined)
               ),
-              SizedBox(height: size.height * 0.03),
+              IconButton(
+                  onPressed: () {
+                    pickImage(ImageSource.gallery);
+                  },
+                  icon: Icon(Icons.image_outlined)
+              ),
               RoundedButton(
                 text: "Hoàn tất",
                 press: () async {
                     try {
                       Map data = {
                         "farm_type_id": "${_ChoosefarmType.id}",
-                        "farmer_id": "${farmer.id}",
+                        "farmer_id": "${widget.farmerID}",
                         "area_id": "${_Choosearea.ID}",
                         "name": "$name",
                         "address": "$address",
@@ -182,9 +206,8 @@ class _AddFarmState extends State<AddFarm> {
                       );
                       if (response.statusCode==201) {
                         final String farmID  = jsonDecode(response.body)['id'];
-                        final getFarm = await http.get(Uri.parse('http://52.221.245.187:90/api/v1/farms/$farmID'));
-                        if (getFarm.statusCode==200) {
-                          final FarmDTO AddedFarm = FarmDTO.fromJson(jsonDecode(getFarm.body));
+                        bool uploadImage = await httpService.postFarmImage(image!, farmID);
+                        if (uploadImage) {
                           await showDialog(
                               context: context,
                               builder: (BuildContext context)=>Message_Dialog(
@@ -192,7 +215,7 @@ class _AddFarmState extends State<AddFarm> {
                                 content: 'Tạo nông trại thành công',
                               )
                           );
-                          Navigator.pop(context,AddedFarm);
+                          Navigator.pop(context);
                         }
                       }
                     } on Exception catch (e) {

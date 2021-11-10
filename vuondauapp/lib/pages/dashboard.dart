@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:vuondauapp/object/order_detail_dto.dart';
 import 'package:vuondauapp/object/order_dto.dart';
-import 'package:vuondauapp/services/http_service_order.dart';
+import 'package:vuondauapp/services/http_service.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({Key? key}) : super(key: key);
@@ -15,7 +15,7 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
-  final HttpOrderService httpOrderService = HttpOrderService();
+  final HttpService httpOrderService = HttpService();
   final LocalStorage storage = LocalStorage('farmer_info');
 
   @override

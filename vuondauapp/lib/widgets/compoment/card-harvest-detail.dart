@@ -2,12 +2,21 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:vuondauapp/object/harvestDTO.dart';
+import 'package:vuondauapp/object/harvestPicture.dart';
+import 'package:vuondauapp/services/http_service.dart';
 
-class CardHarvestDetail extends StatelessWidget {
+class CardHarvestDetail extends StatefulWidget {
   CardHarvestDetail({required this.harvest,required this.tap});
 
   final HarvestDTO harvest;
   final Function()  tap;
+
+  @override
+  State<CardHarvestDetail> createState() => _CardHarvestDetailState();
+}
+
+class _CardHarvestDetailState extends State<CardHarvestDetail> {
+  final HttpService httpService = HttpService();
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -22,16 +31,7 @@ class CardHarvestDetail extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    height: size.height*0.25,
-                      width: size.width-20,
-                      decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: NetworkImage('https://cdn.discordapp.com/attachments/900392963639750657/905113971948941332/iconVuondau.png'),
-                            fit: BoxFit.cover,
-                          )
-                      )
-                  ),
+
                       Padding(
                         padding: const EdgeInsets.only(
                             top: 8.0, bottom: 8.0, left: 8.0),
@@ -39,11 +39,11 @@ class CardHarvestDetail extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('Mùa vụ: '+harvest.name,
+                            Text('Mùa vụ: '+widget.harvest.name,
                                 style: TextStyle(
                                     color: Colors.green, fontSize: 13, fontWeight: FontWeight.bold)),
                             SizedBox(height: 8.0,),
-                            Text('Mô tả: '+harvest.description,
+                            Text('Mô tả: '+widget.harvest.description,
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 11,
@@ -51,15 +51,36 @@ class CardHarvestDetail extends StatelessWidget {
                             SizedBox(height: 8.0,),
                             Row(
                               children: [
-                                Container(
-                                    height: size.height*0.25,
-                                    width: size.width*0.5,
-                                    decoration: BoxDecoration(
-                                        image: DecorationImage(
-                                          image: NetworkImage('https://cdn.discordapp.com/attachments/900392963639750657/905113971948941332/iconVuondau.png'),
-                                          fit: BoxFit.cover,
-                                        )
-                                    )
+                                FutureBuilder(
+                                    future: httpService.getHarvestImage(widget.harvest.ID),
+                                    builder: (BuildContext context, AsyncSnapshot<HarvestPicture> snapshot) {
+                                      if(snapshot.hasData){
+                                        HarvestPicture img = snapshot.requireData;
+                                        return Container(
+                                            height: size.height*0.25,
+                                            width: size.width*0.5,
+                                            decoration: BoxDecoration(
+                                                image: DecorationImage(
+                                                  image: NetworkImage(img.src),
+                                                  fit: BoxFit.cover,
+                                                )
+                                            )
+                                        );
+                                      }
+                                      if(snapshot.hasError){
+                                        return Container(
+                                            height: size.height*0.25,
+                                            width: size.width*0.5,
+                                            decoration: BoxDecoration(
+                                                image: DecorationImage(
+                                                  image: NetworkImage('https://cdn.discordapp.com/attachments/900392963639750657/905113971948941332/iconVuondau.png'),
+                                                  fit: BoxFit.cover,
+                                                )
+                                            )
+                                        );
+                                      }
+                                      return const Center(child: CircularProgressIndicator());
+                                    }
                                 ),
                                 Container(
                                   margin: EdgeInsets.fromLTRB(8, 0, 0, 0),
@@ -69,12 +90,12 @@ class CardHarvestDetail extends StatelessWidget {
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
-                                      Text('Tên sản phẩm: '+harvest.product.name,
+                                      Text('Tên sản phẩm: '+widget.harvest.product.name,
                                           style: TextStyle(
                                               color: Colors.black, fontSize: 13
                                           )
                                       ),
-                                      Text('Ngày thu hoạch: '+DateFormat('dd/MM/yyyy').format(harvest.start_date),
+                                      Text('Ngày thu hoạch: '+DateFormat('dd/MM/yyyy').format(widget.harvest.start_date),
                                           style: TextStyle(
                                               color: Colors.black, fontSize: 10
                                           )
@@ -89,7 +110,7 @@ class CardHarvestDetail extends StatelessWidget {
                                 style: TextButton.styleFrom(
                                   backgroundColor: Colors.green,
                                 ),
-                                onPressed: tap,
+                                onPressed: widget.tap,
                                 child: Text(
                                   'Cập nhật mùa vụ',
                                   style: TextStyle(

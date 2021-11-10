@@ -1,16 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:vuondauapp/object/farmDTO.dart';
+import 'package:vuondauapp/object/farmPicture.dart';
+import 'package:vuondauapp/services/http_service.dart';
 
-class CardFarm extends StatelessWidget {
+class CardFarm extends StatefulWidget {
   CardFarm(
-      {this.img = 'https://cdn.discordapp.com/attachments/900392963639750657/905113971948941332/iconVuondau.png',
-        required this.farm,
+      {required this.farm,
       required this.tap});
 
-  final String img;
   final FarmDTO farm;
   final Function() tap;
 
+  @override
+  State<CardFarm> createState() => _CardFarmState();
+}
+
+class _CardFarmState extends State<CardFarm> {
+  final HttpService httpService = HttpService();
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -18,7 +24,7 @@ class CardFarm extends StatelessWidget {
         height: 250,
         width: size.width-20,
         child: GestureDetector(
-          onTap: tap,
+          onTap: widget.tap,
           child: Card(
               elevation: 0.4,
               shape: RoundedRectangleBorder(
@@ -28,15 +34,40 @@ class CardFarm extends StatelessWidget {
                 children: [
                   Flexible(
                       flex: 3,
-                      child: Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(6.0),
-                                  topRight: Radius.circular(6.0)),
-                              image: DecorationImage(
-                                image: NetworkImage(img),
-                                fit: BoxFit.cover,
-                              )))),
+                      child: FutureBuilder(
+                        future: httpService.getFarmImage(widget.farm.ID),
+                        builder: (BuildContext context, AsyncSnapshot<FarmPicture> snapshot) {
+                          if(snapshot.hasData){
+                            String img = snapshot.requireData.src;
+                            return Container(
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(6.0),
+                                        topRight: Radius.circular(6.0)),
+                                    image: DecorationImage(
+                                      image: NetworkImage(img),
+                                      fit: BoxFit.cover,
+                                    )
+                                )
+                            );
+                          }
+                          if(snapshot.hasError){
+                            return Container(
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(6.0),
+                                        topRight: Radius.circular(6.0)),
+                                    image: DecorationImage(
+                                      image: NetworkImage('https://cdn.discordapp.com/attachments/900392963639750657/905113971948941332/iconVuondau.png'),
+                                      fit: BoxFit.cover,
+                                    )
+                                )
+                            );
+                          }
+                          return const Center(child: CircularProgressIndicator());
+                        },
+                      )
+                  ),
                   Flexible(
                       flex: 1,
                       child: Padding(
@@ -46,7 +77,7 @@ class CardFarm extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(farm.name,
+                            Text(widget.farm.name,
                                 style: TextStyle( fontSize: 13)),
                             Text('Xem chi tiết',
                                 style: TextStyle(

@@ -1,33 +1,29 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
+import 'package:localstorage/localstorage.dart';
 import 'package:vuondauapp/object/areaDTO.dart';
 import 'package:vuondauapp/object/farmType.dart';
-import 'package:vuondauapp/object/farmerDTO.dart';
-import 'package:vuondauapp/object/harvestDTO.dart';
 import 'package:vuondauapp/pages/farm/farm_add.dart';
 import 'package:vuondauapp/pages/farm/farm_detail.dart';
+import 'package:vuondauapp/services/http_service.dart';
 import 'package:vuondauapp/widgets/compoment/card-farm.dart';
 import 'package:vuondauapp/object/farmDTO.dart';
-import 'package:http/http.dart' as http;
-import 'package:vuondauapp/widgets/compoment/dialog.dart';
-
-import '../navpage.dart';
 
 class Farm extends StatefulWidget {
-  final FarmerDTO farmer;
-
-  Farm({required this.farmer});
 
   @override
   _FarmState createState() => _FarmState();
 }
 
 class _FarmState extends State<Farm> {
+  final HttpService httpService = HttpService();
+  final LocalStorage storage = LocalStorage('farmer_info');
   @override
   Widget build(BuildContext context) {
-    final List<FarmDTO> listfarm=ModalRoute.of(context)!.settings.arguments as List<FarmDTO>;
     Size size = MediaQuery.of(context).size;
+    String farmerID = "";
+    if (storage.getItem("Farmer_ID") != null) {
+      farmerID = storage.getItem("Farmer_ID");
+    }
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.green,
@@ -38,18 +34,13 @@ class _FarmState extends State<Farm> {
         backgroundColor: Colors.green,
         foregroundColor: Colors.white,
         onPressed: () async {
-          http.Response response = await http.get(Uri.parse('http://52.221.245.187:90/api/v1/areas'));
-          List<AreaDTO> listArea  = ListAreas.fromJson(jsonDecode(response.body)).areas;
-          response = await http.get(Uri.parse('http://52.221.245.187:90/api/v1/farm-types'));
-          List<FarmType> listFarmType  = ListFarmTypes.fromJson(jsonDecode(response.body)).farmTypes;
-          final FarmDTO AddedFarm=await Navigator.push(context,MaterialPageRoute(
-            builder: (context) => AddFarm(listArea: listArea,listFarmType: listFarmType),
-            settings: RouteSettings(
-              arguments: widget.farmer,
-            ),
-          )) as FarmDTO;
-          Navigator.pushReplacement(context, MaterialPageRoute(
-              builder: (context) => NavigationPage(farmer: widget.farmer)
+          List<AreaDTO> listArea  = await httpService.getListAreas();
+          List<FarmType> listFarmType  = await  httpService.getListFarmTypes();
+          await Navigator.push(context,MaterialPageRoute(
+            builder: (context) => AddFarm(listArea: listArea,listFarmType: listFarmType,farmerID: farmerID,)
+          ));
+          Navigator.pushReplacement(context,MaterialPageRoute(
+              builder: (context) => Farm()
           ));
         },
         icon: Icon(Icons.add),
@@ -57,50 +48,53 @@ class _FarmState extends State<Farm> {
       ),
       body: Container(
         margin: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
-        width: size.width-20,
+        width: size.width,
         height: size.height,
-        child: SingleChildScrollView(
-            child: Column(
-              children: <Widget>[
-                Container(
+        child: FutureBuilder(
+          future: httpService.getListFarms(farmerID),
+          builder: (BuildContext context, AsyncSnapshot snapshot){
+            if(snapshot.hasData){
+              List<FarmDTO> listfarm  = snapshot.requireData;
+              print(1);
+              return SingleChildScrollView(
                   child: Column(
-                    children: listfarm.map((farm) => Container(
-                      child: Column(
-                        children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 10.0),
-                            child: CardFarm(
-                                farm: farm,
-                                tap: () async {
-                                  try {
-                                    final response = await http.get(Uri.parse('http://52.221.245.187:90/api/v1/harvests/${farm.ID}'));
-                                    if (response.statusCode==200) {
-                                      final List<HarvestDTO> list = ListHarvests.fromJson(jsonDecode(response.body)).harvests;
-                                      Navigator.push(context,MaterialPageRoute(
-                                          builder: (context) => DetailFarm(farm:farm,listharvest:list),
-                                      ));
-                                    } else if (response.statusCode==404){
-                                      final List<HarvestDTO> list = [];
-                                      Navigator.push(context,MaterialPageRoute(
-                                        builder: (context) => DetailFarm(farm:farm,listharvest:list),
-                                      ));
-                                    }
-                                  } on Exception catch (e) {
-                                    await showDialog(
-                                        context: context,
-                                        builder: (BuildContext context)=>Message_Dialog(title: 'Lỗi nông trại',content: e.toString())
-                                    );
-                                  }
-                                }),
+                      children: <Widget>[
+                        Container(
+                          child: Column(
+                            children: listfarm.map((farm) => Container(
+                              child: Column(
+                                children: <Widget>[
+                                  Padding(
+                                    padding: const EdgeInsets.only(bottom: 10.0),
+                                    child: CardFarm(
+                                        farm: farm,
+                                        tap: () async {
+                                          await Navigator.push(context,MaterialPageRoute(
+                                              builder: (context) => DetailFarm(),
+                                              settings: RouteSettings(
+                                                arguments: farm.ID,
+                                              )
+                                          ));
+                                          Navigator.pushReplacement(context,MaterialPageRoute(
+                                              builder: (context) => Farm()
+                                          ));
+                                        }),
+                                  ),
+                                ],
+                              ),
+                            )).toList(),
                           ),
-                        ],
-                      ),
-                    )).toList(),
-                  ),
-                ),
-                SizedBox(height: 45),
-              ]
-            )
+                        ),
+                        SizedBox(height: 45),
+                      ]
+                  )
+              );
+            }
+            if(snapshot.hasError){
+              return  const Center(child: Text('Chưa có nông trại nào'));
+            }
+            return const Center(child: CircularProgressIndicator());
+          },
         ),
       ),
     );

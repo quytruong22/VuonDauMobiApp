@@ -80,14 +80,10 @@ class _LoginScreenState extends State<LoginScreen> {
       Map<String, dynamic> payload = Jwt.parseJwt(response.body);
       final String getID = payload['ID'];
       storage.setItem("Farmer_ID", getID);
-     final getFarmerResponse = await http.get(Uri.parse('http://52.221.245.187:90/api/v1/farmers/$getID'));
-      if(getFarmerResponse.statusCode==200){
-        farmer = FarmerDTO.fromJson(jsonDecode(getFarmerResponse.body));
-        _googleSignIn.signOut();
-        Navigator.pushReplacement(context, MaterialPageRoute(
-            builder: (context) => NavigationPage(farmer: farmer)
-        ));
-      }
+      _googleSignIn.signOut();
+      Navigator.pushReplacement(context, MaterialPageRoute(
+          builder: (context) => NavigationPage()
+      ));
     }
   }
 

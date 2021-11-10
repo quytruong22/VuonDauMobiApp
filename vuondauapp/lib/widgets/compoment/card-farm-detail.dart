@@ -1,13 +1,9 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:vuondauapp/object/areaDTO.dart';
 import 'package:vuondauapp/object/farmDTO.dart';
-import 'package:vuondauapp/object/farmType.dart';
-import 'package:vuondauapp/pages/farm/farm_update.dart';
-import 'package:http/http.dart' as http;
+import 'package:vuondauapp/object/farmPicture.dart';
+import 'package:vuondauapp/services/http_service.dart';
 
-class CardFarmDetail extends StatelessWidget {
+class CardFarmDetail extends StatefulWidget {
   CardFarmDetail(
       {required this.farm,
         required  this.tap
@@ -16,6 +12,12 @@ class CardFarmDetail extends StatelessWidget {
   final FarmDTO farm;
   final Function()  tap;
 
+  @override
+  State<CardFarmDetail> createState() => _CardFarmDetailState();
+}
+
+class _CardFarmDetailState extends State<CardFarmDetail> {
+  final HttpService httpService = HttpService();
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -26,16 +28,34 @@ class CardFarmDetail extends StatelessWidget {
               elevation: 0.4,
               child: Column(
                 children: [
-                  Container(
-                    height: size.height*0.3,
-                    width: size.width-20,
-                    child: Image(
-                      image: NetworkImage('https://thamhiemmekong.com/wp-content/uploads/2020/12/nongtraiphannam01.jpg'),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
+                  FutureBuilder(
+                      future: httpService.getFarmImage(widget.farm.ID),
+                      builder: (BuildContext context, AsyncSnapshot<FarmPicture> snapshot) {
+                        if(snapshot.hasData){
+                          final String img = snapshot.requireData.src;
+                          return Container(
+                            height: size.height*0.3,
+                            width: size.width-20,
+                            child: Image(
+                              image: NetworkImage(img),
+                              fit: BoxFit.cover,
+                            ),
+                          );
+                        }
+                        if(snapshot.hasError){
+                          return Container(
+                            height: size.height*0.3,
+                            width: size.width-20,
+                            child: Image(
+                              image: NetworkImage('https://cdn.discordapp.com/attachments/900392963639750657/905113971948941332/iconVuondau.png'),
+                              fit: BoxFit.cover,
+                            ),
+                          );
+                        }
+                        return const Center(child: CircularProgressIndicator());
+                      }),
                   ListTile(
-                    title: Text(farm.name),
+                    title: Text(widget.farm.name),
                   ),
                   Container(
                     padding: const EdgeInsets.all(16.0),
@@ -45,19 +65,19 @@ class CardFarmDetail extends StatelessWidget {
                         Row(
                           children: [
                             Text('Miền:'),
-                            Text(farm.area.name),
+                            Text(widget.farm.area.name),
                           ],
                         ),
                         Row(
                           children: [
                             Text('Địa chỉ:'),
-                            Text(farm.address),
+                            Text(widget.farm.address),
                           ],
                         ),
                         Row(
                           children: [
                             Text('Mô tả:'),
-                            Text(farm.description),
+                            Text(widget.farm.description),
                           ],
                         ),
                       ],
@@ -70,7 +90,7 @@ class CardFarmDetail extends StatelessWidget {
                           style: TextButton.styleFrom(
                             backgroundColor: Colors.green,
                           ),
-                          onPressed: tap,
+                          onPressed: widget.tap,
                           child: Text(
                             'Cập nhật nông trại',
                             style: TextStyle(

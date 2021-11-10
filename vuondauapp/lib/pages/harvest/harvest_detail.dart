@@ -1,29 +1,37 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:localstorage/localstorage.dart';
 import 'package:vuondauapp/object/harvestDTO.dart';
 import 'package:vuondauapp/object/farmDTO.dart';
 import 'package:vuondauapp/object/harvestDTO.dart';
+import 'package:vuondauapp/object/harvestPicture.dart';
 import 'package:vuondauapp/object/productDTO.dart';
+import 'package:vuondauapp/services/http_service.dart';
 import 'package:vuondauapp/widgets/compoment/card-harvest-detail.dart';
 
 import '../navpage.dart';
 import 'harvest_update.dart';
 
 class DetailHarvest extends StatefulWidget {
-  final HarvestDTO  harvest;
+  final String harvestID;
 
-
-  DetailHarvest({required this.harvest});
+  DetailHarvest({required this.harvestID});
 
   @override
   _DetailHarvestState createState() => _DetailHarvestState();
 }
 
 class _DetailHarvestState extends State<DetailHarvest> {
+  final HttpService httpService = HttpService();
+  final LocalStorage storage = LocalStorage('farmer_info');
 
   @override
   Widget build(BuildContext context) {
+    String farmerID = "";
+    if (storage.getItem("Farmer_ID") != null) {
+      farmerID = storage.getItem("Farmer_ID");
+    }
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
@@ -38,23 +46,34 @@ class _DetailHarvestState extends State<DetailHarvest> {
           child: Column(
             children: <Widget>[
               SizedBox(height: 8.0),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 32.0),
-                child: CardHarvestDetail(
-                  harvest: widget.harvest,
-                  tap: () async {
-                    http.Response response = await http.get(Uri.parse('http://52.221.245.187:90/api/v1/products'));
-                    List<ProductDTO> listProduct  = ListProducts.fromJson(jsonDecode(response.body)).products;
-                    response = await http.get(Uri.parse('http://52.221.245.187:90/api/v1/farms'));
-                    List<FarmDTO> listFarm  = ListFarms.fromJson(jsonDecode(response.body)).farms;
-                    await Navigator.push(context,MaterialPageRoute(
-                        builder: (context) => UpdateHarvest(listproduct: listProduct,listfarm: listFarm,harvest:widget.harvest))
-                    );
-                    Navigator.pushReplacement(context, MaterialPageRoute(
-                        builder: (context) => NavigationPage(farmer: widget.harvest.farm.farmer)
-                    ));
+              FutureBuilder(
+                  future: httpService.getHarvest(widget.harvestID),
+                  builder: (BuildContext context, AsyncSnapshot<HarvestDTO> snapshot){
+                    if(snapshot.hasData){
+                      HarvestDTO harvest = snapshot.requireData;
+                      return  Padding(
+                        padding: const EdgeInsets.only(bottom: 32.0),
+                        child: CardHarvestDetail(
+                            harvest: harvest,
+                            tap: () async {
+                              HarvestPicture img  = await httpService.getHarvestImage(harvest.ID);
+                              List<ProductDTO> listProduct  = await httpService.getListProducts();
+                              List<FarmDTO> listFarm  = await httpService.getListFarms(farmerID);
+                              await Navigator.push(context,MaterialPageRoute(
+                                  builder: (context) => UpdateHarvest(listproduct: listProduct,listfarm: listFarm,harvest:harvest,image:img))
+                              );
+                              Navigator.pushReplacement(context,MaterialPageRoute(
+                                  builder: (context) => DetailHarvest(harvestID: harvest.ID)
+                              ));
+                            }
+                        ),
+                      );
+                    }
+                    if(snapshot.hasError){
+                      return  const Center(child: Text('Lỗi load mùa vụ'));
+                    }
+                    return const Center(child: CircularProgressIndicator());
                   }
-                ),
               ),
             ],
           ),

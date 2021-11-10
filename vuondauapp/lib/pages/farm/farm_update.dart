@@ -1,9 +1,13 @@
 import 'dart:convert';
-
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:vuondauapp/object/areaDTO.dart';
 import 'package:vuondauapp/object/farmDTO.dart';
+import 'package:vuondauapp/object/farmPicture.dart';
 import 'package:vuondauapp/object/farmType.dart';
+import 'package:vuondauapp/services/http_service.dart';
 import 'package:vuondauapp/widgets/compoment/dialog.dart';
 import 'package:vuondauapp/widgets/compoment/rounded_input_field.dart';
 import 'package:vuondauapp/widgets/compoment/rounded_button.dart';
@@ -15,14 +19,18 @@ class UpdateFarm extends StatefulWidget {
   final List<AreaDTO> listArea;
   final List<FarmType> listFarmType;
   final FarmDTO farm;
+  final FarmPicture image;
 
-  UpdateFarm({required this.listArea, required this.listFarmType,required this.farm});
+  UpdateFarm({required this.listArea, required this.listFarmType,required this.farm,required this.image});
 
   @override
   _UpdateFarmState createState() => _UpdateFarmState();
 }
 
 class _UpdateFarmState extends State<UpdateFarm> {
+  File? image;
+  final HttpService httpService = HttpService();
+  final picker = ImagePicker();
   String  name = '';
   String  address = '';
   String  description = '';
@@ -38,8 +46,30 @@ class _UpdateFarmState extends State<UpdateFarm> {
     address=farm.address;
     description=farm.description;
     name=farm.name;
-    _Choosearea = widget.listArea.first;
-    _ChoosefarmType = widget.listFarmType.first;
+    widget.listArea.forEach((area) {
+      if(area.ID==farm.area.ID){
+        _Choosearea=area;
+      }
+    });
+    widget.listFarmType.forEach((farmtype) {
+      if(farmtype.id==farm.farmType.id){
+        _ChoosefarmType=farmtype;
+      }
+    });
+  }
+
+  Future  pickImage(ImageSource source) async {
+    try{
+      final image = await picker.pickImage(source: source);
+      if(image==null) return;
+
+      final imageTemporary = File(image.path);
+      setState(() {
+        this.image = imageTemporary;
+      });
+    }on PlatformException catch(e){
+      print('failed to pick image: '+e.toString());
+    }
   }
 
   @override
@@ -174,12 +204,18 @@ class _UpdateFarmState extends State<UpdateFarm> {
                 },
               ),
               SizedBox(height: size.height * 0.03),
-              RoundedInputField(
-                icon: Icons.picture_in_picture_alt,
-                hintText: "Link ảnh nông trại",
-                onChanged: (value) {
-                  link = value;
-                },
+              image!=null? Image.file(image!,width: 150,height: 150,fit: BoxFit.cover): Image.network(widget.image.src,width: 150,height: 150,fit: BoxFit.cover),
+              IconButton(
+                  onPressed: () {
+                    pickImage(ImageSource.camera);
+                  },
+                  icon: Icon(Icons.camera_alt_outlined)
+              ),
+              IconButton(
+                  onPressed: () {
+                    pickImage(ImageSource.gallery);
+                  },
+                  icon: Icon(Icons.image_outlined)
               ),
               SizedBox(height: size.height * 0.03),
               RoundedButton(
@@ -202,6 +238,19 @@ class _UpdateFarmState extends State<UpdateFarm> {
                         body: body
                     );
                     if (response.statusCode==200) {
+                      if(image!=null){
+                        bool updateImage = await httpService.updateFarmImage(image!, farm.ID, widget.image.id);
+                        if(updateImage){
+                          await showDialog(
+                              context: context,
+                              builder: (BuildContext context)=>Message_Dialog(
+                                title: 'Cập nhật nông trại',
+                                content: 'Cập nhật nông trại thành công',
+                              )
+                          );
+                          Navigator.pop(context);
+                        }
+                      }
                       await showDialog(
                           context: context,
                           builder: (BuildContext context)=>Message_Dialog(

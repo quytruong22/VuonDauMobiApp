@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:localstorage/localstorage.dart';
 import 'package:vuondauapp/object/areaDTO.dart';
 import 'package:vuondauapp/object/farmDTO.dart';
 import 'package:vuondauapp/object/farmType.dart';
@@ -11,6 +12,7 @@ import 'package:vuondauapp/object/productDTO.dart';
 import 'package:vuondauapp/object/productPicture.dart';
 import 'package:vuondauapp/pages/selling/selling_add.dart';
 import 'package:vuondauapp/pages/selling/selling_detail.dart';
+import 'package:vuondauapp/services/http_service.dart';
 import 'package:vuondauapp/widgets/compoment/card-harvest.dart';
 import 'package:vuondauapp/widgets/compoment/card-selling.dart';
 import 'package:vuondauapp/widgets/icon/icon.dart';
@@ -22,23 +24,20 @@ import 'harvest/harvest_detail.dart';
 import 'navpage.dart';
 
 class Home extends StatefulWidget {
-  final List<HarvestDTO> listharvest;
-  final List<HarvestSellingPriceDTO>  listselling;
-  final List<FarmDTO> farms;
-  final FarmerDTO farmer;
-
-  Home({required this.listharvest, required this.listselling,required this.farmer,required  this.farms});
 
   @override
   _HomeState createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
-
+  final HttpService httpService = HttpService();
+  final LocalStorage storage = LocalStorage('farmer_info');
   @override
   Widget build(BuildContext context) {
-    List<HarvestDTO> listharvest=widget.listharvest;
-    List<HarvestSellingPriceDTO>  listselling=widget.listselling;
+    String farmerID = "";
+    if (storage.getItem("Farmer_ID") != null) {
+      farmerID = storage.getItem("Farmer_ID");
+    }
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
@@ -60,18 +59,13 @@ class _HomeState extends State<Home> {
                       icon: MyCustomIcons.farm,
                       color: Colors.lightGreen,
                       press: ()async {
-                        http.Response response = await http.get(Uri.parse('http://52.221.245.187:90/api/v1/areas'));
-                        List<AreaDTO> listArea  = ListAreas.fromJson(jsonDecode(response.body)).areas;
-                        response = await http.get(Uri.parse('http://52.221.245.187:90/api/v1/farm-types'));
-                        List<FarmType> listFarmType  = ListFarmTypes.fromJson(jsonDecode(response.body)).farmTypes;
+                        List<AreaDTO> listArea  = await httpService.getListAreas();
+                        List<FarmType> listFarmType  = await  httpService.getListFarmTypes();
                         await Navigator.push(context,MaterialPageRoute(
-                          builder: (context) => AddFarm(listArea: listArea,listFarmType: listFarmType),
-                          settings: RouteSettings(
-                            arguments: widget.farmer,
-                          ),
+                            builder: (context) => AddFarm(listArea: listArea,listFarmType: listFarmType,farmerID: farmerID,)
                         ));
                         Navigator.pushReplacement(context, MaterialPageRoute(
-                            builder: (context) => NavigationPage(farmer: widget.farmer)
+                            builder: (context) => NavigationPage()
                         ));
                         },
                     ),
@@ -80,11 +74,12 @@ class _HomeState extends State<Home> {
                       icon: Icons.agriculture,
                       color: Colors.lightGreen,
                       press: () async {
+                        List<HarvestDTO> listharvest = await httpService.getListAllHarvests(farmerID);
                         await Navigator.push(context,MaterialPageRoute(
-                            builder: (context) => AddSelling(harvests: widget.listharvest))
+                            builder: (context) => AddSelling(harvests: listharvest))
                         );
                         Navigator.pushReplacement(context, MaterialPageRoute(
-                            builder: (context) => NavigationPage(farmer: widget.farmer)
+                            builder: (context) => NavigationPage()
                         ));
                         },
                     ),
@@ -93,21 +88,22 @@ class _HomeState extends State<Home> {
                       icon: MyCustomIcons.farm,
                       color: Colors.lightGreen,
                       press: () async {
-                        http.Response response = await http.get(Uri.parse('http://52.221.245.187:90/api/v1/products'));
-                        List<ProductDTO> listProduct  = ListProducts.fromJson(jsonDecode(response.body)).products;
+                        List<ProductDTO> listProduct  = await httpService.getListProducts();
+                        List<FarmDTO> listFarm = await httpService.getListFarms(farmerID);
                         await Navigator.push(context,MaterialPageRoute(
-                            builder: (context) => AddHarvest(listproduct: listProduct,listfarm: widget.farms))
+                            builder: (context) => AddHarvest(listproduct: listProduct,listfarm: listFarm))
                         );
                         Navigator.pushReplacement(context, MaterialPageRoute(
-                            builder: (context) => NavigationPage(farmer: widget.farmer)
+                            builder: (context) => NavigationPage()
                         ));
                       },
                     ),
                     SquareButton(
-                      text: 'Xem hóa đơn',
+                      text: 'Tải lại',
                       icon: Icons.description,
                       color: Colors.lightGreen,
-                      press: (){Navigator.pushNamed(context, '/dashboard');},
+                      press: (){
+                        },
                     )
                   ],
                 )
@@ -123,33 +119,44 @@ class _HomeState extends State<Home> {
                   ),
                 ),
               ),
-              Container(
-                  width: size.width-20,
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: listselling.map((selling) => Container(
-                        child: Column(
-                          children: <Widget>[
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 32.0),
-                              child: CardSelling(
-                                  selling: selling,
-                                  tap: () async {
-                                    final response = await http.get(Uri.parse('http://52.221.245.187:90/api/v1/product-pictures/${selling.harvestSelling.harvest.product.id}'));
-                                    List<ProductPicture> pictures = ListProductPictures.fromJson(jsonDecode(response.body)).products;
-                                    final String  imgProduct  = pictures.first.src;
-                                    Navigator.push(context,MaterialPageRoute(
-                                        builder: (context) => DetailSelling(selling: selling,imgProduct:imgProduct)
-                                    ));
-                                  }),
+              FutureBuilder(
+                  future: httpService.getAllSellings(farmerID),
+                  builder: (BuildContext context, AsyncSnapshot<List<HarvestSellingPriceDTO>> snapshot){
+                    if(snapshot.hasData){
+                      List<HarvestSellingPriceDTO> listselling = snapshot.requireData;
+                      return Container(
+                          width: size.width-20,
+                          child: SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Row(
+                              children: listselling.map((selling) => Container(
+                                child: Column(
+                                  children: <Widget>[
+                                    Padding(
+                                      padding: const EdgeInsets.only(bottom: 32.0),
+                                      child: CardSelling(
+                                          selling: selling,
+                                          tap: () async {
+                                            final response = await http.get(Uri.parse('http://52.221.245.187:90/api/v1/product-pictures/${selling.harvestSelling.harvest.product.id}'));
+                                            List<ProductPicture> pictures = ListProductPictures.fromJson(jsonDecode(response.body)).products;
+                                            final String  imgProduct  = pictures.first.src;
+                                            Navigator.push(context,MaterialPageRoute(
+                                                builder: (context) => DetailSelling(selling: selling,imgProduct:imgProduct)
+                                            ));
+                                          }),
+                                    ),
+                                  ],
+                                ),
+                              )).toList(),
                             ),
-                          ],
-                        ),
-                      )).toList(),
-                    ),
-                  )
-              ),
+                          )
+                      );
+                    }
+                    if(snapshot.hasError){
+                      return  const Center(child: Text('Chưa có đợt bán nào'));
+                    }
+                    return const Center(child: CircularProgressIndicator());
+                  }),
               Container(
                 padding: EdgeInsets.fromLTRB(8, 10, 0, 0),
                 width: size.width,
@@ -161,29 +168,40 @@ class _HomeState extends State<Home> {
                   ),
                 ),
               ),
-              Container(
-                width: size.width-20,
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: listharvest.map((harvest) => Container(
-                        child: Column(
-                          children: <Widget>[
-                            Container(
-                              child: CardHarvest(
-                                  harvest: harvest,
-                                  tap: () {
-                                    Navigator.push(context,MaterialPageRoute(
-                                        builder: (context) => DetailHarvest(harvest: harvest)
-                                    ));
-                                  }),
-                            ),
-                          ],
-                        ),
-                      )).toList(),
-                    ),
-                  )
-              ),
+              FutureBuilder(
+                future: httpService.getListAllHarvests(farmerID),
+                builder: (BuildContext context, AsyncSnapshot<List<HarvestDTO>> snapshot){
+                  if(snapshot.hasData){
+                    List<HarvestDTO> listharvest = snapshot.requireData;
+                    return Container(
+                        width: size.width-20,
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            children: listharvest.map((harvest) => Container(
+                              child: Column(
+                                children: <Widget>[
+                                  Container(
+                                    child: CardHarvest(
+                                        harvest: harvest,
+                                        tap: () {
+                                          Navigator.push(context,MaterialPageRoute(
+                                              builder: (context) => DetailHarvest(harvestID: harvest.ID)
+                                          ));
+                                        }),
+                                  ),
+                                ],
+                              ),
+                            )).toList(),
+                          ),
+                        )
+                    );
+                  }
+                  if(snapshot.hasError){
+                    return  const Center(child: Text('Chưa có mùa vụ nào'));
+                  }
+                  return const Center(child: CircularProgressIndicator());
+                })
             ],
           ),
         ),

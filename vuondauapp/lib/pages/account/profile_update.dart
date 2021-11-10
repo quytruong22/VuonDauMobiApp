@@ -162,7 +162,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
               RoundedButton(
                   text: 'Hoàn tất',
                   press: () async {
-                    final int gender = dropdownValue == 'Nam'? 0 : 1;
+                    final int gender = dropdownValue == 'Nam'? 1 : 0;
                     Map data = {
                       "full_name": full_name,
                       "password": "",
@@ -178,14 +178,11 @@ class _UpdateProfileState extends State<UpdateProfile> {
                         body: body
                     );
                     if(response.statusCode==200){
-                      final farmer2 = FarmerDTO.fromJson(jsonDecode(response.body));
                       await showDialog(
                           context: context,
                           builder: (BuildContext context)=>Message_Dialog(title: 'Cập nhật thành công',content: 'Cập nhật thông tin cá nhân thành công')
                       );
-                      Navigator.pushReplacement(context, MaterialPageRoute(
-                          builder: (context) => NavigationPage(farmer: farmer2)
-                      ));
+                      Navigator.pop(context);
                     }
                   }
               )

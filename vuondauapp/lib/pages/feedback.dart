@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:vuondauapp/object/feedback_dto.dart';
-import 'package:vuondauapp/services/http_service_order.dart';
+import 'package:vuondauapp/services/http_service.dart';
 import 'package:vuondauapp/widgets/compoment/rounded_button.dart';
 
 class FeedbackPage extends StatefulWidget {
@@ -16,7 +16,7 @@ class FeedbackPage extends StatefulWidget {
 }
 
 class _FeedbackPageState extends State<FeedbackPage> {
-  final HttpOrderService httpOrderService = HttpOrderService();
+  final HttpService httpOrderService = HttpService();
   final LocalStorage storage = LocalStorage('farmer_info');
 
   String feedbackDescription = '';

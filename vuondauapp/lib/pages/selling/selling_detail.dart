@@ -42,9 +42,6 @@ class _DetailSellingState extends State<DetailSelling> {
                     await Navigator.push(context,MaterialPageRoute(
                         builder: (context) => UpdateSelling(selling: widget.selling))
                     );
-                    Navigator.pushReplacement(context, MaterialPageRoute(
-                        builder: (context) => NavigationPage(farmer: widget.selling.harvestSelling.harvest.farm.farmer)
-                    ));
                   },
                   imgProduct: widget.imgProduct,
                 ),

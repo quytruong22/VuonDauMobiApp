@@ -28,3 +28,17 @@ class FarmPicture {
     return data;
   }
 }
+
+class ListFarmPicture{
+  final List<FarmPicture> farms;
+
+  ListFarmPicture({required this.farms});
+
+  factory ListFarmPicture.fromJson(List<dynamic> parsedJson) {
+
+    List<FarmPicture> farms = parsedJson.map((i)=>FarmPicture.fromJson(i)).toList();
+    return new ListFarmPicture(
+      farms: farms,
+    );
+  }
+}

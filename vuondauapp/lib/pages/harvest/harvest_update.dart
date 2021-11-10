@@ -1,10 +1,15 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:vuondauapp/object/farmDTO.dart';
 import 'package:vuondauapp/object/harvestDTO.dart';
+import 'package:vuondauapp/object/harvestPicture.dart';
 import 'package:vuondauapp/object/productDTO.dart';
+import 'package:vuondauapp/services/http_service.dart';
 import 'package:vuondauapp/widgets/compoment/dialog.dart';
 import 'package:vuondauapp/widgets/compoment/rounded_date_input.dart';
 import 'package:vuondauapp/widgets/compoment/rounded_input_field.dart';
@@ -17,13 +22,17 @@ class UpdateHarvest extends StatefulWidget {
   final List<ProductDTO>  listproduct;
   final List<FarmDTO> listfarm;
   final HarvestDTO  harvest;
-  UpdateHarvest({required this.listproduct,required  this.listfarm,required this.harvest});
+  final HarvestPicture image;
+  UpdateHarvest({required this.listproduct,required  this.listfarm,required this.harvest,required this.image});
 
   @override
   _UpdateHarvestState createState() => _UpdateHarvestState();
 }
 
 class _UpdateHarvestState extends State<UpdateHarvest> {
+  File? image;
+  final HttpService httpService = HttpService();
+  final picker = ImagePicker();
   DateTime datestart = DateTime.now();
   DateTime dateend = DateTime.now();
   String  description = '';
@@ -51,6 +60,21 @@ class _UpdateHarvestState extends State<UpdateHarvest> {
       }
     });
   }
+
+  Future  pickImage(ImageSource source) async {
+    try{
+      final image = await picker.pickImage(source: source);
+      if(image==null) return;
+
+      final imageTemporary = File(image.path);
+      setState(() {
+        this.image = imageTemporary;
+      });
+    }on PlatformException catch(e){
+      print('failed to pick image: '+e.toString());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -212,10 +236,19 @@ class _UpdateHarvestState extends State<UpdateHarvest> {
                   }).toList(),
                 ),
               ),
-              RoundedInputField(
-                hintText: "Link ảnh mùa vụ",
-                icon: Icons.picture_in_picture,
-                onChanged: (value) {},
+              SizedBox(height: size.height * 0.03),
+              image!=null? Image.file(image!,width: 150,height: 150,fit: BoxFit.cover): Image.network(widget.image.src,width: 150,height: 150,fit: BoxFit.cover),
+              IconButton(
+                  onPressed: () {
+                    pickImage(ImageSource.camera);
+                  },
+                  icon: Icon(Icons.camera_alt_outlined)
+              ),
+              IconButton(
+                  onPressed: () {
+                    pickImage(ImageSource.gallery);
+                  },
+                  icon: Icon(Icons.image_outlined)
               ),
               SizedBox(height: size.height * 0.03),
               RoundedButton(
@@ -246,6 +279,20 @@ class _UpdateHarvestState extends State<UpdateHarvest> {
                         body: body
                     );
                     if (response.statusCode == 200) {
+                      if(image!=null){
+                        bool uploadImage = await httpService.updateHarvestImage(image!, harvest.ID, widget.image.id);
+                        if(uploadImage){
+                          await showDialog(
+                              context: context,
+                              builder: (BuildContext context) =>
+                                  Message_Dialog(
+                                    title: 'Cập nhật mùa vụ',
+                                    content: 'Cập nhật mùa vụ thành công',
+                                  )
+                          );
+                          Navigator.pop(context);
+                        }
+                      }
                       await showDialog(
                           context: context,
                           builder: (BuildContext context) =>

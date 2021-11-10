@@ -1,9 +1,13 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:vuondauapp/object/farmDTO.dart';
 import 'package:vuondauapp/object/productDTO.dart';
+import 'package:vuondauapp/services/http_service.dart';
 import 'package:vuondauapp/widgets/compoment/dialog.dart';
 import 'package:vuondauapp/widgets/compoment/rounded_input_field.dart';
 import 'package:vuondauapp/widgets/compoment/rounded_button.dart';
@@ -21,6 +25,9 @@ class AddHarvest extends StatefulWidget {
 }
 
 class _AddHarvestState extends State<AddHarvest> {
+  File? image;
+  final HttpService httpService = HttpService();
+  final picker = ImagePicker();
   DateTime datestart = DateTime.now();
   DateTime dateend = DateTime.now();
   String  description = '';
@@ -33,6 +40,20 @@ class _AddHarvestState extends State<AddHarvest> {
     super.initState();
     _Chooseproduct  = widget.listproduct.first;
     _Choosefarm = widget.listfarm.first;
+  }
+
+  Future  pickImage(ImageSource source) async {
+    try{
+      final image = await picker.pickImage(source: source);
+      if(image==null) return;
+
+      final imageTemporary = File(image.path);
+      setState(() {
+        this.image = imageTemporary;
+      });
+    }on PlatformException catch(e){
+      print('failed to pick image: '+e.toString());
+    }
   }
 
   @override
@@ -196,10 +217,19 @@ class _AddHarvestState extends State<AddHarvest> {
                   }).toList(),
                 ),
               ),
-              RoundedInputField(
-                hintText: "Link ảnh mùa vụ",
-                icon: Icons.picture_in_picture,
-                onChanged: (value) {},
+              SizedBox(height: size.height * 0.03),
+              image!=null? Image.file(image!,width: 150,height: 150,fit: BoxFit.cover): Text('no image selected'),
+              IconButton(
+                  onPressed: () {
+                    pickImage(ImageSource.camera);
+                  },
+                  icon: Icon(Icons.camera_alt_outlined)
+              ),
+              IconButton(
+                  onPressed: () {
+                    pickImage(ImageSource.gallery);
+                  },
+                  icon: Icon(Icons.image_outlined)
               ),
               SizedBox(height: size.height * 0.03),
               RoundedButton(
@@ -229,15 +259,19 @@ class _AddHarvestState extends State<AddHarvest> {
                         body: body
                     );
                     if (response.statusCode == 201) {
-                      await showDialog(
-                          context: context,
-                          builder: (BuildContext context) =>
-                              Message_Dialog(
-                                title: 'Tạo mùa vụ',
-                                content: 'Tạo mùa vụ thành công',
-                              )
-                      );
-                      Navigator.pop(context);
+                      final String harvestID  = jsonDecode(response.body)['id'];
+                      bool uploadImage = await httpService.postHarvestImage(image!, harvestID);
+                      if (uploadImage) {
+                        await showDialog(
+                            context: context,
+                            builder: (BuildContext context) =>
+                                Message_Dialog(
+                                  title: 'Tạo mùa vụ',
+                                  content: 'Tạo mùa vụ thành công',
+                                )
+                        );
+                        Navigator.pop(context);
+                      }
                     }
                   }
                 },
