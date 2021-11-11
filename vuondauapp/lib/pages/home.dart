@@ -72,7 +72,7 @@ class _HomeState extends State<Home> {
                     ),
                     SquareButton(
                       text: 'Tạo đợt bán',
-                      icon: Icons.agriculture,
+                      icon: Icons.agriculture_outlined,
                       color: Colors.lightGreen,
                       press: () async {
                         List<HarvestDTO> listharvest = await httpService.getListAllHarvests(farmerID);
@@ -86,7 +86,7 @@ class _HomeState extends State<Home> {
                     ),
                     SquareButton(
                       text: 'Tạo mùa vụ',
-                      icon: MyCustomIcons.farm,
+                      icon: Icons.add_to_queue_outlined,
                       color: Colors.lightGreen,
                       press: () async {
                         List<ProductDTO> listProduct  = await httpService.getListProducts();
@@ -101,7 +101,7 @@ class _HomeState extends State<Home> {
                     ),
                     SquareButton(
                       text: 'Xem hóa đơn',
-                      icon: Icons.description,
+                      icon: Icons.description_outlined,
                       color: Colors.lightGreen,
                       press: (){
                         Navigator.push(context, MaterialPageRoute(

@@ -124,19 +124,19 @@ class _LoginScreenState extends State<LoginScreen> {
                   SizedBox(height: size.height * 0.03),
                   RoundedInputField(
                     icon: Icons.email,
-                    hintText: "Your Email",
+                    hintText: "Email của bạn",
                     onChanged: (value) {
                       email=value;
                     },
                   ),
                   RoundedPasswordField(
-                    hint: 'Password',
+                    hint: 'Mật khẩu',
                     onChanged: (value) {
                       password=value;
                     },
                   ),
                   RoundedButton(
-                    text: "LOGIN",
+                    text: "ĐĂNG NHẬP",
                     press: () {
                       _handleSignIn();
                     },

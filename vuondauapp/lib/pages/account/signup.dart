@@ -93,19 +93,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                   RoundedInputField(
                     icon: Icons.email,
-                    hintText: "Your Email",
+                    hintText: "Email của bạn",
                     onChanged: (value) {
                       email=value;
                     },
                   ),
                   RoundedPasswordField(
-                    hint: 'Password',
+                    hint: 'Mật khẩu',
                     onChanged: (value) {
                       password=value;
                     },
                   ),
                   RoundedButton(
-                    text: "SIGNUP",
+                    text: "ĐĂNG KÝ",
                     press: () async {
                       _handleSignUp();
                       await Navigator.push(context,MaterialPageRoute(
