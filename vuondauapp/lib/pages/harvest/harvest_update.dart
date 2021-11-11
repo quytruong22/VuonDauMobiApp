@@ -150,7 +150,7 @@ class _UpdateHarvestState extends State<UpdateHarvest> {
               Container(
                   width: size.width*0.8,
                   child: Text(
-                    'Ngày thu hoạch dự kiến',
+                    'Ngày bắt đầu mùa vụ',
                     style: TextStyle(
 
                     ),

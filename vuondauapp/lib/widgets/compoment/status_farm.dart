@@ -8,8 +8,8 @@ class StatusFarm extends StatelessWidget {
   Container Status(BuildContext context,String textbar, Color colorbar){
     return Container(
       padding: EdgeInsets.symmetric(vertical: 3.0),
-      width: 100,
-      height: 20,
+      width: 200,
+      height: 25,
       decoration: BoxDecoration(
           color: colorbar,
           borderRadius: BorderRadius.circular(7.5)

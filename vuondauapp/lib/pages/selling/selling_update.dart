@@ -115,7 +115,7 @@ class _UpdateSellingState extends State<UpdateSelling> {
               ),
               SizedBox(height: size.height * 0.03),
               RoundedNumberInputField(
-                hintText: "Sản lượng (Kg)",
+                hintText: "Sản lượng tối thiểu (Kg)",
                 icon: Icons.add_shopping_cart,
                 onChanged: (value) {
                   try{
@@ -127,7 +127,7 @@ class _UpdateSellingState extends State<UpdateSelling> {
               ),
               SizedBox(height: size.height * 0.03),
               RoundedNumberInputField(
-                hintText: "Sản lượng (Kg)",
+                hintText: "Sản lượng tối đa (Kg)",
                 icon: Icons.add_shopping_cart,
                 onChanged: (value) {
                   try{
