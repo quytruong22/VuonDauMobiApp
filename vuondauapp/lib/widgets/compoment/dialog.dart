@@ -17,7 +17,7 @@ class Message_Dialog extends StatelessWidget {
       ),
       actions: [
         ElevatedButton(
-          child: Text("OK"),
+          child: Text("Đồng ý"),
           onPressed: (){
             Navigator.pop(context);
           },
@@ -48,7 +48,7 @@ class Confirm_Dialog extends StatelessWidget {
       ),
       actions: [
         ElevatedButton(
-          child: Text("Accept"),
+          child: Text("Đồng ý"),
           onPressed: (){
             Navigator.pop(context,true); // Return false
           },
@@ -57,7 +57,7 @@ class Confirm_Dialog extends StatelessWidget {
           ),
         ),
         ElevatedButton(
-          child: Text("Cancel"),
+          child: Text("Hủy"),
           onPressed: (){
             Navigator.pop(context,false); // Return true
           },

@@ -116,7 +116,7 @@ class _DashboardState extends State<Dashboard> {
                               ),
                               child: Column(children: [
                                 Text(
-                                  'YOUR PROFIT',
+                                  'DOANH THU',
                                   style: TextStyle(
                                     color: Colors.grey[700],
                                   ),
