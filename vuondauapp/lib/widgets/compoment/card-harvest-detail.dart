@@ -70,8 +70,8 @@ class _CardHarvestDetailState extends State<CardHarvestDetail> {
                                       if(snapshot.hasData){
                                         HarvestPicture img = snapshot.requireData;
                                         return Container(
-                                            height: size.height*0.25,
-                                            width: size.width*0.5,
+                                            height: size.width*0.4,
+                                            width: size.width*0.45,
                                             decoration: BoxDecoration(
                                                 image: DecorationImage(
                                                   image: NetworkImage(img.src),
@@ -82,8 +82,8 @@ class _CardHarvestDetailState extends State<CardHarvestDetail> {
                                       }
                                       if(snapshot.hasError){
                                         return Container(
-                                            height: size.height*0.25,
-                                            width: size.width*0.5,
+                                            height: size.width*0.4,
+                                            width: size.width*0.45,
                                             decoration: BoxDecoration(
                                                 image: DecorationImage(
                                                   image: NetworkImage('https://cdn.discordapp.com/attachments/900392963639750657/905113971948941332/iconVuondau.png'),
@@ -96,24 +96,36 @@ class _CardHarvestDetailState extends State<CardHarvestDetail> {
                                     }
                                 ),
                                 Container(
-                                  //margin: EdgeInsets.fromLTRB(8, 0, 0, 0),
+                                  margin: EdgeInsets.fromLTRB(8, 0, 0, 0),
                                   //height: size.height*0.25,
-                                  //width: size.width*0.4,
+                                  width: size.width*0.4,
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       Text('Tên sản phẩm: '+widget.harvest.product.name,
                                           style: TextStyle(
-                                              color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold
+                                              color: Colors.black, fontSize: 13, fontWeight: FontWeight.bold
                                           )
                                       ),
                                       SizedBox(height: 4.0,),
-                                      Text('Mô tả: '+widget.harvest.product.description),
+                                      Text('Mô tả: '+widget.harvest.product.description,
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.w600)),
                                       SizedBox(height: 4.0,),
-                                      Text('Loại sản phẩm: '+widget.harvest.product.product_type.name),
+                                      Text('Loại sản phẩm: '+widget.harvest.product.product_type.name,
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.w600)),
                                       SizedBox(height: 4.0,),
                                       Text('Ngày thu hoạch: '+DateFormat('dd/MM/yyyy').format(widget.harvest.start_date),
+                                          style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.w600)
                                       ),
                                     ],
                                   ),

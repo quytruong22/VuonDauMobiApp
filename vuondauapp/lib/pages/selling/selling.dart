@@ -17,6 +17,11 @@ import '../navpage.dart';
 
 class Selling extends StatefulWidget {
 
+  final List<HarvestSellingPriceDTO> listSelling;
+
+
+  Selling({required this.listSelling});
+
   @override
   _SellingState createState() => _SellingState();
 }
@@ -31,6 +36,8 @@ class _SellingState extends State<Selling> {
   @override
   void initState() {
     super.initState();
+    data = widget.listSelling;
+    list = data;
   }
 
   Widget buildSearch() => SearchWidget(
@@ -49,6 +56,7 @@ class _SellingState extends State<Selling> {
       this.query = query;
     });
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -82,13 +90,7 @@ class _SellingState extends State<Selling> {
         margin: EdgeInsets.symmetric(horizontal: 10),
         width: size.width,
         height: size.height,
-        child: FutureBuilder(
-          future: httpService.getAllSellings(farmerID),
-          builder: (BuildContext context, AsyncSnapshot<List<HarvestSellingPriceDTO>> snapshot){
-            if(snapshot.hasData){
-              data = snapshot.requireData;
-              list=data;
-              return SingleChildScrollView(
+        child: SingleChildScrollView(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
@@ -117,15 +119,8 @@ class _SellingState extends State<Selling> {
                     SizedBox(height: 45,)
                   ],
                 ),
-              );
-            }
-            if(snapshot.hasError){
-              return  const Center(child: Text('Chưa có đợt bán nào'));
-            }
-            return const Center(child: CircularProgressIndicator());
-          }
-        ),
-      ),
+              )
+      )
     );
   }
 }

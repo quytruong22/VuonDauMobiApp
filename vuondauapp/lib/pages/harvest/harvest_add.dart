@@ -218,18 +218,36 @@ class _AddHarvestState extends State<AddHarvest> {
                 ),
               ),
               SizedBox(height: size.height * 0.03),
-              image!=null? Image.file(image!,width: 150,height: 150,fit: BoxFit.cover): Text('no image selected'),
-              IconButton(
-                  onPressed: () {
-                    pickImage(ImageSource.camera);
-                  },
-                  icon: Icon(Icons.camera_alt_outlined)
+              Text(
+                'Ảnh mùa vụ',
+                style: TextStyle(
+
+                ),
               ),
-              IconButton(
-                  onPressed: () {
-                    pickImage(ImageSource.gallery);
-                  },
-                  icon: Icon(Icons.image_outlined)
+              Container(
+                width: 150,
+                height: 150,
+                child: image!=null? Image.file(image!,width: 150,height: 150,fit: BoxFit.cover): Center(child:Text('no image selected')),
+                decoration: BoxDecoration(
+                    border: Border.all(width: 1)
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(
+                      onPressed: () {
+                        pickImage(ImageSource.camera);
+                      },
+                      icon: Icon(Icons.camera_alt_outlined)
+                  ),
+                  IconButton(
+                      onPressed: () {
+                        pickImage(ImageSource.gallery);
+                      },
+                      icon: Icon(Icons.image_outlined)
+                  ),
+                ],
               ),
               SizedBox(height: size.height * 0.03),
               RoundedButton(

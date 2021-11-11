@@ -11,6 +11,9 @@ import 'package:vuondauapp/widgets/compoment/search_widget.dart';
 import '../navpage.dart';
 
 class Harvest extends StatefulWidget {
+  final List<HarvestDTO>  listHarvest;
+
+  Harvest({required this.listHarvest});
 
   @override
   _HarvestState createState() => _HarvestState();
@@ -20,6 +23,7 @@ class _HarvestState extends State<Harvest> {
   final HttpService httpService = HttpService();
   final LocalStorage storage = LocalStorage('farmer_info');
   late  List<HarvestDTO> data;
+  String farmerID = "";
   List<HarvestDTO> list=[];
   String query = '';
 
@@ -40,10 +44,17 @@ class _HarvestState extends State<Harvest> {
       list = listSearch;
     });
   }
+
+  @override
+  void initState() {
+    super.initState();
+    data = widget.listHarvest;
+    list = data;
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    String farmerID = "";
     if (storage.getItem("Farmer_ID") != null) {
       farmerID = storage.getItem("Farmer_ID");
     }
@@ -73,13 +84,7 @@ class _HarvestState extends State<Harvest> {
         margin: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
         width: size.width,
         height: size.height,
-        child: FutureBuilder(
-          future: httpService.getListAllHarvests(farmerID),
-          builder: (BuildContext context, AsyncSnapshot<List<HarvestDTO>> snapshot){
-            if(snapshot.hasData){
-              data = snapshot.requireData;
-              list=data;
-              return SingleChildScrollView(
+        child: SingleChildScrollView(
                   child: Column(
                       children: <Widget>[
                         buildSearch(),
@@ -104,14 +109,7 @@ class _HarvestState extends State<Harvest> {
                         SizedBox(height: 45,)
                       ]
                   )
-              );
-            }
-            if(snapshot.hasError){
-              return  const Center(child: Text('Chưa có mùa vụ nào'));
-            }
-            return const Center(child: CircularProgressIndicator());
-          },
-        ),
+              )
       )
     );
   }

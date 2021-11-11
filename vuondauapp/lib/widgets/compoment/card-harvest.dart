@@ -35,7 +35,7 @@ class _CardHarvestState extends State<CardHarvest> {
             child: Row(
               children: [
                 Flexible(
-                  flex: 1,
+                  flex: 3,
                   child: FutureBuilder(
                     future: httpService.getHarvestImage(widget.harvest.ID),
                     builder: (BuildContext context, AsyncSnapshot<HarvestPicture> snapshot) {
@@ -68,7 +68,7 @@ class _CardHarvestState extends State<CardHarvest> {
                     })
                 ),
                 Flexible(
-                    flex: 1,
+                    flex: 5,
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Column(

@@ -10,6 +10,7 @@ import 'package:vuondauapp/object/harvestDTO.dart';
 import 'package:vuondauapp/object/harvestSellingPriceDTO.dart';
 import 'package:vuondauapp/object/productDTO.dart';
 import 'package:vuondauapp/object/productPicture.dart';
+import 'package:vuondauapp/pages/dashboard.dart';
 import 'package:vuondauapp/pages/selling/selling_add.dart';
 import 'package:vuondauapp/pages/selling/selling_detail.dart';
 import 'package:vuondauapp/services/http_service.dart';
@@ -46,7 +47,7 @@ class _HomeState extends State<Home> {
         centerTitle: true
       ),
       body: Container(
-        margin: EdgeInsets.symmetric(horizontal: 10),
+        margin: EdgeInsets.fromLTRB(10,10,10,0),
         width: size.width,
         child: SingleChildScrollView(
           child: Column(
@@ -99,11 +100,14 @@ class _HomeState extends State<Home> {
                       },
                     ),
                     SquareButton(
-                      text: 'Tải lại',
+                      text: 'Xem hóa đơn',
                       icon: Icons.description,
                       color: Colors.lightGreen,
                       press: (){
-                        },
+                        Navigator.push(context, MaterialPageRoute(
+                            builder: (context) => Dashboard()
+                        ));
+                      },
                     )
                   ],
                 )

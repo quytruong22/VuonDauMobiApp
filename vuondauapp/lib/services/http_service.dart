@@ -15,6 +15,7 @@ import 'package:vuondauapp/object/harvestSellingPriceDTO.dart';
 import 'package:vuondauapp/object/order_detail_dto.dart';
 import 'package:vuondauapp/object/order_dto.dart';
 import 'package:vuondauapp/object/productDTO.dart';
+import 'package:vuondauapp/object/productPicture.dart';
 
 class HttpService {
   final String endPoint = "http://52.221.245.187:90/";
@@ -257,16 +258,31 @@ class HttpService {
     Response res = await get(Uri.parse(endPoint+'api/v1/farm-pictures/$farmID'));
     if(res.statusCode==200){
       List<FarmPicture> farmPicture = ListFarmPicture.fromJson(jsonDecode(res.body)).farms;
-      return farmPicture.first;
+      if(farmPicture.length!=0){
+        return farmPicture.first;
+      }
+      throw 'no image';
     }
-    throw 'no image or fail load';
+    throw 'fail load';
   }
 
   Future<HarvestPicture> getHarvestImage(String harvestID) async {
     Response res = await get(Uri.parse(endPoint+'api/v1/harvest-pictures/$harvestID'));
     if(res.statusCode==200){
       List<HarvestPicture> harvestPicture = ListHarvestPicture.fromJson(jsonDecode(res.body)).harvests;
-      return harvestPicture.first;
+      if(harvestPicture.length!=0){
+        return harvestPicture.first;
+      }
+      throw 'no image';
+    }
+    throw 'fail load image';
+  }
+
+  Future<ProductPicture> getProductImage(String productID) async {
+    Response res = await get(Uri.parse(endPoint+'api/v1/product-pictures/$productID'));
+    if(res.statusCode==200){
+      List<ProductPicture> productPicture = ListProductPictures.fromJson(jsonDecode(res.body)).products;
+      return productPicture.first;
     }
     throw 'no image or fail load';
   }

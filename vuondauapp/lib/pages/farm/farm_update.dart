@@ -204,18 +204,36 @@ class _UpdateFarmState extends State<UpdateFarm> {
                 },
               ),
               SizedBox(height: size.height * 0.03),
-              image!=null? Image.file(image!,width: 150,height: 150,fit: BoxFit.cover): Image.network(widget.image.src,width: 150,height: 150,fit: BoxFit.cover),
-              IconButton(
-                  onPressed: () {
-                    pickImage(ImageSource.camera);
-                  },
-                  icon: Icon(Icons.camera_alt_outlined)
+              Text(
+                'Ảnh nông trại',
+                style: TextStyle(
+
+                ),
               ),
-              IconButton(
-                  onPressed: () {
-                    pickImage(ImageSource.gallery);
-                  },
-                  icon: Icon(Icons.image_outlined)
+              Container(
+                width: 150,
+                height: 150,
+                child: image!=null? Image.file(image!,width: 150,height: 150,fit: BoxFit.cover): Image.network(widget.image.src,width: 150,height: 150,fit: BoxFit.cover),
+                decoration: BoxDecoration(
+                    border: Border.all(width: 1)
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(
+                      onPressed: () {
+                        pickImage(ImageSource.camera);
+                      },
+                      icon: Icon(Icons.camera_alt_outlined)
+                  ),
+                  IconButton(
+                      onPressed: () {
+                        pickImage(ImageSource.gallery);
+                      },
+                      icon: Icon(Icons.image_outlined)
+                  ),
+                ],
               ),
               SizedBox(height: size.height * 0.03),
               RoundedButton(

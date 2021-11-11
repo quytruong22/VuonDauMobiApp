@@ -18,7 +18,7 @@ class _ProfileState extends State<Profile> {
           title: Text('Hồ sơ'),
           centerTitle: true,
       ),
-      body: Body()
+      body: Body(),
     );
   }
 }

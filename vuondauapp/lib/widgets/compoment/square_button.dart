@@ -15,7 +15,6 @@ class SquareButton extends StatelessWidget {
       width: (size.width-20) * 0.25,
       height: (size.width-20) * 0.25,
       child: ElevatedButton(
-
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
@@ -39,7 +38,8 @@ class SquareButton extends StatelessWidget {
           ),
           onPressed: press,
           style: ElevatedButton.styleFrom(
-            primary: Colors.white,elevation: 0,
+            primary: Colors.white,
+            elevation: 1,
           ),
       ),
     );
